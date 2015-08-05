@@ -12,23 +12,25 @@ uri = ch.epfl.bulletqml
 # Input
 SOURCES += \
     qml-bullet_plugin.cpp \
-    world.cpp \
-    simulationthread.cpp \
-    rigidbody.cpp \
-    heightfield2d.cpp \
-    abstractcollitionshape.cpp \
-    sphereshape.cpp \
-    boxshape.cpp
+    src/world.cpp \
+    src/simulationthread.cpp \
+    src/CollitionShapes/heightfield2d.cpp \
+    src/CollitionShapes/abstractcollitionshape.cpp \
+    src/CollitionShapes/sphereshape.cpp \
+    src/CollitionShapes/boxshape.cpp \
+    src/CollitionShapes/convexhullshape.cpp \
+    src/CollitionShapes/motionstate.cpp
 
 HEADERS += \
     qml-bullet_plugin.h \
-    world.h \
-    simulationthread.h \
-    rigidbody.h \
-    heightfield2d.h \
-    abstractcollitionshape.h \
-    sphereshape.h \
-    boxshape.h
+    src/world.h \
+    src/simulationthread.h \
+    src/CollitionShapes/heightfield2d.h \
+    src/CollitionShapes/abstractcollitionshape.h \
+    src/CollitionShapes/sphereshape.h \
+    src/CollitionShapes/boxshape.h \
+    src/CollitionShapes/convexhullshape.h \
+    src/CollitionShapes/motionstate.h
 
 DISTFILES = qmldir
 
@@ -53,7 +55,6 @@ android{
     INCLUDEPATH +=  /home/chili/android-ndk-r10d/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/user/include/
     INCLUDEPATH +=  /home/chili/android-ndk-r10d/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/user/include/bullet
     LIBS += -L/home/chili/android-ndk-r10d/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/user/lib
-
 }
 
 !android{

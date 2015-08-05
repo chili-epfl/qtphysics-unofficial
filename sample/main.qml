@@ -2,7 +2,7 @@ import QtQuick 2.4
 import QtQuick.Controls 1.3
 import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
-import ch.epfl.bulletqml 1.0
+import ch.epfl.bulletqml 1.0 as Bullet
 
 ApplicationWindow {
     title: qsTr("Hello World")
@@ -10,38 +10,39 @@ ApplicationWindow {
     height: 480
     visible: true
 
-    BulletItem{
+    property real h:20;
 
+    Bullet.World{
+        id:world
     }
 
-    menuBar: MenuBar {
-        Menu {
-            title: qsTr("&File")
-            MenuItem {
-                text: qsTr("&Open")
-                onTriggered: messageDialog.show(qsTr("Open action triggered"));
-            }
-            MenuItem {
-                text: qsTr("E&xit")
-                onTriggered: Qt.quit();
-            }
+    Bullet.Sphere{
+        id:sphere
+        objectName: "Sphere"
+        world:world
+        transformation: Qt.matrix4x4(1,0,0,0,0,1,0,h,0,0,1,0,0,0,0,1);
+        onTransformationFromBulletChanged: {
+            console.log(m.m24)
+            button.y=parent.height*(h-m.m24)/20
+        }
+    }
+    Bullet.HeightField2D{
+        id:ground
+        objectName: "Ground"
+        world:world
+    }
+
+    Button{
+        id:button
+        anchors.horizontalCenter: parent.horizontalCenter
+        text: "Start"
+        onClicked: {
+            text="I'm a ball!!!"
+            world.start()
         }
     }
 
-    MainForm {
-        anchors.fill: parent
-        button1.onClicked: messageDialog.show(qsTr("Button 1 pressed"))
-        button2.onClicked: messageDialog.show(qsTr("Button 2 pressed"))
-        button3.onClicked: messageDialog.show(qsTr("Button 3 pressed"))
-    }
 
-    MessageDialog {
-        id: messageDialog
-        title: qsTr("May I have your attention, please?")
 
-        function show(caption) {
-            messageDialog.text = caption;
-            messageDialog.open();
-        }
-    }
+
 }

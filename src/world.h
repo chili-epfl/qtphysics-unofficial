@@ -1,27 +1,27 @@
 #ifndef WORLD_H
 #define WORLD_H
 
+#include <QObject>
 #include <QQuickItem>
 #include <bullet/btBulletDynamicsCommon.h>
 #include "simulationthread.h"
-#include "abstractcollitionshape.h"
 
 #include <QReadWriteLock>
 #include <QThread>
 #include <QVector3D>
+#include <QHash>
+#include "CollitionShapes/abstractcollitionshape.h"
 
 namespace Bullet{
 
-typedef QList<AbstractCollitionShape*> QListAbstractCollitionShapePtr;
 
 class World : public QQuickItem
 {
     Q_OBJECT
-    Q_DISABLE_COPY(World)
     Q_PROPERTY(WorldType type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(qreal simulationRate READ simulationRate WRITE setSimulationRate NOTIFY simulationRateChanged)
     Q_PROPERTY(QVector3D gravity READ gravity WRITE setGravity NOTIFY gravityChanged)
-    Q_PROPERTY(QListAbstractCollitionShapePtr bodies READ bodies WRITE setBodies NOTIFY bodiesChanged)
+    //Q_PROPERTY(QVariantList collitionShapes READ collitionShapes WRITE setCollitionShapes NOTIFY collitionShapesChanged)
 
 public:
     enum WorldType{DISCRETEDYNAMICSWORLD,SOFTRIGIDDYNAMICSWORLD};
@@ -35,12 +35,17 @@ public:
     void setSimulationRate(qreal rate);
     QVector3D gravity(){return m_gravity;}
     void setGravity(QVector3D gravity);
-    //QQmlListProperty bodies(){};
-    void setBodies(QListAbstractCollitionShapePtr bodies);
-    QListAbstractCollitionShapePtr bodies(){return m_bodies;}
+
+    //void setCollitionShapes(QVariantList collitionShapes);
+    //QVariantList collitionShapes();
 
     void removeRigidBody(btRigidBody* b,bool emitSignal=true);
-    void addRigidBody(btRigidBody* b,bool emitSignal=true);
+    void addRigidBody(btRigidBody* b,int group,int mask,bool emitSignal=true);
+    void removeCollitionShape(AbstractCollitionShape* b,bool emitSignal=true);
+    void addCollitionShape(AbstractCollitionShape* b,bool emitSignal=true);
+
+    void lock(){m_locker->lockForWrite();};
+    void unlock(){m_locker->unlock();};
 
 public slots:
     void start();
@@ -50,7 +55,7 @@ signals:
     void typeChanged(WorldType type);
     void simulationRateChanged(qreal rate);
     void gravityChanged(QVector3D gravity);
-    void bodiesChanged();
+    void collitionShapesChanged();
 private:
 
     void init();
@@ -59,8 +64,7 @@ private:
     qreal m_simulationRate;
     QVector3D m_gravity;
 
-    /*TODO ???*/
-    QListAbstractCollitionShapePtr m_bodies;
+    QHash<QString, AbstractCollitionShape*> m_collitionShapes;
 
     btBroadphaseInterface* m_broadphase;
     btDefaultCollisionConfiguration* m_collisionConfiguration;

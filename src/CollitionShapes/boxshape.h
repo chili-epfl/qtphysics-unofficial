@@ -17,6 +17,8 @@ public:
     ~BoxShape();
     QVector3D dimension(){return m_dimension;}
     void setDimension(QVector3D dimention);
+    void setFallInertia(QVector3D fallInertia);
+    void setMass(qreal mass);
 signals:
     void dimensionChanged(QVector3D val);
 private:

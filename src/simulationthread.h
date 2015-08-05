@@ -16,7 +16,7 @@ class SimulationThread: public QObject
 
 public:
     SimulationThread(QReadWriteLock* locker,btDynamicsWorld* dynamicsWorld, QObject* parent=0);
-
+    ~SimulationThread();
 public slots:
     void start();
     void stop();

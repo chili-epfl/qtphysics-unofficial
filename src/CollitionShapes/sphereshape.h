@@ -16,6 +16,8 @@ public:
     ~SphereShape();
     qreal radius(){return m_radius;}
     void setRadius(qreal radius);
+    void setFallInertia(QVector3D fallInertia);
+    void setMass(qreal mass);
 signals:
     void radiusChanged(qreal radius);
 

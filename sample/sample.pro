@@ -27,6 +27,11 @@ android {
 
 }
 
+!android{
+    LIBS += -L/home/chili/Downloads/bullet3-2.83.5/build-linux/install/lib
+
+}
+
 # Default rules for deployment.
 include(deployment.pri)
 
