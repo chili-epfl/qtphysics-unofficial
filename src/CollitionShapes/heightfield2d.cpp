@@ -12,7 +12,7 @@ Bullet::HeightField2D::HeightField2D(QQuickItem* parent):AbstractCollitionShape(
 
 Bullet::HeightField2D::~HeightField2D()
 {
-    clean();
+    clear();
     if(m_world)
         m_world->removeCollitionShape(this,false);
 
@@ -27,6 +27,7 @@ void Bullet::HeightField2D::setPlaneConstant(qreal d){
         delete m_shape;
         m_shape = new btStaticPlaneShape(btVector3(m_normal.x(),m_normal.y(),m_normal.z()), m_planeConstant);
         m_rigidBody->setCollisionShape(m_shape);
+
         if(m_world)
             m_world->unlock();
 
@@ -50,20 +51,40 @@ void Bullet::HeightField2D::setNormal(QVector3D normal){
     }
 
 }
-
+void Bullet::HeightField2D::setMass(qreal mass){
+    if(m_mass!=mass){
+        qWarning()<<"HeightField2D does not support mass";
+    }
+}
+void Bullet::HeightField2D::setFallInertia(QVector3D fallInertia){
+    if(m_fallInertia!=fallInertia){
+        qWarning()<<"HeightField2D does not support fall inertia";
+    }
+}
 
 void Bullet::HeightField2D::init(){
 
     m_shape = new btStaticPlaneShape(btVector3(m_normal.x(),m_normal.y(),m_normal.z()), m_planeConstant);
+
     m_motionState = new MotionState(m_transformation,QMatrix4x4());
+
     connect(m_motionState,SIGNAL(motionStateChanged(QMatrix4x4)),this,SIGNAL(transformationFromBulletChanged(QMatrix4x4)));
+
     m_rigidBodyCI=new btRigidBody::btRigidBodyConstructionInfo(0,m_motionState, m_shape, btVector3(0, 0, 0));
+
     m_rigidBody= new btRigidBody(*m_rigidBodyCI);
+
+    m_rigidBody->setRestitution(m_restitution);
+
+    m_rigidBody->setFriction(m_friction);
+
+    m_rigidBody->setRollingFriction(m_rollingFriction);
+
     if(m_world)
         m_world->addRigidBody(m_rigidBody,m_group,m_mask);
 }
 
-void Bullet::HeightField2D::clean(){
+void Bullet::HeightField2D::clear(){
     if(m_world)
         m_world->removeRigidBody(m_rigidBody);
     delete m_rigidBody;

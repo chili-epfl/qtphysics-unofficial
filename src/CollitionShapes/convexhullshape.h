@@ -14,7 +14,7 @@ public:
     void setMass(qreal mass){};
 private:
     void init();
-    void clean();
+    void clear();
 };
 
 }

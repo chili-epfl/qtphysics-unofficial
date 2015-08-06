@@ -12,7 +12,7 @@ Bullet::SphereShape::SphereShape(QQuickItem* parent):AbstractCollitionShape(pare
 }
 Bullet::SphereShape::~SphereShape()
 {
-    clean();
+    clear();
     if(m_world)
         m_world->removeCollitionShape(this,false);
 }
@@ -29,11 +29,18 @@ void Bullet::SphereShape::init(){
 
     m_rigidBodyCI=new btRigidBody::btRigidBodyConstructionInfo(m_mass,m_motionState, m_shape,inertia);
     m_rigidBody= new btRigidBody(*m_rigidBodyCI);
+    m_rigidBody->setRestitution(m_restitution);
+
+    m_rigidBody->setFriction(m_friction);
+
+    m_rigidBody->setRollingFriction(m_rollingFriction);
+
+
     if(m_world)
         m_world->addRigidBody(m_rigidBody,m_group,m_mask);
 }
 
-void Bullet::SphereShape::clean(){
+void Bullet::SphereShape::clear(){
     if(m_world)
         m_world->removeRigidBody(m_rigidBody);
     delete m_rigidBody;

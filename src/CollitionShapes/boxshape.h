@@ -23,7 +23,7 @@ signals:
     void dimensionChanged(QVector3D val);
 private:
     void init();
-    void clean();
+    void clear();
     QVector3D m_dimension;
 };
 }

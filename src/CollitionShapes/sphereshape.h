@@ -23,7 +23,7 @@ signals:
 
 private:
     void init();
-    void clean();
+    void clear();
 
     qreal m_radius;
 };

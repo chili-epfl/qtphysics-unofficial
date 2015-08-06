@@ -9,7 +9,7 @@ Bullet::BoxShape::BoxShape(QQuickItem* parent):AbstractCollitionShape(parent)
 }
 Bullet::BoxShape::~BoxShape()
 {
-    clean();
+    clear();
     if(m_world)
         m_world->removeCollitionShape(this,false);
 }
@@ -37,11 +37,17 @@ void Bullet::BoxShape::init(){
     connect(m_motionState,SIGNAL(motionStateChanged(QMatrix4x4)),this,SIGNAL(transformationFromBulletChanged(QMatrix4x4)));
     m_rigidBodyCI=new btRigidBody::btRigidBodyConstructionInfo(m_mass,m_motionState, m_shape, btVector3(m_fallInertia.x(),m_fallInertia.y(),m_fallInertia.z()));
     m_rigidBody= new btRigidBody(*m_rigidBodyCI);
+    m_rigidBody->setRestitution(m_restitution);
+
+    m_rigidBody->setFriction(m_friction);
+
+    m_rigidBody->setRollingFriction(m_rollingFriction);
+
     if(m_world)
         m_world->addRigidBody(m_rigidBody,m_group,m_mask);
 }
 
-void Bullet::BoxShape::clean(){
+void Bullet::BoxShape::clear(){
     if(m_world)
         m_world->removeRigidBody(m_rigidBody);
     delete m_rigidBody;

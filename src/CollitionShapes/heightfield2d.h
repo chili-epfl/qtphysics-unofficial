@@ -18,6 +18,11 @@ public:
     void setNormal(QVector3D normal);
     qreal planeConstant(){return m_planeConstant;}
     void setPlaneConstant(qreal d);
+
+    void setFallInertia(QVector3D fallInertia);
+    void setMass(qreal mass);
+
+
 signals:
     void normalChanged(QVector3D normal);
     void planeConstantChanged(qreal d);
@@ -25,7 +30,7 @@ public slots:
 
 private:
     void init();
-    void clean();
+    void clear();
 
 
     QVector3D m_normal;

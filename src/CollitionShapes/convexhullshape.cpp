@@ -9,7 +9,7 @@ Bullet::ConvexHullShape::ConvexHullShape(QQuickItem* parent):AbstractCollitionSh
 }
 
 Bullet::ConvexHullShape::~ConvexHullShape(){
-    clean();
+    clear();
     m_world->removeCollitionShape(this,false);
 
 }
@@ -29,7 +29,7 @@ m_motionState = new MotionState(m_transformation,QMatrix4x4());
 }
 
 
-void Bullet::ConvexHullShape::clean(){
+void Bullet::ConvexHullShape::clear(){
     if(m_world)
         m_world->removeRigidBody(m_rigidBody);
     delete m_rigidBody;
