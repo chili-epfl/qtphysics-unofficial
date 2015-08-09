@@ -1,7 +1,7 @@
 #include "physicsaspect.h"
 #include "physicsmanager.h"
 #include "physicsentity.h"
-
+#include "jobs/debugjob.h"
 #include <Qt3DCore/qaspectfactory.h>
 #include <Qt3DCore/qnodevisitor.h>
 #include <Qt3DCore/qscenepropertychange.h>
@@ -18,7 +18,11 @@ PhysicsAspect::PhysicsAspect(QObject* parent):
 }
 
 QVector<Qt3D::QAspectJobPtr> PhysicsAspect::jobsToExecute(qint64 time){
-
+    QVector<Qt3D::QAspectJobPtr> jobs;
+    Qt3D::QAspectJobPtr job;
+    job.reset(new DebugJob(m_manager));
+    jobs.append(job);
+    return jobs;
 }
 
 void PhysicsAspect::sceneNodeAdded(Qt3D::QSceneChangePtr &e) {
@@ -58,4 +62,5 @@ void PhysicsAspect::visitNode(Qt3D::QNode *node){
 
 QT_END_NAMESPACE
 
-QT3D_REGISTER_NAMESPACED_ASPECT("Physics", QT_PREPEND_NAMESPACE(Physics), PhysicsAspect);
+QT3D_REGISTER_NAMESPACED_ASPECT("physics", QT_PREPEND_NAMESPACE(Physics), PhysicsAspect);
+//QT3D_REGISTER_ASPECT("physics", Physics::PhysicsAspect);

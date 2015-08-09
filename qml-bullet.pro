@@ -25,7 +25,8 @@ SOURCES += \
     extra/qt3d/physicsmanager.cpp \
     extra/qt3d/physicsaspect.cpp \
     extra/qt3d/physicsentity.cpp \
-    extra/qt3d/physicsbodyinfo.cpp
+    extra/qt3d/physicsbodyinfo.cpp \
+    extra/qt3d/jobs/debugjob.cpp
 
 HEADERS += \
     qml-bullet_plugin.h \
@@ -39,7 +40,8 @@ HEADERS += \
     extra/qt3d/physicsmanager.h \
     extra/qt3d/physicsaspect.h \
     extra/qt3d/physicsentity.h \
-    extra/qt3d/physicsbodyinfo.h
+    extra/qt3d/physicsbodyinfo.h \
+    extra/qt3d/jobs/debugjob.h
 
 DISTFILES = qmldir
 

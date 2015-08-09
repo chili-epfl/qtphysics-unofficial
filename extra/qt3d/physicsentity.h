@@ -9,13 +9,15 @@ QT_BEGIN_NAMESPACE
 namespace Physics {
 
 class PhysicsManager;
-
+class DebugJob;
 class PhysicsEntity : public Qt3D::QBackendNode
 {
 public:
     PhysicsEntity();
     ~PhysicsEntity();
     void updateFromPeer(Qt3D::QNode *peer) Q_DECL_OVERRIDE;
+
+    QString objectName(){return m_objectName;}
 
     PhysicsEntity *parent();
     Qt3D::QNodeId parentId()  { return m_parentId; }
@@ -56,6 +58,7 @@ public:
     void destroy(const Qt3D::QNodeId &id) const Q_DECL_OVERRIDE;
 private:
     PhysicsManager* m_manager;
+
 
 };
 
