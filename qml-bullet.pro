@@ -1,7 +1,10 @@
 TEMPLATE = lib
 TARGET = qml-Bullet
 
-QT += qml quick 3dcore
+QT += qml quick
+
+QT += 3dcore 3drenderer
+
 CONFIG += qt plugin c++11
 CONFIG -= android_install
 
@@ -12,27 +15,35 @@ uri = ch.epfl.bulletqml
 # Input
 SOURCES += \
     qml-bullet_plugin.cpp \
-    world.cpp \
-    simulationthread.cpp \
-    rigidbody.cpp \
-    heightfield2d.cpp \
-    abstractcollitionshape.cpp \
-    sphereshape.cpp \
-    boxshape.cpp
+    #world.cpp \
+    #simulationthread.cpp \
+    #rigidbody.cpp \
+    #heightfield2d.cpp \
+    #abstractcollitionshape.cpp \
+    #sphereshape.cpp \
+    #boxshape.cpp \
+    extra/qt3d/physicsmanager.cpp \
+    extra/qt3d/physicsaspect.cpp \
+    extra/qt3d/physicsentity.cpp \
+    extra/qt3d/physicsbodyinfo.cpp
 
 HEADERS += \
     qml-bullet_plugin.h \
-    world.h \
-    simulationthread.h \
-    rigidbody.h \
-    heightfield2d.h \
-    abstractcollitionshape.h \
-    sphereshape.h \
-    boxshape.h
+    #world.h \
+    #simulationthread.h \
+    #rigidbody.h \
+    #heightfield2d.h \
+    #abstractcollitionshape.h \
+    #sphereshape.h \
+    #boxshape.h \
+    extra/qt3d/physicsmanager.h \
+    extra/qt3d/physicsaspect.h \
+    extra/qt3d/physicsentity.h \
+    extra/qt3d/physicsbodyinfo.h
 
 DISTFILES = qmldir
 
-LIBS += -lLinearMath -lBulletDynamics -lBulletCollision
+#LIBS += -lLinearMath -lBulletDynamics -lBulletCollision
 
 !equals(_PRO_FILE_PWD_, $$OUT_PWD) {
     copy_qmldir.target = $$OUT_PWD/qmldir
