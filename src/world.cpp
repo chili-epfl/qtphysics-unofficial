@@ -19,7 +19,7 @@ Bullet::World::~World()
     m_workerThread.wait();
     m_workerThread.deleteLater();
 
-    for(AbstractCollitionShape* c: m_collitionShapes.values())
+    for(AbstractBody* c: m_collitionShapes.values())
         delete c;
 
     delete m_simThread;
@@ -111,7 +111,7 @@ QVariantList Bullet::World::collitionShapes(){
 
 void Bullet::World::setCollitionShapes(QVariantList collitionShapes){
     for(QVariant e: collitionShapes){
-       Bullet::AbstractCollitionShape c=  e.value<Bullet::AbstractCollitionShape>();
+       Bullet::AbstractBody c=  e.value<Bullet::AbstractBody>();
        /*qDebug()<<"D:"<<c;
        qDebug()<<"D:"<<e;
        c->setWorld(this);
@@ -120,26 +120,26 @@ void Bullet::World::setCollitionShapes(QVariantList collitionShapes){
     emit collitionShapesChanged();
 }
 */
-void Bullet::World::removeCollitionShape(AbstractCollitionShape* c,bool emitSignal){
+void Bullet::World::removeBody(AbstractBody* c,bool emitSignal){
     m_collitionShapes.remove(c->objectName());
     if(emitSignal)
         emit collitionShapesChanged();
 }
-void Bullet::World::addCollitionShape(AbstractCollitionShape* c,bool emitSignal){
+void Bullet::World::addBody(AbstractBody* c,bool emitSignal){
    m_collitionShapes[c->objectName()]=c;
     if(emitSignal)
         emit collitionShapesChanged();
 
 }
 
-void Bullet::World::removeRigidBody(btRigidBody* b,bool emitSignal){
+void Bullet::World::removebtRigidBody(btRigidBody* b,bool emitSignal){
     m_locker->lockForWrite();
     m_dynamicsWorld->removeRigidBody(b);
     m_locker->unlock();
     if(emitSignal)
         emit collitionShapesChanged();
 }
-void Bullet::World::addRigidBody(btRigidBody* b,int group,int mask,bool emitSignal){
+void Bullet::World::addbtRigidBody(btRigidBody* b,int group,int mask,bool emitSignal){
     m_locker->lockForWrite();
     m_dynamicsWorld->addRigidBody(b,group,mask);
     m_locker->unlock();

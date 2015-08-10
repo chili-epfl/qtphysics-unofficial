@@ -2,7 +2,7 @@
 #define HEIGHTFIELD2D_H
 
 #include <QQuickItem>
-#include "abstractcollitionshape.h"
+#include "abstractbody.h"
 #include <QVector3D>
 namespace Bullet {
 

@@ -2,9 +2,10 @@
 #include "src/world.h"
 
 
-Bullet::SphereShape::SphereShape(QQuickItem* parent):AbstractCollitionShape(parent)
+Bullet::SphereShape::SphereShape(QQuickItem* parent):
+    AbstractCollitionShape(parent),
+    m_radius(1)
 {
-    m_radius=1;
     m_mass=1;
     init();
 

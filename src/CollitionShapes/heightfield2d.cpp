@@ -1,12 +1,11 @@
 #include "heightfield2d.h"
 #include "src/world.h"
 
-Bullet::HeightField2D::HeightField2D(QQuickItem* parent):AbstractCollitionShape(parent)
+Bullet::HeightField2D::HeightField2D(QQuickItem* parent):
+    AbstractCollitionShape(parent),
+    m_normal(0,1,0),
+    m_planeConstant(1.0f)
 {
-    QVector3D normal(0,1,0);
-    m_normal=normal;
-    m_planeConstant=1;
-
     init();
 }
 

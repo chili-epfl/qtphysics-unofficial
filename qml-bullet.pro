@@ -1,7 +1,7 @@
 TEMPLATE = lib
 TARGET = qml-Bullet
 
-QT += qml quick 3dcore
+QT += qml quick 3dcore 3drenderer
 CONFIG += qt plugin c++11
 CONFIG -= android_install
 
@@ -15,22 +15,26 @@ SOURCES += \
     src/world.cpp \
     src/simulationthread.cpp \
     src/CollitionShapes/heightfield2d.cpp \
-    src/CollitionShapes/abstractcollitionshape.cpp \
     src/CollitionShapes/sphereshape.cpp \
     src/CollitionShapes/boxshape.cpp \
     src/CollitionShapes/convexhullshape.cpp \
-    src/CollitionShapes/motionstate.cpp
+    src/CollitionShapes/motionstate.cpp \
+    src/CollitionShapes/compoundshape.cpp \
+    src/CollitionShapes/abstractbody.cpp \
+    src/extra/qt3dbody.cpp
 
 HEADERS += \
     qml-bullet_plugin.h \
     src/world.h \
     src/simulationthread.h \
     src/CollitionShapes/heightfield2d.h \
-    src/CollitionShapes/abstractcollitionshape.h \
     src/CollitionShapes/sphereshape.h \
     src/CollitionShapes/boxshape.h \
     src/CollitionShapes/convexhullshape.h \
-    src/CollitionShapes/motionstate.h
+    src/CollitionShapes/motionstate.h \
+    src/CollitionShapes/compoundshape.h \
+    src/CollitionShapes/abstractbody.h \
+    src/extra/qt3dbody.h
 
 DISTFILES = qmldir
 

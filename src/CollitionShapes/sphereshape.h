@@ -1,7 +1,7 @@
 #ifndef SPHERESHAPE_H
 #define SPHERESHAPE_H
 
-#include "abstractcollitionshape.h"
+#include "abstractbody.h"
 #include <bullet/BulletCollision/CollisionShapes/btSphereShape.h>
 
 namespace Bullet {

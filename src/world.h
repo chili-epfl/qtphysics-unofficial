@@ -10,7 +10,7 @@
 #include <QThread>
 #include <QVector3D>
 #include <QHash>
-#include "CollitionShapes/abstractcollitionshape.h"
+#include "CollitionShapes/abstractbody.h"
 
 namespace Bullet{
 
@@ -21,7 +21,6 @@ class World : public QQuickItem
     Q_PROPERTY(WorldType type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(qreal simulationRate READ simulationRate WRITE setSimulationRate NOTIFY simulationRateChanged)
     Q_PROPERTY(QVector3D gravity READ gravity WRITE setGravity NOTIFY gravityChanged)
-    //Q_PROPERTY(QVariantList collitionShapes READ collitionShapes WRITE setCollitionShapes NOTIFY collitionShapesChanged)
 
 public:
     enum WorldType{DISCRETEDYNAMICSWORLD,SOFTRIGIDDYNAMICSWORLD};
@@ -31,18 +30,17 @@ public:
 
     WorldType type(){return m_type;}
     void setType(WorldType type);
+
     qreal simulationRate(){return m_simulationRate;}
     void setSimulationRate(qreal rate);
+
     QVector3D gravity(){return m_gravity;}
     void setGravity(QVector3D gravity);
 
-    //void setCollitionShapes(QVariantList collitionShapes);
-    //QVariantList collitionShapes();
-
-    void removeRigidBody(btRigidBody* b,bool emitSignal=true);
-    void addRigidBody(btRigidBody* b,int group,int mask,bool emitSignal=true);
-    void removeCollitionShape(AbstractCollitionShape* b,bool emitSignal=true);
-    void addCollitionShape(AbstractCollitionShape* b,bool emitSignal=true);
+    void removebtRigidBody(btRigidBody* b,bool emitSignal=true);
+    void addbtRigidBody(btRigidBody* b,int group,int mask,bool emitSignal=true);
+    void removeBody(AbstractBody* b,bool emitSignal=true);
+    void addBody(AbstractBody* b,bool emitSignal=true);
 
     void lock(){m_locker->lockForWrite();};
     void unlock(){m_locker->unlock();};
@@ -64,7 +62,7 @@ private:
     qreal m_simulationRate;
     QVector3D m_gravity;
 
-    QHash<QString, AbstractCollitionShape*> m_collitionShapes;
+    QHash<QString, AbstractBody*> m_collitionShapes;
 
     btBroadphaseInterface* m_broadphase;
     btDefaultCollisionConfiguration* m_collisionConfiguration;

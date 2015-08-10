@@ -1,7 +1,7 @@
 #ifndef BOXSHAPE_H
 #define BOXSHAPE_H
 
-#include "abstractcollitionshape.h"
+#include "abstractbody.h"
 #include <bullet/BulletCollision/CollisionShapes/btBoxShape.h>
 #include <QVector3D>
 
