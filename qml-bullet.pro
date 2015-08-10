@@ -1,7 +1,10 @@
 TEMPLATE = lib
 TARGET = qml-Bullet
 
-QT += qml quick 3dcore 3drenderer
+QT += qml quick
+
+QT += 3dcore 3drenderer
+
 CONFIG += qt plugin c++11
 CONFIG -= android_install
 
@@ -12,33 +15,37 @@ uri = ch.epfl.bulletqml
 # Input
 SOURCES += \
     qml-bullet_plugin.cpp \
-    src/world.cpp \
-    src/simulationthread.cpp \
-    src/CollitionShapes/heightfield2d.cpp \
-    src/CollitionShapes/sphereshape.cpp \
-    src/CollitionShapes/boxshape.cpp \
-    src/CollitionShapes/convexhullshape.cpp \
-    src/CollitionShapes/motionstate.cpp \
-    src/CollitionShapes/compoundshape.cpp \
-    src/CollitionShapes/abstractbody.cpp \
-    src/extra/qt3dbody.cpp
+    #world.cpp \
+    #simulationthread.cpp \
+    #rigidbody.cpp \
+    #heightfield2d.cpp \
+    #abstractcollitionshape.cpp \
+    #sphereshape.cpp \
+    #boxshape.cpp \
+    extra/qt3d/physicsmanager.cpp \
+    extra/qt3d/physicsaspect.cpp \
+    extra/qt3d/physicsentity.cpp \
+    extra/qt3d/physicsbodyinfo.cpp \
+    extra/qt3d/jobs/debugjob.cpp
 
 HEADERS += \
     qml-bullet_plugin.h \
-    src/world.h \
-    src/simulationthread.h \
-    src/CollitionShapes/heightfield2d.h \
-    src/CollitionShapes/sphereshape.h \
-    src/CollitionShapes/boxshape.h \
-    src/CollitionShapes/convexhullshape.h \
-    src/CollitionShapes/motionstate.h \
-    src/CollitionShapes/compoundshape.h \
-    src/CollitionShapes/abstractbody.h \
-    src/extra/qt3dbody.h
+    #world.h \
+    #simulationthread.h \
+    #rigidbody.h \
+    #heightfield2d.h \
+    #abstractcollitionshape.h \
+    #sphereshape.h \
+    #boxshape.h \
+    extra/qt3d/physicsmanager.h \
+    extra/qt3d/physicsaspect.h \
+    extra/qt3d/physicsentity.h \
+    extra/qt3d/physicsbodyinfo.h \
+    extra/qt3d/jobs/debugjob.h
 
 DISTFILES = qmldir
 
-LIBS += -lLinearMath -lBulletDynamics -lBulletCollision
+#LIBS += -lLinearMath -lBulletDynamics -lBulletCollision
 
 !equals(_PRO_FILE_PWD_, $$OUT_PWD) {
     copy_qmldir.target = $$OUT_PWD/qmldir
