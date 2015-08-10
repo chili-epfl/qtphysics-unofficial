@@ -7,17 +7,15 @@
 
 namespace Physics {
 
-class PhysicsEntity;
 class PhysicsManager
 {
 public:
     PhysicsManager();
     ~PhysicsManager();
 
-    QHash<Qt3D::QNodeId,PhysicsEntity*> resources(){return m_resources;}
     void setRootEntityId(Qt3D::QNodeId rootId){m_rootId=rootId;}
     Qt3D::QNodeId rootEntityId(){return m_rootId;}
-    QHash<Qt3D::QNodeId,PhysicsEntity*> m_resources;
+    QHash<Qt3D::QNodeId,Qt3D::QBackendNode*> m_resources;
 
 signals:
 

@@ -1,11 +1,12 @@
 
 import Qt3D 2.0
 import Qt3D.Renderer 2.0
-
+import ch.epfl.bulletqml 1.0
 import QtQuick 2.0 as QQ2
 
 
 Entity {
+    property alias test: test
     id: sceneRoot
     objectName: "Root"
     Camera {
@@ -57,16 +58,19 @@ Entity {
 
     Transform {
         id: torusTransform
-        Scale { scale3D: Qt.vector3d(1.5, 1, 0.5) }
+        /*Scale { scale3D: Qt.vector3d(1.5, 1, 0.5) }
         Rotate {
             angle: 45
             axis: Qt.vector3d(1, 0, 0)
-        }
+        }*/
     }
-
+    PhysicsBodyInfo{
+        id:test
+        mass:1
+    }
     Entity {
         id: torusEntity
-        components: [ torusMesh, material, torusTransform ]
+        components: [ torusMesh, material, torusTransform,test ]
     }
 
     SphereMesh {

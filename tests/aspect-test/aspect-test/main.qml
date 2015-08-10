@@ -11,7 +11,9 @@ Item {
 
         MouseArea {
             anchors.fill: parent
-            onClicked: animation.start()
+            onClicked: {
+                sceneroot.test.mass=2.0
+            }
         }
     }
 
@@ -37,7 +39,9 @@ Item {
             focus: true
             aspects: ["input","physics"]
 
-            AnimatedEntity {}
+            AnimatedEntity {
+                id:sceneroot
+            }
         }
     }
 

@@ -5,7 +5,8 @@
 #include "src/CollitionShapes/heightfield2d.h"
 #include "src/CollitionShapes/sphereshape.h"
 #include "src/CollitionShapes/heightfield2d.h"*/
-#include "extra/qt3d/physicsaspect.h"
+#include "extra/qt3d/physicsbodyinfo.h"
+#include "extra/qt3d/physicsquickbodyinfo.h"
 
 #include <qqml.h>
 
@@ -19,7 +20,8 @@ void Qml_BulletPlugin::registerTypes(const char *uri)
   qmlRegisterType<Bullet::BoxShape>(uri, 1, 0, "Box");
   qmlRegisterType<Bullet::SphereShape>(uri, 1, 0, "Sphere");
   qmlRegisterType<Bullet::HeightField2D>(uri, 1, 0, "HeightField2D");*/
-    qmlRegisterType<Physics::PhysicsAspect>(uri, 1, 0, "PhysicsAspect");
+  qmlRegisterExtendedType<Physics::PhysicsBodyInfo,Physics::PhysicsQuickBodyInfo>(uri, 1, 0, "PhysicsBodyInfo");
+  //qmlRegisterType<Physics::PhysicsBodyInfo>(uri, 1, 0, "PhysicsBodyInfo");
 
 }
 

@@ -2,14 +2,12 @@
 #define PhysicsENTITY_H
 
 #include <Qt3DCore>
-#include <QSet>
 
 QT_BEGIN_NAMESPACE
 
 namespace Physics {
 
 class PhysicsManager;
-class DebugJob;
 class PhysicsEntity : public Qt3D::QBackendNode
 {
 public:
@@ -30,17 +28,22 @@ public:
     void removeComponent(Qt3D::QNodeId componentId);
     void setManager(PhysicsManager *manager);
     PhysicsManager* manager();
+    Qt3D::QNodeId physics_transform(){return m_physics_transform;}
+    Qt3D::QNodeId abstractmesh(){return m_abstractmesh;}
+    Qt3D::QNodeId default_transform(){return m_default_transform;}
+    Qt3D::QNodeId physicsBodyInfo(){return m_physicsBodyInfo;}
+
+
 protected:
     void sceneChangeEvent(const Qt3D::QSceneChangePtr &) Q_DECL_OVERRIDE;
 private:
-
-
 
     Qt3D::QNodeId m_parentId;
     QSet<Qt3D::QNodeId > m_childrenId;
 
     QString m_objectName;
-    Qt3D::QNodeId m_transform;
+    Qt3D::QNodeId m_default_transform;
+    Qt3D::QNodeId m_physics_transform;
     Qt3D::QNodeId m_abstractmesh;
     Qt3D::QNodeId m_physicsBodyInfo;
 
@@ -58,8 +61,6 @@ public:
     void destroy(const Qt3D::QNodeId &id) const Q_DECL_OVERRIDE;
 private:
     PhysicsManager* m_manager;
-
-
 };
 
 }

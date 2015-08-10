@@ -7,10 +7,12 @@
 namespace Physics {
 
 PhysicsEntity::PhysicsEntity():
+    Qt3D::QBackendNode(),
     m_abstractmesh(),
     m_parentId(),
     m_physicsBodyInfo(),
-    m_transform(),
+    m_default_transform(),
+    m_physics_transform(),
     m_objectName()
 
 {
@@ -39,7 +41,8 @@ void PhysicsEntity::updateFromPeer(Qt3D::QNode *peer){
     m_objectName = peer->objectName();
     m_abstractmesh=Qt3D::QNodeId();
     m_physicsBodyInfo=Qt3D::QNodeId();
-    m_transform=Qt3D::QNodeId();
+    m_default_transform=Qt3D::QNodeId();
+    m_physics_transform=Qt3D::QNodeId();
 
     for(Qt3D::QComponent* comp : entity->components()){
         addComponent(comp);
@@ -69,7 +72,8 @@ void PhysicsEntity::sceneChangeEvent(const Qt3D::QSceneChangePtr &e){
 
 void PhysicsEntity::setParentEntity(Qt3D::QEntity *parent){
     if(!m_parentId.isNull() && m_manager->m_resources.contains(m_parentId)){
-         m_manager->m_resources.operator [](m_parentId)->removeChildId(peerUuid());
+        PhysicsEntity* parent_entity = static_cast<PhysicsEntity*>(m_manager->m_resources.operator [](m_parentId));
+        parent_entity->removeChildId(peerUuid());
     }
     if(parent==Q_NULLPTR){
         m_parentId=Qt3D::QNodeId();
@@ -77,14 +81,17 @@ void PhysicsEntity::setParentEntity(Qt3D::QEntity *parent){
     else{
     m_parentId=parent->id();
         if(m_manager->m_resources.contains(m_parentId)){
-            m_manager->m_resources.operator [](m_parentId)->addChildId(peerUuid());
+            PhysicsEntity* parent_entity = static_cast<PhysicsEntity*>(m_manager->m_resources.operator [](m_parentId));
+            parent_entity->addChildId(peerUuid());
         }
     }
 }
 
 void PhysicsEntity::addComponent(Qt3D::QComponent *component){
-    if (qobject_cast<Qt3D::QTransform*>(component) != Q_NULLPTR)
-        m_transform = component->id();
+    if (qobject_cast<Qt3D::QTransform*>(component) != Q_NULLPTR && component->objectName().compare("@MaDeByPhYsIcS@")!=0)
+        m_default_transform = component->id();
+    else if (qobject_cast<Qt3D::QTransform*>(component) != Q_NULLPTR && component->objectName().compare("@MaDeByPhYsIcS@")==0)
+        m_physics_transform = component->id();
     else if (qobject_cast<Qt3D::QAbstractMesh*>(component) != Q_NULLPTR)
         m_abstractmesh = component->id();
     else if (qobject_cast<PhysicsBodyInfo*>(component) != Q_NULLPTR)
@@ -92,17 +99,19 @@ void PhysicsEntity::addComponent(Qt3D::QComponent *component){
 }
 
 void PhysicsEntity::removeComponent(Qt3D::QNodeId componentId){
-    if (m_transform==componentId)
-        m_transform = Qt3D::QNodeId();
+    if (m_default_transform==componentId)
+        m_default_transform = Qt3D::QNodeId();
     else if (m_abstractmesh==componentId)
         m_abstractmesh = Qt3D::QNodeId();
     else if (m_physicsBodyInfo==componentId)
         m_physicsBodyInfo = Qt3D::QNodeId();
+    else if(m_physics_transform==componentId)
+        m_physics_transform=Qt3D::QNodeId();
 }
 
 PhysicsEntity* PhysicsEntity::parent(){
     if(m_manager->m_resources.contains(m_parentId))
-        return m_manager->m_resources.operator [](m_parentId);
+        return static_cast<PhysicsEntity*>(m_manager->m_resources.operator [](m_parentId));
     return Q_NULLPTR;
 }
 void PhysicsEntity::addChildId(Qt3D::QNodeId childId){
@@ -116,8 +125,9 @@ void PhysicsEntity::removeChildId(Qt3D::QNodeId childId){
 QSet<PhysicsEntity *> PhysicsEntity::children() {
     QSet<PhysicsEntity *> children;
     for(Qt3D::QNodeId id : m_childrenId){
-        if(m_manager->m_resources.contains(id))
-            children.insert(m_manager->m_resources.operator [](id));
+        if(m_manager->m_resources.contains(id)){
+            children.insert(static_cast<PhysicsEntity*>(m_manager->m_resources.operator [](id)));
+        }
     }
     return children;
 }

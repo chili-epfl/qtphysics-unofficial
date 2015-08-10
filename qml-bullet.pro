@@ -3,7 +3,7 @@ TARGET = qml-Bullet
 
 QT += qml quick
 
-QT += 3dcore 3drenderer
+QT += 3dcore 3drenderer 3dquick
 
 CONFIG += qt plugin c++11
 CONFIG -= android_install
@@ -26,7 +26,12 @@ SOURCES += \
     extra/qt3d/physicsaspect.cpp \
     extra/qt3d/physicsentity.cpp \
     extra/qt3d/physicsbodyinfo.cpp \
-    extra/qt3d/jobs/debugjob.cpp
+    extra/qt3d/jobs/debugjob.cpp \
+    extra/qt3d/backendtypes/physicsmesh.cpp \
+    extra/qt3d/backendtypes/physicstransform.cpp \
+    extra/qt3d/physicsquickbodyinfo.cpp \
+    extra/qt3d/backendtypes/physicsbodyinfobackendnode.cpp \
+    extra/qt3d/jobs/insertphysicstransformjob.cpp
 
 HEADERS += \
     qml-bullet_plugin.h \
@@ -41,7 +46,12 @@ HEADERS += \
     extra/qt3d/physicsaspect.h \
     extra/qt3d/physicsentity.h \
     extra/qt3d/physicsbodyinfo.h \
-    extra/qt3d/jobs/debugjob.h
+    extra/qt3d/jobs/debugjob.h \
+    extra/qt3d/backendtypes/physicsmesh.h \
+    extra/qt3d/backendtypes/physicstransform.h \
+    extra/qt3d/physicsquickbodyinfo.h \
+    extra/qt3d/backendtypes/physicsbodyinfobackendnode.h \
+    extra/qt3d/jobs/insertphysicstransformjob.h
 
 DISTFILES = qmldir
 

@@ -1,10 +1,22 @@
 #include "physicsaspect.h"
 #include "physicsmanager.h"
+
 #include "physicsentity.h"
+#include "backendtypes/physicsmesh.h"
+#include "backendtypes/physicstransform.h"
+#include "backendtypes/physicsbodyinfobackendnode.h"
+
+#include "physicsbodyinfo.h"
 #include "jobs/debugjob.h"
+#include "jobs/insertphysicstransformjob.h"
+
 #include <Qt3DCore/qaspectfactory.h>
 #include <Qt3DCore/qnodevisitor.h>
 #include <Qt3DCore/qscenepropertychange.h>
+
+#include <Qt3DRenderer/QAbstractMesh>
+#include <Qt3DCore/QTransform>
+
 
 QT_BEGIN_NAMESPACE
 namespace Physics {
@@ -14,13 +26,16 @@ PhysicsAspect::PhysicsAspect(QObject* parent):
 {
     m_manager=new PhysicsManager();
     registerBackendType<Qt3D::QEntity>(Qt3D::QBackendNodeFunctorPtr(new Physics::PhysicsEntityFunctor(m_manager)));
+    registerBackendType<Qt3D::QAbstractMesh>(Qt3D::QBackendNodeFunctorPtr(new Physics::PhysicsMeshFunctor(m_manager)));
+    registerBackendType<Qt3D::QTransform>(Qt3D::QBackendNodeFunctorPtr(new Physics::PhysicsTransformFunctor(m_manager)));
+    registerBackendType<Physics::PhysicsBodyInfo>(Qt3D::QBackendNodeFunctorPtr(new Physics::PhysicsBodyInfoBackendNodeFunctor(m_manager)));
 
 }
 
 QVector<Qt3D::QAspectJobPtr> PhysicsAspect::jobsToExecute(qint64 time){
     QVector<Qt3D::QAspectJobPtr> jobs;
     Qt3D::QAspectJobPtr job;
-    job.reset(new DebugJob(m_manager));
+    job.reset(new InsertPhysicsTransformJob(m_manager));
     jobs.append(job);
     return jobs;
 }
@@ -63,4 +78,3 @@ void PhysicsAspect::visitNode(Qt3D::QNode *node){
 QT_END_NAMESPACE
 
 QT3D_REGISTER_NAMESPACED_ASPECT("physics", QT_PREPEND_NAMESPACE(Physics), PhysicsAspect);
-//QT3D_REGISTER_ASPECT("physics", Physics::PhysicsAspect);
