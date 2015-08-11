@@ -1,0 +1,12 @@
+#ifndef FRONTEND_GLOBAL_H
+#define FRONTEND_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(FRONTEND_LIBRARY)
+#  define FRONTENDSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define FRONTENDSHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // FRONTEND_GLOBAL_H

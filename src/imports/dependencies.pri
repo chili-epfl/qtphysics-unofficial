@@ -1,0 +1,2 @@
+INCLUDEPATH += ../frontend 
+INCLUDEPATH += ../backend
