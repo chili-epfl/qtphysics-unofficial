@@ -4,15 +4,19 @@ qtCompileTest(bullet)
 TEMPLATE = subdirs
 CONFIG += ordered
 
-if(config_bullet){
-}
-else{
-    message("Bullet not found")
-}
 qtHaveModule(3dcore){
     SUBDIRS += \
         src \
         examples
+    if(config_bullet){
+        SUBDIRS += \
+            plugins
+    }
+    else{
+        message("Bullet not found")
+    }
 }else{
-    message("physics needs qt3d")
+    message("physics needs Qt3d 2.0")
+
 }
+

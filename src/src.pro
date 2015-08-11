@@ -5,6 +5,7 @@ CONFIG += ordered
 SUBDIRS += \
     frontend \
     backend \
-    imports #\
+    imports \ #\
+    plugins/bullet
     #plugins \
 		
