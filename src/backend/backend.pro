@@ -26,6 +26,9 @@ SOURCES += \
     jobs/insertphysicstransformjob.cpp \
     physicsaspect.cpp \
     physicsmanager.cpp
+    #physics_entities/physicsabstractrigidbody.cpp \
+    #physics_entities/physicsabstractdynamicsworld.cpp \
+    #physics_entities/physicsabstractfactory.cpp
 
 HEADERS +=\
         backend_global.h \
@@ -36,7 +39,10 @@ HEADERS +=\
     jobs/debugjob.h \
     jobs/insertphysicstransformjob.h \
     physicsaspect.h \
-    physicsmanager.h
+    physicsmanager.h \
+    physics_entities/physicsabstractrigidbody.h \
+    physics_entities/physicsabstractdynamicsworld.h \
+    physics_entities/physicsabstractfactory.h
 
 
 headersDataFiles.path = $$[QT_INSTALL_HEADERS]/$$PROJECT_NAME/backend
