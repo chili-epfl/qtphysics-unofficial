@@ -73,29 +73,7 @@ void World::setGravity(QVector3D gravity){
 }
 
 
-/*
-QVariantList World::collitionShapes(){
-    QVariantList output;
-    for(QString key: m_collitionShapes.keys()){
-        output.append(qVariantFromValue((void *) m_collitionShapes[key]));
-    }
-    return output;
-}
 
-void World::setCollitionShapes(QVariantList collitionShapes){
-    for(QVariant e: collitionShapes){
-       AbstractBody c=  e.value<AbstractBody>();
-       /*qDebug()<<"D:"<<c;
-       qDebug()<<"D:"<<e;
-       c->setWorld(this);
-       //m_collitionShapes[key]=c;
-    }
-    emit collitionShapesChanged();
-}   m_locker->unlock();
-    if(emitSignal)
-        emit collitionShapesChanged();
-
-*/
 void World::removeBody(AbstractBody* c,bool emitSignal){
     m_bodies.remove(c->objectName());
 }

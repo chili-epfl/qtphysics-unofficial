@@ -2,7 +2,9 @@
 #define WORLD_H
 
 #include <physics_entities/physicsabstractdynamicsworld.h>
+
 #include "../bodies/abstractbody.h"
+
 
 #include <QVector3D>
 #include <btBulletDynamicsCommon.h>
@@ -40,7 +42,11 @@ private:
     qreal m_simulationRate;
     QVector3D m_gravity;
 
+
+
     QHash<QString, AbstractBody*> m_bodies;
+
+
 
     btBroadphaseInterface* m_broadphase;
     btDefaultCollisionConfiguration* m_collisionConfiguration;
