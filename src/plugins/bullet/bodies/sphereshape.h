@@ -13,7 +13,7 @@ class SphereShape: public AbstractBody
     Q_OBJECT
 
 public:
-    SphereShape(QObject* parent=0);
+    explicit SphereShape(QObject* parent=0);
     ~SphereShape();
     qreal radius(){return m_radius;}
     void setRadius(qreal radius);

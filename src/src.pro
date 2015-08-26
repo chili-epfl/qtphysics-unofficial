@@ -5,7 +5,13 @@ CONFIG += ordered
 SUBDIRS += \
     frontend \
     backend \
-    imports \ #\
-    plugins/bullet
-    #plugins \
+    imports  #\
+
+if(config_bullet){
+    SUBDIRS += \
+         plugins/bullet
+}
+else{
+     message("Bullet not found")
+}
 		

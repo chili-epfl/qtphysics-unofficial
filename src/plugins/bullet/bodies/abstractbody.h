@@ -18,12 +18,12 @@ class AbstractBody : public PhysicsAbstractRigidBody {
 
 public:
     enum ChangeFlag{
-        NoChange,
-        MaskChanged,
-        GroupChanged
+        NoChange =0,
+        MaskChanged=1,
+        GroupChanged=2
     };
     Q_DECLARE_FLAGS(ChangeFlags, ChangeFlag)
-    AbstractBody(QObject* parent=0);
+    explicit AbstractBody(QObject* parent=0);
 
     virtual int mask(){return m_mask;}
     virtual int group(){return m_group;}
@@ -31,9 +31,8 @@ public:
     virtual void setMask(int mask);
     virtual void setGroup(int group);
 
-    virtual QMatrix4x4 worldTransformation(){return m_worldTransformation;}
+    virtual QMatrix4x4 worldTransformation();
     virtual void setWorldTransformation(QMatrix4x4 m);
-
 
     virtual qreal restitution(){return m_restitution;}
     virtual qreal rollingFriction(){return m_rollingFriction;}
@@ -47,15 +46,18 @@ public:
     virtual void setMass(qreal mass);
     virtual void setFallInertia(QVector3D fallInertia);
 
+    btRigidBody* bulletBody(){return m_rigidBody;}
 public slots:
 
     virtual void applyForce(QVector3D force,QVector3D relationPosition=QVector3D());
     virtual void applyImpulse(QVector3D force,QVector3D relationPosition=QVector3D());
     virtual void clearForces();
-
+signals:
+    void worldUpdateRequired();
 protected:
     virtual void initBody();
     virtual void initShape()=0;
+    virtual void setMassProps();
 
     int m_mask;
     int m_group;
@@ -65,7 +67,6 @@ protected:
     qreal m_restitution;
     qreal m_friction;
     qreal m_rollingFriction;
-    QMatrix4x4 m_worldTransformation;
 
     btCollisionShape* m_shape ;
     btMotionState* m_motionState;

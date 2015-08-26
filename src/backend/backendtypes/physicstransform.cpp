@@ -6,11 +6,10 @@ namespace Physics {
 
 PhysicsTransform::PhysicsTransform():
     Qt3D::QBackendNode(),
+    m_objectName(),
     m_dirty(false),
     m_enabled(false),
-    m_transformMatrix(),
-    m_objectName()
-
+    m_transformMatrix()
 {
     m_manager=Q_NULLPTR;
 }
@@ -19,9 +18,6 @@ void PhysicsTransform::setManager(PhysicsManager *manager){
         m_manager=manager;
 }
 
-PhysicsManager* PhysicsTransform::manager(){
-    return m_manager;
-}
 
 PhysicsTransform::~PhysicsTransform(){
     m_manager->m_resources.remove(peerUuid());

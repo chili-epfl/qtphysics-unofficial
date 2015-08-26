@@ -2,7 +2,7 @@
 #define PHYSICSBODYINFO_H
 #include "frontend_global.h"
 
-#include <Qt3DCore/QComponent>
+#include <Qt3DCore>
 #include <QVector3D>
 
 namespace Physics {
@@ -19,6 +19,9 @@ class FRONTENDSHARED_EXPORT PhysicsBodyInfo: public Qt3D::QComponent
     Q_PROPERTY(qreal rollingFriction READ rollingFriction WRITE setRollingFriction NOTIFY rollingFrictionChanged)
     Q_PROPERTY(qreal mass READ mass WRITE setMass NOTIFY massChanged)
     Q_PROPERTY(QVector3D fallInertia READ fallInertia WRITE setFallInertia NOTIFY fallInertiaChanged)
+    /*Shape details allows to override the details of the collition shape that otherwise would be
+    * derived by the mesh. It's also useful to create object with a specific collition shape but with an empty mesh*/
+    Q_PROPERTY(QVariantMap shapeDetails READ shapeDetails WRITE setShapeDetails NOTIFY shapeDetailsChanged)
 public:
     explicit PhysicsBodyInfo(Qt3D::QNode* parent=0);
     ~PhysicsBodyInfo();
@@ -35,13 +38,14 @@ public:
     virtual qreal friction(){return m_friction;}
     virtual qreal mass(){return m_mass;}
     virtual QVector3D fallInertia(){return m_fallInertia;}
+    virtual const QVariantMap& shapeDetails(){return m_shapeDetails;}
 
     virtual void setRestitution(qreal restitution);
     virtual void setRollingFriction(qreal rollingFriction);
     virtual void setFriction(qreal friction);
     virtual void setMass(qreal mass);
     virtual void setFallInertia(QVector3D fallInertia);
-
+    virtual void setShapeDetails(QVariantMap shapeDetails);
 
 signals:
     void maskChanged(int mask);
@@ -52,6 +56,7 @@ signals:
     void rollingFrictionChanged(qreal rollingFriction);
     void frictionChanged(qreal friction);
     void restitutionChanged(qreal restitution);
+    void shapeDetailsChanged();
 
 protected:
     void copy(const Qt3D::QNode *ref) Q_DECL_OVERRIDE;
@@ -66,6 +71,9 @@ private:
     qreal m_restitution;
     qreal m_friction;
     qreal m_rollingFriction;
+    QVariantMap m_shapeDetails;
+
+    Qt3D::QMatrixTransform* m_attached_matrix;
 
 };
 

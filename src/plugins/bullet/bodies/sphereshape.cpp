@@ -12,7 +12,6 @@ SphereShape::SphereShape(QObject* parent):
     AbstractBody(parent),
     m_radius(1)
 {
-    setMass(1);
     initShape();
     initBody();
 }

@@ -1,6 +1,7 @@
 #include "physics-qml_plugin.h"
 
 #include <physicsbodyinfo.h>
+#include <physicsworldinfo.h>
 #include <physicsaspect.h>
 #include <QLibrary>
 #include <qqml.h>
@@ -19,5 +20,6 @@ void Qml_PhysicsPlugin::registerTypes(const char *uri)
     //qmlRegisterExtendedType<Physics::PhysicsBodyInfo,Physics::PhysicsQuickBodyInfo>(uri, 1, 0, "PhysicsBodyInfo");
 
     qmlRegisterType<Physics::PhysicsBodyInfo>(uri, 1, 0, "PhysicsBodyInfo");
+    qmlRegisterType<Physics::PhysicsWorldInfo>(uri, 1, 0, "PhysicsWorldInfo");
 
 }

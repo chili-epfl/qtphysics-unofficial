@@ -12,7 +12,7 @@ class BoxShape: public AbstractBody
 {
     Q_OBJECT
 public:
-    BoxShape(QObject* parent=0);
+    explicit BoxShape(QObject* parent=0);
     ~BoxShape();
 
     QVector3D dimension(){return m_dimension;}

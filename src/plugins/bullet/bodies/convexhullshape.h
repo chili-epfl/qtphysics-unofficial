@@ -9,13 +9,13 @@ class ConvexHullShape : public AbstractBody
 {
     Q_OBJECT
 public:
-    ConvexHullShape(QObject* parent=0);
-    ConvexHullShape(qreal* points,int n_points,QObject* parent=0);
+    explicit ConvexHullShape(QObject* parent=0);
+    explicit ConvexHullShape(qreal* points,int n_points,QObject* parent=0);
     ~ConvexHullShape();
     void addPoint(QVector3D p);
 protected:
-    void initShape(qreal* points=NULL,int n_points=0) Q_DECL_OVERRIDE;
-
+    void initShape(qreal* points,int n_points);
+    void initShape()Q_DECL_OVERRIDE;
 private:
 };
 

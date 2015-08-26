@@ -7,20 +7,22 @@ namespace Bullet {
 ConvexHullShape::ConvexHullShape(QObject* parent):
     AbstractBody(parent)
 {
-    setMass(1.0f);
     initShape();
     initBody();
 }
 ConvexHullShape::ConvexHullShape(qreal* points,int n_points,QObject* parent):
     AbstractBody(parent)
 {
-    setMass(1.0f);
     initShape(points,n_points);
     initBody();
+
 }
 
 ConvexHullShape::~ConvexHullShape(){
 
+}
+void ConvexHullShape::initShape(){
+    initShape(Q_NULLPTR,0);
 }
 
 void ConvexHullShape::initShape(qreal* points,int n_points){
@@ -38,5 +40,6 @@ void ConvexHullShape::initShape(qreal* points,int n_points){
 void ConvexHullShape::addPoint(QVector3D p){
     ((btConvexHullShape*)m_shape)->addPoint(btVector3(p.x(),p.y(),p.z()));
 }
+
 
 }}

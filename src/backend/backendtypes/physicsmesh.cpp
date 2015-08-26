@@ -7,29 +7,42 @@ namespace Physics {
 
 PhysicsMesh::PhysicsMesh():
     Qt3D::QBackendNode(),
+    m_objectName(),
     m_dirty(false),
     m_enabled(false),
-    m_meshfunctor(),
-    m_objectName()
+    m_meshfunctor()
 
 {
     m_manager=Q_NULLPTR;
+    m_type=GENERAL;
 }
 
 void PhysicsMesh::setManager(PhysicsManager *manager){
         m_manager=manager;
 }
 
-PhysicsManager* PhysicsMesh::manager(){
-    return m_manager;
-}
 
 PhysicsMesh::~PhysicsMesh(){
     m_manager->m_resources.remove(peerUuid());
 }
 
 void PhysicsMesh::updateFromPeer(Qt3D::QNode *peer){
-    Qt3D::QAbstractMesh *mesh = static_cast<Qt3D::QAbstractMesh*>(peer);
+    Qt3D::QAbstractMesh *mesh = static_cast<Qt3D::QAbstractMesh*>(peer);   
+    if(mesh->inherits("Qt3D::QCuboidMesh")){
+        m_type=CUBOID;
+        Qt3D::QCuboidMesh* _mesh =static_cast<Qt3D::QCuboidMesh*>(peer);
+        m_x_dim=_mesh->xExtent();
+        m_y_dim=_mesh->yExtent();
+        m_z_dim=_mesh->zExtent();
+    }
+    else if (mesh->inherits("Qt3D::QSphereMesh")){
+        m_type=SPHERE;
+        Qt3D::QSphereMesh* _mesh =static_cast<Qt3D::QSphereMesh*>(peer);
+        m_radius=_mesh->radius();
+    }
+    else {
+        m_type=GENERAL;
+    }
     m_objectName = peer->objectName();
     m_dirty=true;
     m_enabled=mesh->isEnabled();

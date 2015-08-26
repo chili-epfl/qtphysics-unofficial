@@ -10,7 +10,6 @@ BoxShape::BoxShape(QObject* parent):
     m_dimension(1,1,1)
 
 {
-    setMass(1.0f);
     initShape();
     initBody();
 
@@ -21,6 +20,7 @@ BoxShape::~BoxShape()
 }
 
 void BoxShape::setDimension(QVector3D dimension){
+
     /*if(m_dimension!=dimension){
         m_dimension=dimension;
         if(m_world)
@@ -39,7 +39,6 @@ void BoxShape::setDimension(QVector3D dimension){
 void BoxShape::initShape(){
     m_shape = new btBoxShape(btVector3(m_dimension.x()/2,m_dimension.y()/2,m_dimension.z()/2));
 }
-
 
 }}
 

@@ -1,25 +1,25 @@
-#include "heightfield2d.h"
+#include "staticplane.h"
 
 namespace Physics {
 
 namespace Bullet {
 
-HeightField2D::HeightField2D(QObject* parent):
+StaticPlane::StaticPlane(QObject* parent):
     AbstractBody(parent),
     m_normal(0,1,0),
-    m_planeConstant(1.0f)
+    m_planeConstant(0.0f)
 {
     setMass(0.0f);
     initShape();
     initBody();
 }
 
-HeightField2D::~HeightField2D()
+StaticPlane::~StaticPlane()
 {
 
 }
 
-void HeightField2D::setPlaneConstant(qreal d){
+void StaticPlane::setPlaneConstant(qreal d){
 /*
     if(m_planeConstant!=d){
         m_planeConstant=d;
@@ -37,7 +37,7 @@ void HeightField2D::setPlaneConstant(qreal d){
 */
 }
 
-void HeightField2D::setNormal(QVector3D normal){
+void StaticPlane::setNormal(QVector3D normal){
 /*
     if(m_normal!=normal){
         m_normal=normal;
@@ -52,14 +52,13 @@ void HeightField2D::setNormal(QVector3D normal){
     }
 */
 }
-void HeightField2D::setMass(qreal mass){
+void StaticPlane::setMass(qreal mass){
     if(m_mass!=mass){
-        qWarning()<<"HeightField2D does not support mass";
+        qWarning()<<"StaticPlane does not support mass";
     }
 }
 
-void HeightField2D::initShape(){
-
+void StaticPlane::initShape(){
     m_shape = new btStaticPlaneShape(btVector3(m_normal.x(),m_normal.y(),m_normal.z()), m_planeConstant);
 }
 

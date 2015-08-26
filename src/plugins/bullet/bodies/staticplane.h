@@ -1,5 +1,5 @@
-#ifndef HEIGHTFIELD2D_H
-#define HEIGHTFIELD2D_H
+#ifndef STATICPLANE_H
+#define STATICPLANE_H
 
 #include "abstractbody.h"
 #include <QVector3D>
@@ -8,12 +8,12 @@ namespace Physics {
 
 namespace Bullet {
 
-class HeightField2D : public AbstractBody
+class StaticPlane : public AbstractBody
 {
     Q_OBJECT
 public:
-    HeightField2D(QObject* parent=0);
-    ~HeightField2D();
+    explicit StaticPlane(QObject* parent=0);
+    ~StaticPlane();
     QVector3D normal(){return m_normal;}
     void setNormal(QVector3D normal);
     qreal planeConstant(){return m_planeConstant;}
@@ -32,4 +32,4 @@ private:
 
 }
 }
-#endif // HEIGHTFIELD2D_H
+#endif // STATICPLANE_H

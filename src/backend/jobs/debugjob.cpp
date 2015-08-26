@@ -21,8 +21,8 @@ void DebugJob::print(Qt3D::QNodeId id){
     PhysicsEntity* e= static_cast<PhysicsEntity*>(m_manager->m_resources.operator [](id));
 //    qDebug()<< e->objectName();
   //  qDebug()<< e->objectName();
-    for(PhysicsEntity* child : e->children())
-        print(child->peerUuid());
+    for(Qt3D::QNodeId childId : e->childrenIds())
+        print(childId);
 }
 
 }

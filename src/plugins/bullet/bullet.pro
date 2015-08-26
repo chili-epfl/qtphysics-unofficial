@@ -13,29 +13,29 @@ CONFIG += plugin
 include("../../common.pri")
 include("dependencies.pri")
 
-DESTDIR = $$[QT_INSTALL_PLUGINS]/generic
+DESTDIR = $$[QT_INSTALL_PLUGINS]/physicsfactories
 
 SOURCES += \
     bulletfactory.cpp \
     bodies/boxshape.cpp \
     #bodies/compoundshape.cpp \
     bodies/convexhullshape.cpp \
-    bodies/heightfield2d.cpp \
     bodies/motionstate.cpp \
     bodies/sphereshape.cpp \
     bodies/abstractbody.cpp \
-    worlds/world.cpp
+    worlds/world.cpp \
+    bodies/staticplane.cpp
 
 HEADERS += \
     bulletfactory.h \
     bodies/boxshape.h \
     #bodies/compoundshape.h \
     bodies/convexhullshape.h \
-    bodies/heightfield2d.h \
     bodies/motionstate.h \
     bodies/sphereshape.h \
     bodies/abstractbody.h \
-    worlds/world.h
+    worlds/world.h \
+    bodies/staticplane.h
 DISTFILES += bullet.json \
 
 

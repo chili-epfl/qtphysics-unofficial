@@ -2,21 +2,20 @@
 #define BulletFactory_H
 
 #include <QGenericPlugin>
-#include <physics_entities/physicsabstractfactory.h>
+#include <physics_entities/physicsfactoryinterface.h>
 namespace Physics {
 
 namespace Bullet {
 
-class BulletFactory : PhysicsAbstractFactory
+class BulletFactory :public QObject,
+        PhysicsFactoryInterface
 {
     Q_OBJECT
-#if QT_VERSION >= 0x050000
-    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.Physics.Unofficial.PhysicsAbstractFactory" FILE "bullet.json")
-#endif // QT_VERSION >= 0x050000
-    Q_INTERFACES(PhysicsAbstractFactory)
+    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.Physics.Unofficial.PhysicsFactoryBullet" FILE "bullet.json")
+    Q_INTERFACES(Physics::PhysicsFactoryInterface)
 public:
     BulletFactory(QObject *parent = 0);
-    PhysicsAbstractRigidBody* create_rigid_body();
+    PhysicsAbstractRigidBody* create_rigid_body(QVariantMap geometric_info);
     PhysicsAbstractDynamicsWorld* create_dynamics_world();
 };
 

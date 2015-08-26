@@ -19,14 +19,17 @@ DEFINES += FRONTEND_LIBRARY
 DESTDIR = test
 
 SOURCES += \
-    physicsbodyinfo.cpp
+    physicsbodyinfo.cpp \
+    physicsworldinfo.cpp
 
 HEADERS +=\
         frontend_global.h \
-        physicsbodyinfo.h
+        physicsbodyinfo.h \
+    physicsworldinfo.h
 
 headersDataFiles.path = $$[QT_INSTALL_HEADERS]/$$PROJECT_NAME/frontend
 headersDataFiles.files = $$PWD/*.h
+
 INSTALLS += headersDataFiles
 
 #libraryFiles.path = $$[QT_INSTALL_LIBS]

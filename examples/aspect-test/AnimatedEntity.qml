@@ -66,9 +66,11 @@ Entity {
     PhysicsBodyInfo{
         id:test
         mass:1
+        restitution: 0.9
     }
     Entity {
         id: torusEntity
+        objectName: "torus"
         components: [ torusMesh, material, torusTransform,test ]
     }
 
@@ -94,4 +96,24 @@ Entity {
         id: sphereEntity
         components: [ sphereMesh, material, sphereTransform ]
     }
+
+    Entity{
+        objectName: "Floor"
+        Transform{
+            id:transformFloor
+            Translate{
+                dy: -5
+            }
+        }
+        PhysicsBodyInfo{
+            id:floorBodyInfo
+            restitution: 0.9
+            shapeDetails:{"Type":"StaticPlane","PlaneConstant":1,"PlaneNormal": Qt.vector3d(0, 1, 0) }
+        }
+        components: [transformFloor,floorBodyInfo]
+
+    }
+
+
+
 }

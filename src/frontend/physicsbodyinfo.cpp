@@ -1,17 +1,18 @@
 #include "physicsbodyinfo.h"
-#include <Qt3DCore>
+
 namespace Physics {
 
 PhysicsBodyInfo::PhysicsBodyInfo(Qt3D::QNode* parent):
     Qt3D::QComponent(parent),
-    m_group(1),
     m_mask(1),
+    m_group(1),
+    m_mass(0),
+    m_fallInertia(),
     m_restitution(0.0f),
     m_friction(0.0f),
-    m_rollingFriction(0.0f),
-    m_fallInertia(),
-    m_mass(0)
+    m_rollingFriction(0.0f)
 {
+    m_attached_matrix=Q_NULLPTR;
     setShareable(false);
 }
 void PhysicsBodyInfo::copy(const Qt3D::QNode *ref){
@@ -25,6 +26,7 @@ void PhysicsBodyInfo::copy(const Qt3D::QNode *ref){
     m_mass=body_info->m_mass;
     m_mask=body_info->m_mask;
     m_group=body_info->m_group;
+    m_attached_matrix=body_info->m_attached_matrix;
 }
 
 PhysicsBodyInfo::~PhysicsBodyInfo(){
@@ -37,6 +39,13 @@ void PhysicsBodyInfo::setMass(qreal mass){
         emit massChanged(m_mass);
     }
 }
+void PhysicsBodyInfo::setShapeDetails(QVariantMap shapeDetails){
+
+   m_shapeDetails=shapeDetails;
+   emit shapeDetailsChanged();
+
+}
+
 void PhysicsBodyInfo::setFallInertia(QVector3D fallInertia){
     if( m_fallInertia!=fallInertia){
         m_fallInertia=fallInertia;
@@ -107,10 +116,18 @@ void PhysicsBodyInfo::sceneChangeEvent(const Qt3D::QSceneChangePtr &change)
                         Qt3D::QMatrixTransform* matrix= new Qt3D::QMatrixTransform(m,physics_transform);
                         physics_transform->addTransform(matrix);
                         e->addComponent(physics_transform);
+                        m_attached_matrix=matrix;
                     }
                 }
             }
-    }}
+    }
+    else if(e->propertyName() == QByteArrayLiteral("updateTransform")){
+            QMatrix4x4 mat= e->value().value<QMatrix4x4>();
+            if(!m_attached_matrix)
+                qFatal("Attached matrix expected but not present");
+            m_attached_matrix->setMatrix(mat);
+        }
+    }
 }
 
 

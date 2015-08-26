@@ -1,20 +1,69 @@
 #include "bulletfactory.h"
 
+#include "worlds/world.h"
+#include "bodies/boxshape.h"
+#include "bodies/convexhullshape.h"
+#include "bodies/staticplane.h"
+#include "bodies/sphereshape.h"
+
 namespace Physics {
 
 namespace Bullet {
 BulletFactory::BulletFactory(QObject *parent) :
-    PhysicsAbstractFactory(parent)
+    QObject(parent)
 {
 }
 
-PhysicsAbstractRigidBody* BulletFactory::create_rigid_body(){
-
+PhysicsAbstractRigidBody* BulletFactory::create_rigid_body(QVariantMap geometric_info){
+    if(geometric_info.contains("Type")){
+        QString type=geometric_info["Type"].toString();
+        if(type=="Cuboid"){
+            BoxShape* b=new BoxShape();
+            b->setDimension(QVector3D(geometric_info["X_Dim"].toFloat(),
+                            geometric_info["Y_Dim"].toFloat(),
+                            geometric_info["Z_Dim"].toFloat()));
+            return b;
+        }
+        else if(type=="Sphere"){
+            SphereShape* b=new SphereShape();
+            b->setRadius(geometric_info["Radius"].toFloat());
+            return b;
+        }
+        else if(type=="StaticPlane"){
+            StaticPlane* b=new StaticPlane();
+            b->setPlaneConstant(geometric_info["PlaneConstant"].toFloat());
+            b->setNormal(geometric_info["PlaneNormal"].value<QVector3D>());
+            return b;
+        }
+        else if(type=="Generic"){
+            QList<QVariant> points=geometric_info["Points"].toList();
+            qreal* _points=new qreal[points.size()*3];
+            int i=0;
+            Q_FOREACH(QVariant p, points){
+                QVector3D _p=p.value<QVector3D>();
+                _points[i]=_p.x();
+                _points[i+1]=_p.y();
+                _points[i+2]=_p.z();
+                i+=3;
+            }
+            ConvexHullShape* b=new ConvexHullShape(_points,points.size(),0);
+            delete _points;
+            return b;
+        }
+        else{
+            qFatal("Invalid geometric info");
+            return Q_NULLPTR;
+        }
+    }
+    else{
+        qFatal("Invalid geometric info");
+        return Q_NULLPTR;
+    }
 
 }
+
 PhysicsAbstractDynamicsWorld* BulletFactory::create_dynamics_world(){
-
-
+    return new World();
 }
 
 }

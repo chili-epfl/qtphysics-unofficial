@@ -9,19 +9,15 @@ namespace Physics {
 
 PhysicsBodyInfoBackendNode::PhysicsBodyInfoBackendNode():
     Qt3D::QBackendNode(Qt3D::QBackendNode::ReadWrite),
-    m_enabled(false),
+    m_dirtyFlags(Clean),
     m_objectName(),
-    m_dirtyFlags(Clean)
+    m_enabled(false)
 {
     m_manager=Q_NULLPTR;
 }
 
 void PhysicsBodyInfoBackendNode::setManager(PhysicsManager *manager){
         m_manager=manager;
-}
-
-PhysicsManager* PhysicsBodyInfoBackendNode::manager(){
-    return m_manager;
 }
 
 PhysicsBodyInfoBackendNode::~PhysicsBodyInfoBackendNode(){
@@ -39,7 +35,7 @@ void PhysicsBodyInfoBackendNode::updateFromPeer(Qt3D::QNode *peer){
     setMass(body_info->mass());
     setRestitution(body_info->restitution());
     setRollingFriction(body_info->rollingFriction());
-
+    setShapeDetails(body_info->shapeDetails());
 }
 
 void PhysicsBodyInfoBackendNode::setMass(qreal mass){
@@ -54,6 +50,12 @@ void PhysicsBodyInfoBackendNode::setFallInertia(QVector3D fallInertia){
         m_dirtyFlags.operator |=(FallInertiaChanged);
     }
 }
+
+void PhysicsBodyInfoBackendNode::setShapeDetails(QVariantMap shapeDetails){
+    m_shapeDetails=shapeDetails;
+    m_dirtyFlags.operator |=(ShapeDetailsChanged);
+}
+
 
 void PhysicsBodyInfoBackendNode::setMask(int mask){
     if(mask >0 && m_mask!=mask){
@@ -110,6 +112,8 @@ void PhysicsBodyInfoBackendNode::sceneChangeEvent(const Qt3D::QSceneChangePtr &e
                 setRestitution(propertyChange->value().toReal());
             else if (propertyChange->propertyName() == QByteArrayLiteral("rollingFriction"))
                 setRollingFriction(propertyChange->value().toReal());
+            else if (propertyChange->propertyName() == QByteArrayLiteral("shapeDetails"))
+                setShapeDetails(propertyChange->value().value<QVariantMap>());
             else if (propertyChange->propertyName() == QByteArrayLiteral("enabled"))
                 m_enabled = propertyChange->value().toBool();
             break;
@@ -119,16 +123,23 @@ void PhysicsBodyInfoBackendNode::sceneChangeEvent(const Qt3D::QSceneChangePtr &e
     }
 }
 
-void PhysicsBodyInfoBackendNode::notifyFrontEnd(){
+void PhysicsBodyInfoBackendNode::notifyFrontEnd(QString operation, QVariantMap args){
     Qt3D::QBackendScenePropertyChangePtr e(new Qt3D::QBackendScenePropertyChange(Qt3D::NodeUpdated, peerUuid()));
-    e->setPropertyName("attachPhysicsTransfrom");
+    if(operation=="attachPhysicsTransfrom"){
+        e->setPropertyName("attachPhysicsTransfrom");
+        e->setValue(true);
+    }
+    else if(operation=="updateTransform"){
+        e->setPropertyName("updateTransform");
+        e->setValue(args["Matrix"]);
+    }
+    else{
+        return;
+    }
     // The Frontend element has to perform the action (PhysicsBodyInfo)
-    e->setValue(true);
     e->setTargetNode(peerUuid());
     notifyObservers(e);
 }
-
-
 
 
 

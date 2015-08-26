@@ -18,7 +18,8 @@ class World : public PhysicsAbstractDynamicsWorld
     Q_OBJECT
 
 public:
-    enum WorldType{DISCRETEDYNAMICSWORLD,SOFTRIGIDDYNAMICSWORLD};
+    World(QObject *parent=0);
+    ~World();
 
     WorldType type(){return m_type;}
     void setType(WorldType type);
@@ -26,15 +27,20 @@ public:
     qreal simulationRate(){return m_simulationRate;}
     void setSimulationRate(qreal rate);
 
+    void stepSimulation();
+
     QVector3D gravity(){return m_gravity;}
     void setGravity(QVector3D gravity);
 
-    void removebtRigidBody(btRigidBody* b,bool emitSignal=true);
-    void addbtRigidBody(btRigidBody* b,int group,int mask,bool emitSignal=true);
-    void removeBody(AbstractBody* b,bool emitSignal=true);
-    void addBody(AbstractBody* b,bool emitSignal=true);
+    void removeBody(PhysicsAbstractRigidBody* b);
+    void addBody(PhysicsAbstractRigidBody*b);
 
+private slots:
+    void onBodyDestroyed(QObject* obj);
+    void onBodyRequireUpdate();
 private:
+    void removebtRigidBody(btRigidBody* b);
+    void addbtRigidBody(btRigidBody* b,int group,int mask);
 
     void init();
 
@@ -42,11 +48,7 @@ private:
     qreal m_simulationRate;
     QVector3D m_gravity;
 
-
-
-    QHash<QString, AbstractBody*> m_bodies;
-
-
+    QSet<AbstractBody*> m_bodies;
 
     btBroadphaseInterface* m_broadphase;
     btDefaultCollisionConfiguration* m_collisionConfiguration;

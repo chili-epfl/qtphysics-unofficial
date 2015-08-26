@@ -13,14 +13,19 @@ class PhysicsManager;
 class BACKENDSHARED_EXPORT PhysicsTransform : public Qt3D::QBackendNode
 {
 public:
-    PhysicsTransform();
+    explicit PhysicsTransform();
     ~PhysicsTransform();
     void updateFromPeer(Qt3D::QNode *peer) Q_DECL_OVERRIDE;
 
     QString objectName(){return m_objectName;}
 
+    bool isDirty(){return m_dirty;}
+    void setDirty(bool dirty){ m_dirty=dirty;}
+
     void setManager(PhysicsManager *manager);
-    PhysicsManager* manager();
+
+    const QMatrix4x4& transformMatrix(){return m_transformMatrix;}
+
 protected:
     void sceneChangeEvent(const Qt3D::QSceneChangePtr &) Q_DECL_OVERRIDE;
 private:

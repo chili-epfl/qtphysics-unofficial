@@ -1,5 +1,6 @@
 #include "physicsentity.h"
 #include "physicsbodyinfo.h"
+#include "physicsworldinfo.h"
 
 #include "../physicsmanager.h"
 
@@ -9,12 +10,13 @@ namespace Physics {
 
 PhysicsEntity::PhysicsEntity():
     Qt3D::QBackendNode(),
-    m_abstractmesh(),
     m_parentId(),
-    m_physicsBodyInfo(),
+    m_objectName(),
     m_default_transform(),
     m_physics_transform(),
-    m_objectName()
+    m_abstractmesh(),
+    m_physicsBodyInfo(),
+    m_physicsWorldInfo()
 
 {
     m_manager=Q_NULLPTR;
@@ -24,9 +26,6 @@ void PhysicsEntity::setManager(PhysicsManager *manager){
         m_manager=manager;
 }
 
-PhysicsManager* PhysicsEntity::manager(){
-    return m_manager;
-}
 
 PhysicsEntity::~PhysicsEntity(){
     m_manager->m_resources.remove(peerUuid());
@@ -44,6 +43,7 @@ void PhysicsEntity::updateFromPeer(Qt3D::QNode *peer){
     m_physicsBodyInfo=Qt3D::QNodeId();
     m_default_transform=Qt3D::QNodeId();
     m_physics_transform=Qt3D::QNodeId();
+    m_physicsWorldInfo=Qt3D::QNodeId();
 
     for(Qt3D::QComponent* comp : entity->components()){
         addComponent(comp);
@@ -97,6 +97,8 @@ void PhysicsEntity::addComponent(Qt3D::QComponent *component){
         m_abstractmesh = component->id();
     else if (qobject_cast<PhysicsBodyInfo*>(component) != Q_NULLPTR)
         m_physicsBodyInfo = component->id();
+    else if (qobject_cast<PhysicsWorldInfo*>(component) != Q_NULLPTR)
+        m_physicsWorldInfo = component->id();
 }
 
 void PhysicsEntity::removeComponent(Qt3D::QNodeId componentId){
@@ -108,6 +110,8 @@ void PhysicsEntity::removeComponent(Qt3D::QNodeId componentId){
         m_physicsBodyInfo = Qt3D::QNodeId();
     else if(m_physics_transform==componentId)
         m_physics_transform=Qt3D::QNodeId();
+    else if(m_physicsWorldInfo==componentId)
+        m_physicsWorldInfo=Qt3D::QNodeId();
 }
 
 PhysicsEntity* PhysicsEntity::parent(){
@@ -122,17 +126,6 @@ void PhysicsEntity::removeChildId(Qt3D::QNodeId childId){
     if(m_childrenId.contains(childId))
        m_childrenId.remove(childId);
 }
-
-QSet<PhysicsEntity *> PhysicsEntity::children() {
-    QSet<PhysicsEntity *> children;
-    for(Qt3D::QNodeId id : m_childrenId){
-        if(m_manager->m_resources.contains(id)){
-            children.insert(static_cast<PhysicsEntity*>(m_manager->m_resources.operator [](id)));
-        }
-    }
-    return children;
-}
-
 
 
 

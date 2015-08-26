@@ -25,10 +25,13 @@ SOURCES += \
     jobs/debugjob.cpp \
     jobs/insertphysicstransformjob.cpp \
     physicsaspect.cpp \
-    physicsmanager.cpp
-    #physics_entities/physicsabstractrigidbody.cpp \
-    #physics_entities/physicsabstractdynamicsworld.cpp \
-    #physics_entities/physicsabstractfactory.cpp
+    physicsmanager.cpp \
+    backendtypes/physicsworldinfobackendnode.cpp \
+    physics_entities/physicsabstractrigidbody.cpp \
+    physics_entities/physicsabstractdynamicsworld.cpp \
+    jobs/simulatestepjob.cpp \
+    jobs/updatephysicsentitiesjob.cpp \
+    jobs/updatetransformsjob.cpp
 
 HEADERS +=\
         backend_global.h \
@@ -42,7 +45,11 @@ HEADERS +=\
     physicsmanager.h \
     physics_entities/physicsabstractrigidbody.h \
     physics_entities/physicsabstractdynamicsworld.h \
-    physics_entities/physicsabstractfactory.h
+    backendtypes/physicsworldinfobackendnode.h \
+    jobs/simulatestepjob.h \
+    jobs/updatephysicsentitiesjob.h \
+    jobs/updatetransformsjob.h \
+    physics_entities/physicsfactoryinterface.h
 
 
 headersDataFiles.path = $$[QT_INSTALL_HEADERS]/$$PROJECT_NAME/backend
