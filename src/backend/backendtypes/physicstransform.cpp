@@ -32,11 +32,12 @@ void PhysicsTransform::updateFromPeer(Qt3D::QNode *peer){
 void PhysicsTransform::sceneChangeEvent(const Qt3D::QSceneChangePtr &e){
     if (e->type() == Qt3D::NodeUpdated) {
             const Qt3D::QScenePropertyChangePtr &propertyChange = qSharedPointerCast<Qt3D::QScenePropertyChange>(e);
-            if (propertyChange->propertyName() == QByteArrayLiteral("matrix"))
+            if (propertyChange->propertyName() == QByteArrayLiteral("matrix")){
                 m_transformMatrix = propertyChange->value().value<QMatrix4x4>();
+                m_dirty=true;
+            }
             else if (propertyChange->propertyName() == QByteArrayLiteral("enabled"))
                 m_enabled = propertyChange->value().toBool();
-            m_dirty=true;
     }
 }
 

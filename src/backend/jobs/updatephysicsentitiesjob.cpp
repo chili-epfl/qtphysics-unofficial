@@ -76,8 +76,11 @@ void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 
                 else{
                     qFatal("Unknown shape type");
                 }
+                if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::ShapeDetailsChanged)){
+                    entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::ShapeDetailsChanged;
+                }
             }
-            /*Otherwise the geomtric info are extracted by the mesh*/
+            /*Otherwise the geometric info are extracted by the mesh*/
             else{
                 if(entity_mesh->m_type==PhysicsMesh::Mesh_Type::CUBOID){
                     geometric_info["Type"]="Cuboid";
@@ -95,18 +98,31 @@ void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 
                     Qt3D::QMeshDataPtr data_ptr=entity_mesh->m_meshfunctor.data()->operator ()();
                     Qt3D::QMeshData* mesh_data=data_ptr.data();
                     QVector<QVector3D> vertexPosition=mesh_data->attributeByName("vertexPosition")->asVector3D();
-                    geometric_info["Points"]=QVariant::fromValue(vertexPosition.toList());
+                    geometric_info["Points"]=QVariant::fromValue(vertexPosition);
+                }
+                if(entity_mesh!=Q_NULLPTR && entity_mesh->isDirty()){
+                    entity_mesh->setDirty(false);
                 }
             }
             rigid_body=m_manager->m_physics_factory->create_rigid_body(geometric_info);
             m_manager->m_physics_world->addBody(rigid_body);
+
         }
         /*The body was already created*/
         else{
             rigid_body=m_manager->m_rigid_bodies[node_id];
         }
 
-        /*Update body properties*/
+        /*Update Collition Shape*/
+        if(entity_body_info!=Q_NULLPTR &&
+                entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::ShapeDetailsChanged)){
+           //TODO
+        }
+        else if(entity_mesh!=Q_NULLPTR && entity_mesh->isDirty()){
+            //TODO
+        }
+
+        /*Update Motion State*/
         if(entity_default_transform->isDirty() || entity_body_info==Q_NULLPTR || entity_physics_transform==Q_NULLPTR ){
             /*Kinematic object: the motion state is updated according to the new position*/
             current_global_matrix=current_global_matrix*entity_default_transform->transformMatrix();
@@ -115,9 +131,8 @@ void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 
         else{
             current_global_matrix=current_global_matrix*entity_physics_transform->transformMatrix();
         }
-        if(entity_mesh!=Q_NULLPTR && entity_mesh->isDirty()){
-            //TODO
-        }
+
+        /*Update Body properties*/
         if(entity_body_info!=Q_NULLPTR){
             if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::MaskChanged)){
                  rigid_body->setMask(entity_body_info->mask());
@@ -151,7 +166,7 @@ void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 
         m_manager->m_rigid_bodies[node_id]=rigid_body;
     }
 
-    /*Entity containing a world component*/
+    /*Update Physic World settings*/
     if(!entity->physicsWorldInfo().isNull()){
         PhysicsWorldInfoBackendNode* entity_physics_world_info=static_cast<PhysicsWorldInfoBackendNode*>(m_manager->m_resources.operator [](entity->physicsWorldInfo()));
         if(entity_physics_world_info->dirtyFlags().testFlag(PhysicsWorldInfoBackendNode::DirtyFlag::GravityChanged)){
@@ -159,6 +174,7 @@ void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 
             entity_physics_world_info->dirtyFlags() &= ~PhysicsWorldInfoBackendNode::DirtyFlag::GravityChanged;
         }
     }
+
     /*Next call*/
     for(Qt3D::QNodeId childId : entity->childrenIds())
         recursive_step(childId, current_global_matrix);

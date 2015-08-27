@@ -13,6 +13,7 @@ public:
     explicit ConvexHullShape(qreal* points,int n_points,QObject* parent=0);
     ~ConvexHullShape();
     void addPoint(QVector3D p);
+    void updatePoints(qreal* points,int n_points);
 protected:
     void initShape(qreal* points,int n_points);
     void initShape()Q_DECL_OVERRIDE;

@@ -12,12 +12,9 @@ void Qml_PhysicsPlugin::registerTypes(const char *uri)
     /*This is here just to load the backend library*/
      QLibrary library("QtPhysicsUnofficialBackend");
      if (!library.load())
-     qDebug() << library.errorString();
-     if (library.load())
-     qDebug() << "library loaded";
+         qDebug() << library.errorString();
 
     Q_ASSERT(uri == QLatin1String("QtPhysics.unofficial"));
-    //qmlRegisterExtendedType<Physics::PhysicsBodyInfo,Physics::PhysicsQuickBodyInfo>(uri, 1, 0, "PhysicsBodyInfo");
 
     qmlRegisterType<Physics::PhysicsBodyInfo>(uri, 1, 0, "PhysicsBodyInfo");
     qmlRegisterType<Physics::PhysicsWorldInfo>(uri, 1, 0, "PhysicsWorldInfo");

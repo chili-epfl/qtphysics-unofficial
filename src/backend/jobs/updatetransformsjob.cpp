@@ -30,12 +30,16 @@ void UpdateTransformsJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 paren
             if(entity_default_transform->isDirty()){
                 entity_default_transform->setDirty(false);
             }
+
             PhysicsBodyInfoBackendNode* body_info=static_cast<PhysicsBodyInfoBackendNode*>(m_manager->m_resources[entity->physicsBodyInfo()]);
             PhysicsAbstractRigidBody* rigid_body=static_cast<PhysicsAbstractRigidBody*>(m_manager->m_rigid_bodies[node_id]);
-            QVariantMap args;
             current_world_transform=parent_matrix*rigid_body->worldTransformation();
-            args["Matrix"]=parent_matrix.inverted()*rigid_body->worldTransformation();
-            body_info->notifyFrontEnd("updateTransform",args);
+            /*If the object is not statics (or kinematic) then update the position*/
+            if(rigid_body->mass()!=0){
+                QVariantMap args;
+                args["Matrix"]=parent_matrix.inverted()*rigid_body->worldTransformation();
+                body_info->notifyFrontEnd("updateTransform",args);
+            }
         }
     }
     Q_FOREACH(Qt3D::QNodeId id, entity->childrenIds()){

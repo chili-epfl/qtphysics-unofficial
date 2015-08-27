@@ -35,15 +35,15 @@ PhysicsAbstractRigidBody* BulletFactory::create_rigid_body(QVariantMap geometric
             b->setNormal(geometric_info["PlaneNormal"].value<QVector3D>());
             return b;
         }
-        else if(type=="Generic"){
-            QList<QVariant> points=geometric_info["Points"].toList();
+        else if(type=="Generic" ){
+            QVector<QVector3D> points=geometric_info["Points"].value<QVector<QVector3D> >();
             qreal* _points=new qreal[points.size()*3];
             int i=0;
-            Q_FOREACH(QVariant p, points){
-                QVector3D _p=p.value<QVector3D>();
-                _points[i]=_p.x();
-                _points[i+1]=_p.y();
-                _points[i+2]=_p.z();
+            Q_FOREACH(QVector3D p, points){
+                //QVector3D _p=p.value<QVector3D>();
+                _points[i]=p.x();
+                _points[i+1]=p.y();
+                _points[i+2]=p.z();
                 i+=3;
             }
             ConvexHullShape* b=new ConvexHullShape(_points,points.size(),0);

@@ -27,17 +27,13 @@ void SphereShape::initShape(){
 
 
 void SphereShape::setRadius(qreal radius){
-    /*if(m_radius!=radius){
+    if(m_radius!=radius){
         m_radius=radius;
-        if(m_world)
-            m_world->lock();
         delete m_shape;
         m_shape = new btSphereShape(m_radius);
         m_rigidBody->setCollisionShape(m_shape);
-        if(m_world)
-            m_world->unlock();
-        emit radiusChanged(m_radius);
-    }*/
+        setMassProps();
+    }
 }
 
 

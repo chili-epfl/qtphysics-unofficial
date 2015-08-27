@@ -22,6 +22,7 @@ public:
     QString objectName(){return m_objectName;}
 
     bool isDirty(){return m_dirty;}
+    void setDirty(bool dirty){m_dirty=dirty;}
     void setManager(PhysicsManager *manager);
 
 protected:

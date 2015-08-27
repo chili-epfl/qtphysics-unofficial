@@ -11,7 +11,6 @@ PhysicsMesh::PhysicsMesh():
     m_dirty(false),
     m_enabled(false),
     m_meshfunctor()
-
 {
     m_manager=Q_NULLPTR;
     m_type=GENERAL;
@@ -60,11 +59,12 @@ void PhysicsMesh::sceneChangeEvent(const Qt3D::QSceneChangePtr &e){
     switch (e->type()) {
         case Qt3D::NodeUpdated: {
             Qt3D::QScenePropertyChangePtr propertyChange = qSharedPointerCast<Qt3D::QScenePropertyChange>(e);
-            if (propertyChange->propertyName() == QByteArrayLiteral("meshFunctor")) // Mesh with source
+            if (propertyChange->propertyName() == QByteArrayLiteral("meshFunctor")){ // Mesh with source
                 setMeshFunctor(propertyChange->value().value<Qt3D::QAbstractMeshFunctorPtr>());
+                m_dirty=true;
+            }
             else if (propertyChange->propertyName() == QByteArrayLiteral("enabled"))
                 m_enabled = propertyChange->value().toBool();
-            m_dirty=true;
             break;
         }
         default:

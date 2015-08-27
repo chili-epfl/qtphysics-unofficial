@@ -10,6 +10,10 @@ PhysicsWorldInfo::PhysicsWorldInfo(QNode* parent):
 
 }
 
+PhysicsWorldInfo::~PhysicsWorldInfo(){
+    Qt3D::QNode::cleanup();
+}
+
 void PhysicsWorldInfo::setGravity(QVector3D gravity){
     if(m_gravity!=gravity){
         m_gravity=gravity;

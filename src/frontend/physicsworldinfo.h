@@ -16,6 +16,7 @@ class FRONTENDSHARED_EXPORT PhysicsWorldInfo:
 
 public:
     explicit PhysicsWorldInfo(QNode* parent=0);
+    ~PhysicsWorldInfo();
     void copy(const QNode *ref) Q_DECL_OVERRIDE;
 
     QVector3D gravity() const {return m_gravity;}

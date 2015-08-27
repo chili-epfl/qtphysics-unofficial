@@ -26,20 +26,27 @@ void ConvexHullShape::initShape(){
 }
 
 void ConvexHullShape::initShape(qreal* points,int n_points){
+    m_shape = new btConvexHullShape();
+    for(int i=0;i<3*n_points;i=i+3)
+        ((btConvexHullShape*)m_shape)->addPoint(btVector3(points[i],points[i+1],points[i+2]));
 
-    btScalar* bt_points=new btScalar[3*n_points];
-
-    for(int i=0;i<3*n_points;i++)
-        bt_points[i]=points[i];
-
-    m_shape = new btConvexHullShape(bt_points,n_points);
-
-    delete bt_points;
 }
 
 void ConvexHullShape::addPoint(QVector3D p){
     ((btConvexHullShape*)m_shape)->addPoint(btVector3(p.x(),p.y(),p.z()));
 }
+
+void ConvexHullShape::updatePoints(qreal* points,int n_points){
+    delete m_shape;
+    btScalar* bt_points=new btScalar[3*n_points];
+    for(int i=0;i<3*n_points;i++)
+        bt_points[i]=points[i];
+    m_shape = new btConvexHullShape(bt_points,n_points);
+    m_rigidBody->setCollisionShape(m_shape);
+    delete bt_points;
+    setMassProps();
+}
+
 
 
 }}

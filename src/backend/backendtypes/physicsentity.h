@@ -39,7 +39,6 @@ public:
     Qt3D::QNodeId physicsBodyInfo(){return m_physicsBodyInfo;}
     Qt3D::QNodeId physicsWorldInfo(){return m_physicsWorldInfo;}
 
-
 protected:
     void sceneChangeEvent(const Qt3D::QSceneChangePtr &) Q_DECL_OVERRIDE;
 private:

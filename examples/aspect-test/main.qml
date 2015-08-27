@@ -8,12 +8,6 @@ Item {
         anchors.topMargin: 10
         anchors.horizontalCenter: parent.horizontalCenter
 
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                sceneroot.test.mass=2.0
-            }
-        }
     }
 
     Rectangle {
