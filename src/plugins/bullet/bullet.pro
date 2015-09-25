@@ -24,7 +24,8 @@ SOURCES += \
     bodies/sphereshape.cpp \
     bodies/abstractbody.cpp \
     worlds/world.cpp \
-    bodies/staticplane.cpp
+    bodies/staticplane.cpp \
+    worlds/debugdraw.cpp
 
 HEADERS += \
     bulletfactory.h \
@@ -35,7 +36,8 @@ HEADERS += \
     bodies/sphereshape.h \
     bodies/abstractbody.h \
     worlds/world.h \
-    bodies/staticplane.h
+    bodies/staticplane.h \
+    worlds/debugdraw.h
 DISTFILES += bullet.json \
 
 

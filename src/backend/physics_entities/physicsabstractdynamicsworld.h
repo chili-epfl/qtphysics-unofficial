@@ -23,6 +23,10 @@ public:
     virtual QVector3D gravity()=0;
     virtual void setGravity(QVector3D gravity)=0;
 
+    virtual void setDebug(bool debug)=0;
+    virtual bool debug()=0;
+    virtual QVariantList debugEntities()=0;
+
     virtual void addBody(PhysicsAbstractRigidBody* body)=0;
     virtual void removeBody(PhysicsAbstractRigidBody* body)=0;
 

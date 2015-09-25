@@ -33,6 +33,10 @@ public:
     void setGravity(QVector3D gravity);
 
     QVector3D gravity(){return m_gravity;}
+    bool debug(){return m_debug;}
+
+    void notifyFrontEnd(QString operation, QVariantList args);
+
 protected:
     void sceneChangeEvent(const Qt3D::QSceneChangePtr &) Q_DECL_OVERRIDE;
 private:
@@ -43,6 +47,7 @@ private:
     bool m_enabled;
 
     QVector3D m_gravity;
+    bool m_debug;
 
     PhysicsManager* m_manager;
 

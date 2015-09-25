@@ -10,6 +10,7 @@ World::World(QObject *parent):
     m_type=DISCRETEDYNAMICSWORLD;
     m_simulationRate=60.0;
     m_gravity=QVector3D(0,-10,0);
+    m_debugDraw=new DebugDraw();
     init();
 }
 
@@ -66,6 +67,10 @@ void World::setSimulationRate(qreal rate){
 
 void World::stepSimulation(){
     m_dynamicsWorld->stepSimulation(1.0f/m_simulationRate,10);
+    if(m_debug){
+        //m_debugDraw->debug_entities.clear();
+        //m_dynamicsWorld->debugDrawWorld();
+    }
 
 }
 
@@ -75,6 +80,16 @@ void World::setGravity(QVector3D gravity){
         m_gravity=gravity;
         m_dynamicsWorld->setGravity(btVector3(m_gravity.x(),m_gravity.y(),m_gravity.z()));
     }
+}
+void World::setDebug(bool debug){
+    if(m_debug!=debug){
+        m_debug=debug;
+        if(m_debug)
+            m_dynamicsWorld->setDebugDrawer(m_debugDraw);
+        else
+            m_dynamicsWorld->setDebugDrawer(Q_NULLPTR);
+    }
+
 }
 
 

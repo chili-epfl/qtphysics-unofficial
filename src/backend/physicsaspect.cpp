@@ -17,6 +17,7 @@
 #include "jobs/insertphysicstransformjob.h"
 #include "jobs/simulatestepjob.h"
 #include "jobs/updatetransformsjob.h"
+#include "jobs/debugdrawjob.h"
 
 #include <Qt3DCore/qaspectfactory.h>
 #include <Qt3DCore/qnodevisitor.h>
@@ -48,7 +49,7 @@ QVector<Qt3D::QAspectJobPtr> PhysicsAspect::jobsToExecute(qint64 time){
     Q_UNUSED(time);
     QVector<Qt3D::QAspectJobPtr> jobs;
     if(m_manager->m_physics_factory!=Q_NULLPTR && m_manager->m_physics_world!=Q_NULLPTR){
-        Qt3D::QAspectJobPtr insert_physics_transform, update_physics_entities, simulate_step,update_transform;
+        Qt3D::QAspectJobPtr insert_physics_transform, update_physics_entities, simulate_step,update_transform,debug_draw;
         //insert_physics_transform.reset(new InsertPhysicsTransformJob(m_manager));
 
         update_physics_entities.reset(new UpdatePhysicsEntitiesJob(m_manager));
@@ -59,10 +60,16 @@ QVector<Qt3D::QAspectJobPtr> PhysicsAspect::jobsToExecute(qint64 time){
         simulate_step->addDependency(update_physics_entities);
         update_transform->addDependency(simulate_step);
 
+
         //jobs.append(insert_physics_transform);
         jobs.append(update_physics_entities);
         jobs.append(simulate_step);
         jobs.append(update_transform);
+        if(m_manager->m_physics_world->debug()){
+            debug_draw.reset(new DebugDrawJob(m_manager));
+            debug_draw->addDependency(update_transform);
+            jobs.append(debug_draw);
+        }
 
         /*Qt3D::QAspectJobPtr debug_job;
         debug_job.reset(new DebugJob(m_manager));

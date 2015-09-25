@@ -11,7 +11,8 @@ PhysicsWorldInfoBackendNode::PhysicsWorldInfoBackendNode():
     Qt3D::QBackendNode(Qt3D::QBackendNode::ReadWrite),
     m_dirtyFlags(Clean),
     m_objectName(),
-    m_enabled(false)
+    m_enabled(false),
+    m_debug(false)
 {
     m_manager=Q_NULLPTR;
 }
@@ -26,11 +27,11 @@ PhysicsWorldInfoBackendNode::~PhysicsWorldInfoBackendNode(){
 }
 
 void PhysicsWorldInfoBackendNode::updateFromPeer(Qt3D::QNode *peer){
-    PhysicsWorldInfo *body_info = static_cast<PhysicsWorldInfo*>(peer);
+    PhysicsWorldInfo *world_info = static_cast<PhysicsWorldInfo*>(peer);
     m_objectName = peer->objectName();
-    m_enabled=body_info->isEnabled();
-    setGravity(body_info->gravity());
-
+    m_enabled=world_info->isEnabled();
+    setGravity(world_info->gravity());
+    m_debug=world_info->debug();
 }
 
 void PhysicsWorldInfoBackendNode::setGravity(QVector3D gravity){
@@ -49,11 +50,31 @@ void PhysicsWorldInfoBackendNode::sceneChangeEvent(const Qt3D::QSceneChangePtr &
                 setGravity(propertyChange->value().value<QVector3D>());
             else if (propertyChange->propertyName() == QByteArrayLiteral("enabled"))
                 m_enabled = propertyChange->value().toBool();
+            else if (propertyChange->propertyName() == QByteArrayLiteral("debug"))
+                m_debug = propertyChange->value().toBool();
             break;
         }
         default:
             break;
     }
+}
+
+void PhysicsWorldInfoBackendNode::notifyFrontEnd(QString operation, QVariantList args){
+    Qt3D::QBackendScenePropertyChangePtr e(new Qt3D::QBackendScenePropertyChange(Qt3D::NodeUpdated, peerUuid()));
+    /*if(operation=="attachPhysicsTransfrom"){
+        e->setPropertyName("attachPhysicsTransfrom");
+        e->setValue(true);
+    }
+    else */
+    if(operation=="debugdraw"){
+        e->setPropertyName("debugdraw");
+        e->setValue(args);
+    }
+    else{
+        return;
+    }
+    e->setTargetNode(peerUuid());
+    notifyObservers(e);
 }
 
 
@@ -66,12 +87,12 @@ PhysicsWorldInfoBackendNodeFunctor::PhysicsWorldInfoBackendNodeFunctor(PhysicsMa
 
 Qt3D::QBackendNode *PhysicsWorldInfoBackendNodeFunctor::create(Qt3D::QNode *frontend, const Qt3D::QBackendNodeFactory *factory)
 const {
-    PhysicsWorldInfoBackendNode* body_info=new PhysicsWorldInfoBackendNode();
-    m_manager->m_resources.insert(frontend->id(),body_info);
-    body_info->setFactory(factory);
-    body_info->setManager(m_manager);
-    body_info->setPeer(frontend);
-    return body_info;
+    PhysicsWorldInfoBackendNode* world_info=new PhysicsWorldInfoBackendNode();
+    m_manager->m_resources.insert(frontend->id(),world_info);
+    world_info->setFactory(factory);
+    world_info->setManager(m_manager);
+    world_info->setPeer(frontend);
+    return world_info;
 }
 Qt3D::QBackendNode *PhysicsWorldInfoBackendNodeFunctor::get(const Qt3D::QNodeId &id) const
 {

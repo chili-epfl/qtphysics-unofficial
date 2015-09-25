@@ -6,6 +6,7 @@
 #include "backendtypes/physicstransform.h"
 #include "backendtypes/physicsgeometry.h"
 #include "backendtypes/physicsattribute.h"
+#include "backendtypes/physicsbuffer.h"
 
 #include "physicsmanager.h"
 namespace Physics {
@@ -153,6 +154,7 @@ void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 
         if(entity_physics_world_info->dirtyFlags().testFlag(PhysicsWorldInfoBackendNode::DirtyFlag::GravityChanged)){
             m_manager->m_physics_world->setGravity(entity_physics_world_info->gravity());
             entity_physics_world_info->dirtyFlags() &= ~PhysicsWorldInfoBackendNode::DirtyFlag::GravityChanged;
+            m_manager->m_physics_world->setDebug(entity_physics_world_info->debug());
         }
     }
 
@@ -187,12 +189,53 @@ PhysicsAbstractRigidBody* UpdatePhysicsEntitiesJob::createRigidBodyFromMesh(Phys
         }
         PhysicsGeometry* geometry=static_cast<PhysicsGeometry*>(m_manager->m_resources.operator [](geometryId));
         QVector<QVector3D> vertexPosition;
+        QSet<quint16> index_Set;
         Q_FOREACH(Qt3D::QNodeId attrId,geometry->attributes()){
             PhysicsAttribute* attribute=static_cast<PhysicsAttribute*>(m_manager->m_resources.operator [](attrId));
             if(attribute->objectName()=="vertexPosition"){
-                vertexPosition=attribute->asVector3D();
-                break;
+                vertexPosition=attribute->asVector3D();             
             }
+            else if(attribute->attributeType()==Qt3D::QAttribute::IndexAttribute){
+
+                if(!attribute->bufferId().isNull() && m_manager->m_resources.contains(attribute->bufferId())){
+                    QByteArray buffer;
+                    PhysicsBuffer* buffer_node=static_cast<PhysicsBuffer*>(m_manager->m_resources.operator [](attribute->bufferId()));
+                    if(buffer_node->bufferFunctor().isNull()){
+                        buffer=buffer_node->data();
+                    }
+                    else{
+                        buffer=buffer_node->bufferFunctor().data()->operator ()();
+                    }
+
+                    const char *rawBuffer = buffer.constData();
+                    rawBuffer += attribute->byteOffset();
+                    const quint16* fptr;
+                    int stride;
+                    switch (attribute->dataType()) {
+                    case Qt3D::QAttribute::UnsignedShort:
+                        stride = sizeof(quint16) * attribute->dataSize();
+                        break;
+                    default:
+                        qDebug()<< "can't convert";
+                    }
+                    if (attribute->byteStride() != 0)
+                        stride = attribute->byteStride();
+                    index_Set.reserve(attribute->count());
+                    for (uint c = 0; c < attribute->count(); ++c) {
+                        fptr = reinterpret_cast<const quint16*>(rawBuffer);
+                        for (uint i = 0, m = qMin(attribute->dataSize(), 3U); i < m; ++i)
+                            index_Set.insert(fptr[i]);
+                        rawBuffer += stride;
+                    }
+                }
+
+            }
+        }
+        QVector<QVector3D> v=vertexPosition;
+        vertexPosition.clear();
+        vertexPosition.reserve(index_Set.size());
+        Q_FOREACH(quint16 index,index_Set.values()){
+            vertexPosition.append(v[index]);
         }
         geometric_info["Points"]=QVariant::fromValue(vertexPosition);
     }

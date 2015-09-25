@@ -42,6 +42,7 @@ Entity {
         },
         PhysicsWorldInfo{
           gravity: Qt.vector3d(0,-10,0)
+          debug:true
         }
     ]
 
@@ -49,8 +50,8 @@ Entity {
         id: torusMesh
         radius: 2
         minorRadius: 1
-        rings: 10
-        slices: 10
+        rings: 50
+        slices: 50
     }
 
     Transform {

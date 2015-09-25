@@ -5,9 +5,11 @@
 
 #include "../bodies/abstractbody.h"
 
-
 #include <QVector3D>
 #include <btBulletDynamicsCommon.h>
+
+#include "debugdraw.h"
+
 namespace Physics {
 
 namespace Bullet{
@@ -35,6 +37,10 @@ public:
     void removeBody(PhysicsAbstractRigidBody* b);
     void addBody(PhysicsAbstractRigidBody*b);
 
+    void setDebug(bool debug);
+    bool debug(){return m_debug;}
+    QVariantList debugEntities(){return m_debugDraw->debug_entities;}
+
 private slots:
     void onBodyDestroyed(QObject* obj);
     void onBodyRequireUpdate();
@@ -55,6 +61,10 @@ private:
     btCollisionDispatcher* m_dispatcher;
     btSequentialImpulseConstraintSolver* m_solver;
     btDynamicsWorld* m_dynamicsWorld;
+
+    bool m_debug;
+    DebugDraw* m_debugDraw;
+
 
 };
 

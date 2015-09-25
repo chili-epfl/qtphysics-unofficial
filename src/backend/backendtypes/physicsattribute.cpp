@@ -140,7 +140,6 @@ QVector<QVector3D> PhysicsAttribute::asVector3D() const{
         rawBuffer += stride;
     }
     return result;
-
 }
 
 
