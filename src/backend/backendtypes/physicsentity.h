@@ -33,9 +33,8 @@ public:
 
     void setManager(PhysicsManager *manager);
 
-    Qt3D::QNodeId physics_transform(){return m_physics_transform;}
-    Qt3D::QNodeId abstractmesh(){return m_abstractmesh;}
-    Qt3D::QNodeId default_transform(){return m_default_transform;}
+    Qt3D::QNodeId geometry_renderer(){return m_geometry_renderer;}
+    Qt3D::QNodeId transform(){return m_transform;}
     Qt3D::QNodeId physicsBodyInfo(){return m_physicsBodyInfo;}
     Qt3D::QNodeId physicsWorldInfo(){return m_physicsWorldInfo;}
 
@@ -48,9 +47,8 @@ private:
 
     QString m_objectName;
 
-    Qt3D::QNodeId m_default_transform;
-    Qt3D::QNodeId m_physics_transform;
-    Qt3D::QNodeId m_abstractmesh;
+    Qt3D::QNodeId m_transform;
+    Qt3D::QNodeId m_geometry_renderer;
     Qt3D::QNodeId m_physicsBodyInfo;
 
     Qt3D::QNodeId m_physicsWorldInfo;

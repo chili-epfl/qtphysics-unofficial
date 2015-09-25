@@ -17,14 +17,14 @@ Item {
         anchors.centerIn: parent
         color: "darkRed"
 
-        transform: Rotation {
+        /*transform: Rotation {
             id: sceneRotation
             axis.x: 1
             axis.y: 0
             axis.z: 0
             origin.x: scene.width / 2
             origin.y: scene.height / 2
-        }
+        }*/
 
         Scene3D {
             anchors.fill: parent

@@ -23,7 +23,8 @@ public:
             RestistutionChanged = 16,
             FrictionChanged = 32,
             RollingFrictionChanged = 64,
-            ShapeDetailsChanged = 128
+            ShapeDetailsChanged = 128,
+            InputTransformChanged = 256
         };
     Q_DECLARE_FLAGS(DirtyFlags, DirtyFlag)
 
@@ -62,8 +63,10 @@ public:
     const QVariantMap& shapeDetails(){return m_shapeDetails;}
     void setShapeDetails(QVariantMap shapeDetails);
 
-    void notifyFrontEnd(QString operation, QVariantMap args);
+    Qt3D::QNodeId inputTransform(){return m_inputTransform;}
+    void setInputTransform(Qt3D::QNodeId inputTranform);
 
+    void notifyFrontEnd(QString operation, QVariantMap args);
 protected:
     void sceneChangeEvent(const Qt3D::QSceneChangePtr &) Q_DECL_OVERRIDE;
 
@@ -82,6 +85,7 @@ private:
     qreal m_rollingFriction;
 
     QVariantMap m_shapeDetails;
+    Qt3D::QNodeId m_inputTransform;
 
     PhysicsManager* m_manager;
 

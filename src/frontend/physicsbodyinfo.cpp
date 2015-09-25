@@ -12,7 +12,10 @@ PhysicsBodyInfo::PhysicsBodyInfo(Qt3D::QNode* parent):
     m_friction(0.0f),
     m_rollingFriction(0.0f)
 {
-    m_attached_matrix=Q_NULLPTR;
+    m_inputTransform=Q_NULLPTR;
+    m_outputTransform=new Qt3D::QTransform(this);
+    m_outputTransform_matrix=new Qt3D::QMatrixTransform(m_outputTransform);
+    m_outputTransform->addTransform(m_outputTransform_matrix);
     setShareable(false);
 }
 void PhysicsBodyInfo::copy(const Qt3D::QNode *ref){
@@ -26,7 +29,9 @@ void PhysicsBodyInfo::copy(const Qt3D::QNode *ref){
     m_mass=body_info->m_mass;
     m_mask=body_info->m_mask;
     m_group=body_info->m_group;
-    m_attached_matrix=body_info->m_attached_matrix;
+    m_inputTransform=body_info->m_inputTransform;
+    m_outputTransform=body_info->m_outputTransform;
+    m_outputTransform_matrix=body_info->m_outputTransform_matrix;
 }
 
 PhysicsBodyInfo::~PhysicsBodyInfo(){
@@ -85,14 +90,19 @@ void PhysicsBodyInfo::setFriction(qreal friction){
         m_friction=friction;
         emit frictionChanged(m_friction);
     }
-
 }
+
+void PhysicsBodyInfo::setInputTransform(Qt3D::QTransform* inputTransform){
+    m_inputTransform=inputTransform;
+    emit inputTransformChanged();
+}
+
 
 void PhysicsBodyInfo::sceneChangeEvent(const Qt3D::QSceneChangePtr &change)
 {
     Qt3D::QScenePropertyChangePtr e = qSharedPointerCast< Qt3D::QScenePropertyChange>(change);
     if (e->type() == Qt3D::NodeUpdated) {
-        if (e->propertyName() == QByteArrayLiteral("attachPhysicsTransfrom")) {
+        /*if (e->propertyName() == QByteArrayLiteral("attachPhysicsTransfrom")) {
             bool val = e->value().toBool();
             if(val){
                 QVector<Qt3D::QEntity*> entities = this->entities();
@@ -120,12 +130,11 @@ void PhysicsBodyInfo::sceneChangeEvent(const Qt3D::QSceneChangePtr &change)
                     }
                 }
             }
-    }
-    else if(e->propertyName() == QByteArrayLiteral("updateTransform")){
+    }*/
+    if(e->propertyName() == QByteArrayLiteral("updateTransform")){
             QMatrix4x4 mat= e->value().value<QMatrix4x4>();
-            if(!m_attached_matrix)
-                qFatal("Attached matrix expected but not present");
-            m_attached_matrix->setMatrix(mat);
+            m_outputTransform_matrix->setMatrix(mat);
+            emit outputTransformChanged();
         }
     }
 }

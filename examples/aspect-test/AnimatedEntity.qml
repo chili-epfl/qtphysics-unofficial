@@ -27,7 +27,7 @@ Entity {
         FrameGraph {
             activeFrameGraph: Viewport {
                 id: viewport
-                rect: Qt.rect(0.0, 0.0, 1.0, 1.0) // From Top Left
+                rect: Qt.rect(0, 0.0, 1.0, 1.0) // From Top Left
                 clearColor: Qt.rgba(0, 0.5, 1, 1)
 
                 CameraSelector {
@@ -41,7 +41,7 @@ Entity {
             }
         },
         PhysicsWorldInfo{
-          gravity: Qt.vector3d(0,-30,0)
+          gravity: Qt.vector3d(0,-10,0)
         }
     ]
 
@@ -49,32 +49,37 @@ Entity {
         id: torusMesh
         radius: 2
         minorRadius: 1
-        rings: 100
-        slices: 20
+        rings: 10
+        slices: 10
     }
 
     Transform {
         id: torusTransform
-
+        Rotate{
+            axis: Qt.vector3d(1,0,0)
+            angle: 2
+        }
     }
 
     PhysicsBodyInfo{
         id:torusBodyinfo
         mass:1
         restitution: 1
+        inputTransform: torusTransform
     }
-    /*Torus is a dynamic object*/
+
     Entity {
         id: torusEntity
         objectName: "torus"
-        components: [ torusMesh, torusTransform,torusBodyinfo ]
+        components: [ torusMesh, torusBodyinfo, torusBodyinfo.outputTransform ]
     }
 
     Transform {
         id: torusTransform2
        Translate{
            dx:20
-           dy:5
+           dy:10
+           dz:0.5
        }
     }
     TorusMesh {
@@ -89,11 +94,12 @@ Entity {
         id:torusBodyinfo2
         mass:1
         restitution: 1
+        inputTransform: torusTransform2
     }
     Entity{
         id: torusEntity2
         objectName: "torus2"
-        components: [ torusMesh, torusTransform2,torusBodyinfo2 ]
+        components: [ torusMesh, torusBodyinfo2, torusBodyinfo2.outputTransform ]
     }
 
     SphereMesh {
@@ -105,18 +111,21 @@ Entity {
         id: sphereTransform
         Translate{
             dx:20
-            dy:-7
+            dy:-5
         }
     }
     PhysicsBodyInfo{
         id:sphereBody
         restitution: 1
+
+        mass:1
+        inputTransform: sphereTransform
     }
-    /*Sphere is a static object*/
+
     Entity {
         objectName: "Sphere"
         id: sphereEntity
-        components: [ sphereMesh, sphereTransform,sphereBody ]
+        components: [ sphereMesh, sphereBody, sphereBody.outputTransform ]
     }
 
     /*Floor is an entity non renderable
@@ -132,6 +141,7 @@ Entity {
         PhysicsBodyInfo{
             id:floorBodyInfo
             restitution: 1
+            inputTransform: transformFloor
             shapeDetails:{"Type":"StaticPlane","PlaneConstant":0,"PlaneNormal": Qt.vector3d(0, 1, 0) }
         }
         components: [transformFloor,floorBodyInfo]

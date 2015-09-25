@@ -23,23 +23,21 @@ void UpdateTransformsJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 paren
     if(node_id.isNull()) return;
     QMatrix4x4 current_world_transform=parent_matrix;
     PhysicsEntity* entity=static_cast<PhysicsEntity*>(m_manager->m_resources[node_id]);
-        if(m_manager->m_rigid_bodies.contains(node_id)){
+    if(!entity->transform().isNull()){
+        PhysicsTransform* transform=static_cast<PhysicsTransform*>(m_manager->m_resources[entity->transform()]);
+        current_world_transform=current_world_transform*transform->transformMatrix();
+    }
+    if(m_manager->m_rigid_bodies.contains(node_id)){
         if(!entity->physicsBodyInfo().isNull()){
-            /*Make the object not kinematic again*/
-            PhysicsTransform* entity_default_transform=static_cast<PhysicsTransform*>(m_manager->m_resources.operator [](entity->default_transform()));
-            if(entity_default_transform->isDirty()){
-                entity_default_transform->setDirty(false);
-            }
-
             PhysicsBodyInfoBackendNode* body_info=static_cast<PhysicsBodyInfoBackendNode*>(m_manager->m_resources[entity->physicsBodyInfo()]);
             PhysicsAbstractRigidBody* rigid_body=static_cast<PhysicsAbstractRigidBody*>(m_manager->m_rigid_bodies[node_id]);
-            current_world_transform=parent_matrix*rigid_body->worldTransformation();
+            current_world_transform=rigid_body->worldTransformation();
             /*If the object is not statics (or kinematic) then update the position*/
-            if(rigid_body->mass()!=0){
+            //if(rigid_body->mass()!=0){
                 QVariantMap args;
                 args["Matrix"]=parent_matrix.inverted()*rigid_body->worldTransformation();
                 body_info->notifyFrontEnd("updateTransform",args);
-            }
+            //}
         }
     }
     Q_FOREACH(Qt3D::QNodeId id, entity->childrenIds()){

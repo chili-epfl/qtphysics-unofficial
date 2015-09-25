@@ -12,12 +12,10 @@ PhysicsEntity::PhysicsEntity():
     Qt3D::QBackendNode(),
     m_parentId(),
     m_objectName(),
-    m_default_transform(),
-    m_physics_transform(),
-    m_abstractmesh(),
+    m_transform(),
+    m_geometry_renderer(),
     m_physicsBodyInfo(),
     m_physicsWorldInfo()
-
 {
     m_manager=Q_NULLPTR;
 }
@@ -39,10 +37,9 @@ void PhysicsEntity::updateFromPeer(Qt3D::QNode *peer){
     Qt3D::QEntity *entity = static_cast<Qt3D::QEntity*>(peer);
     Qt3D::QEntity *parentEntity = entity->parentEntity();
     m_objectName = peer->objectName();
-    m_abstractmesh=Qt3D::QNodeId();
+    m_geometry_renderer=Qt3D::QNodeId();
     m_physicsBodyInfo=Qt3D::QNodeId();
-    m_default_transform=Qt3D::QNodeId();
-    m_physics_transform=Qt3D::QNodeId();
+    m_transform=Qt3D::QNodeId();
     m_physicsWorldInfo=Qt3D::QNodeId();
 
     for(Qt3D::QComponent* comp : entity->components()){
@@ -89,12 +86,10 @@ void PhysicsEntity::setParentEntity(Qt3D::QEntity *parent){
 }
 
 void PhysicsEntity::addComponent(Qt3D::QComponent *component){
-    if (qobject_cast<Qt3D::QTransform*>(component) != Q_NULLPTR && component->objectName().compare("@MaDeByPhYsIcS@")!=0)
-        m_default_transform = component->id();
-    else if (qobject_cast<Qt3D::QTransform*>(component) != Q_NULLPTR && component->objectName().compare("@MaDeByPhYsIcS@")==0)
-        m_physics_transform = component->id();
-    else if (qobject_cast<Qt3D::QAbstractMesh*>(component) != Q_NULLPTR)
-        m_abstractmesh = component->id();
+    if (qobject_cast<Qt3D::QTransform*>(component) != Q_NULLPTR)
+        m_transform = component->id();
+    else if (qobject_cast<Qt3D::QGeometryRenderer*>(component) != Q_NULLPTR)
+        m_geometry_renderer = component->id();
     else if (qobject_cast<PhysicsBodyInfo*>(component) != Q_NULLPTR)
         m_physicsBodyInfo = component->id();
     else if (qobject_cast<PhysicsWorldInfo*>(component) != Q_NULLPTR)
@@ -102,15 +97,13 @@ void PhysicsEntity::addComponent(Qt3D::QComponent *component){
 }
 
 void PhysicsEntity::removeComponent(Qt3D::QNodeId componentId){
-    if (m_default_transform==componentId)
-        m_default_transform = Qt3D::QNodeId();
-    else if (m_abstractmesh==componentId)
-        m_abstractmesh = Qt3D::QNodeId();
+    if (m_transform==componentId)
+        m_transform = Qt3D::QNodeId();
+    else if (m_geometry_renderer==componentId)
+        m_geometry_renderer = Qt3D::QNodeId();
     else if (m_physicsBodyInfo==componentId)
         m_physicsBodyInfo = Qt3D::QNodeId();
-    else if(m_physics_transform==componentId)
-        m_physics_transform=Qt3D::QNodeId();
-    else if(m_physicsWorldInfo==componentId)
+     else if(m_physicsWorldInfo==componentId)
         m_physicsWorldInfo=Qt3D::QNodeId();
 }
 

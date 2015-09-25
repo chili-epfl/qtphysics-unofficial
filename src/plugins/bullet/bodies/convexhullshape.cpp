@@ -27,8 +27,9 @@ void ConvexHullShape::initShape(){
 
 void ConvexHullShape::initShape(qreal* points,int n_points){
     m_shape = new btConvexHullShape();
-    for(int i=0;i<3*n_points;i=i+3)
+    for(int i=0;i<3*n_points;i=i+3){
         ((btConvexHullShape*)m_shape)->addPoint(btVector3(points[i],points[i+1],points[i+2]));
+    }
 
 }
 

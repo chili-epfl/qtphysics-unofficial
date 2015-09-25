@@ -19,9 +19,12 @@ class FRONTENDSHARED_EXPORT PhysicsBodyInfo: public Qt3D::QComponent
     Q_PROPERTY(qreal rollingFriction READ rollingFriction WRITE setRollingFriction NOTIFY rollingFrictionChanged)
     Q_PROPERTY(qreal mass READ mass WRITE setMass NOTIFY massChanged)
     Q_PROPERTY(QVector3D fallInertia READ fallInertia WRITE setFallInertia NOTIFY fallInertiaChanged)
+
     /*Shape details allows to override the details of the collition shape that otherwise would be
     * derived by the mesh. It's also useful to create object with a specific collition shape but with an empty mesh*/
     Q_PROPERTY(QVariantMap shapeDetails READ shapeDetails WRITE setShapeDetails NOTIFY shapeDetailsChanged)
+    Q_PROPERTY(Qt3D::QTransform* inputTransform READ inputTransform WRITE setInputTransform NOTIFY inputTransformChanged)
+    Q_PROPERTY(Qt3D::QTransform* outputTransform READ outputTransform NOTIFY outputTransformChanged)
 public:
     explicit PhysicsBodyInfo(Qt3D::QNode* parent=0);
     ~PhysicsBodyInfo();
@@ -39,6 +42,8 @@ public:
     virtual qreal mass(){return m_mass;}
     virtual QVector3D fallInertia(){return m_fallInertia;}
     virtual const QVariantMap& shapeDetails(){return m_shapeDetails;}
+    virtual Qt3D::QTransform* inputTransform(){return m_inputTransform;}
+    virtual Qt3D::QTransform* outputTransform(){return m_outputTransform;}
 
     virtual void setRestitution(qreal restitution);
     virtual void setRollingFriction(qreal rollingFriction);
@@ -46,7 +51,7 @@ public:
     virtual void setMass(qreal mass);
     virtual void setFallInertia(QVector3D fallInertia);
     virtual void setShapeDetails(QVariantMap shapeDetails);
-
+    virtual void setInputTransform(Qt3D::QTransform* inputTransform);
 signals:
     void maskChanged(int mask);
     void groupChanged(int group);
@@ -57,6 +62,8 @@ signals:
     void frictionChanged(qreal friction);
     void restitutionChanged(qreal restitution);
     void shapeDetailsChanged();
+    void inputTransformChanged();
+    void outputTransformChanged();
 
 protected:
     void copy(const Qt3D::QNode *ref) Q_DECL_OVERRIDE;
@@ -73,7 +80,9 @@ private:
     qreal m_rollingFriction;
     QVariantMap m_shapeDetails;
 
-    Qt3D::QMatrixTransform* m_attached_matrix;
+    Qt3D::QTransform* m_inputTransform;
+    Qt3D::QTransform* m_outputTransform;
+    Qt3D::QMatrixTransform* m_outputTransform_matrix;
 
 };
 

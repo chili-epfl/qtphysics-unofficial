@@ -1,9 +1,11 @@
 #include "updatephysicsentitiesjob.h"
 #include "backendtypes/physicsentity.h"
-#include "backendtypes/physicsmesh.h"
+#include "backendtypes/physicsgeometryrenderer.h"
 #include "backendtypes/physicsbodyinfobackendnode.h"
 #include "backendtypes/physicsworldinfobackendnode.h"
 #include "backendtypes/physicstransform.h"
+#include "backendtypes/physicsgeometry.h"
+#include "backendtypes/physicsattribute.h"
 
 #include "physicsmanager.h"
 namespace Physics {
@@ -16,154 +18,133 @@ UpdatePhysicsEntitiesJob::UpdatePhysicsEntitiesJob(PhysicsManager* manager):
 }
 
 void UpdatePhysicsEntitiesJob::run(){
-    recursive_step(m_manager->rootEntityId(),QMatrix4x4());
+    recursive_step(m_manager->rootEntityId(),QMatrix4x4(),false);
 }
 
-void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 parent_matrix){
+void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 parent_matrix,bool forceUpdateMS){
     if(node_id.isNull()) return;
     PhysicsEntity* entity= static_cast<PhysicsEntity*>(m_manager->m_resources.operator [](node_id));
 
     QMatrix4x4 current_global_matrix=parent_matrix;
+    PhysicsAbstractRigidBody* rigid_body=Q_NULLPTR;
+    PhysicsBodyInfoBackendNode* entity_body_info=Q_NULLPTR;
+    if(!entity->physicsBodyInfo().isNull())
+        entity_body_info=static_cast<PhysicsBodyInfoBackendNode*>(m_manager->m_resources.operator [](entity->physicsBodyInfo()));
 
-    /*The objects belonging to the physic world are:
-     * 1) Object with an abstract mesh and a transformation but without a bodyinfo -> those are static
-     * 2) Object with an abstract mesh, a transformation and a bodyinfo
-     * 3) Object with a transformation and a bodyinfo -> those are not rendered
-     * */
-    if(!entity->default_transform().isNull() &&
-            (!entity->abstractmesh().isNull() ||
-            (!entity->physicsBodyInfo().isNull()))){
+    /*Case 1: Static objects, they must have at least the component abstract mesh (default transform is I)*/
+    if(entity->physicsBodyInfo().isNull()
+            && !entity->geometry_renderer().isNull()){
+        PhysicsGeometryRenderer* entity_geometry_renderer=static_cast<PhysicsGeometryRenderer*>(m_manager->m_resources.operator [](entity->geometry_renderer()));
 
-        PhysicsTransform* entity_default_transform=static_cast<PhysicsTransform*>(m_manager->m_resources.operator [](entity->default_transform()));
+        PhysicsTransform* entity_transform=Q_NULLPTR;
+        if(!entity->transform().isNull())
+            entity_transform=static_cast<PhysicsTransform*>(m_manager->m_resources.operator [](entity->transform()));
 
-        PhysicsTransform* entity_physics_transform=Q_NULLPTR;
-        PhysicsMesh* entity_mesh=Q_NULLPTR;
-        PhysicsBodyInfoBackendNode* entity_body_info=Q_NULLPTR;
-
-        if(!entity->abstractmesh().isNull())
-            entity_mesh=static_cast<PhysicsMesh*>(m_manager->m_resources.operator [](entity->abstractmesh()));
-
-        if(!entity->physics_transform().isNull())
-            entity_physics_transform=static_cast<PhysicsTransform*>(m_manager->m_resources.operator [](entity->physics_transform()));
-
-        if(!entity->physicsBodyInfo().isNull())
-            entity_body_info=static_cast<PhysicsBodyInfoBackendNode*>(m_manager->m_resources.operator [](entity->physicsBodyInfo()));
-
-        PhysicsAbstractRigidBody* rigid_body;
-
-        /*The body needs to be created*/
         if(!m_manager->m_rigid_bodies.contains(node_id)){
-            QVariantMap geometric_info;
-            /*If the shape details are defined , the collition shape is not derived by the mesh nature*/
-            if(entity_body_info!=Q_NULLPTR && entity_body_info->shapeDetails().size()>0){
-                QVariantMap shapeDetails=entity_body_info->shapeDetails();
-                QString type=shapeDetails["Type"].toString();
-                if(type=="Cuboid"){
-                    geometric_info["Type"]="Cuboid";
-                    geometric_info["X_Dim"]=shapeDetails["X_Dim"];
-                    geometric_info["Y_Dim"]=shapeDetails["Y_Dim"];
-                    geometric_info["Z_Dim"]=shapeDetails["Z_Dim"];
-                }
-                else if(type=="Sphere"){
-                    geometric_info["Type"]="Sphere";
-                    geometric_info["Radius"]=shapeDetails["Radius"];
-                }
-                else if(type=="StaticPlane"){
-                    geometric_info["Type"]="StaticPlane";
-                    geometric_info["PlaneNormal"]=shapeDetails["PlaneNormal"];
-                    geometric_info["PlaneConstant"]=shapeDetails["PlaneConstant"];
-                }
-                else{
-                    qFatal("Unknown shape type");
-                }
-                if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::ShapeDetailsChanged)){
-                    entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::ShapeDetailsChanged;
-                }
-            }
-            /*Otherwise the geometric info are extracted by the mesh*/
-            else{
-                if(entity_mesh->m_type==PhysicsMesh::Mesh_Type::CUBOID){
-                    geometric_info["Type"]="Cuboid";
-                    geometric_info["X_Dim"]=entity_mesh->m_x_dim;
-                    geometric_info["Y_Dim"]=entity_mesh->m_y_dim;
-                    geometric_info["Z_Dim"]=entity_mesh->m_z_dim;
-
-                }
-                if(entity_mesh->m_type==PhysicsMesh::Mesh_Type::SPHERE){
-                    geometric_info["Type"]="Sphere";
-                    geometric_info["Radius"]=entity_mesh->m_radius;
-                }
-                else{
-                    geometric_info["Type"]="Generic";
-                    Qt3D::QMeshDataPtr data_ptr=entity_mesh->m_meshfunctor.data()->operator ()();
-                    Qt3D::QMeshData* mesh_data=data_ptr.data();
-                    QVector<QVector3D> vertexPosition=mesh_data->attributeByName("vertexPosition")->asVector3D();
-                    geometric_info["Points"]=QVariant::fromValue(vertexPosition);
-                }
-                if(entity_mesh!=Q_NULLPTR && entity_mesh->isDirty()){
-                    entity_mesh->setDirty(false);
-                }
-            }
-            rigid_body=m_manager->m_physics_factory->create_rigid_body(geometric_info);
+            rigid_body=createRigidBodyFromMesh(entity_geometry_renderer);
+            m_manager->m_rigid_bodies[node_id]=rigid_body;
             m_manager->m_physics_world->addBody(rigid_body);
 
         }
-        /*The body was already created*/
         else{
             rigid_body=m_manager->m_rigid_bodies[node_id];
         }
-
         /*Update Collition Shape*/
-        if(entity_body_info!=Q_NULLPTR &&
-                entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::ShapeDetailsChanged)){
+        if(entity_geometry_renderer!=Q_NULLPTR && entity_geometry_renderer->isDirty()){
            //TODO
-        }
-        else if(entity_mesh!=Q_NULLPTR && entity_mesh->isDirty()){
-            //TODO
         }
 
         /*Update Motion State*/
-        if(entity_default_transform->isDirty() || entity_body_info==Q_NULLPTR || entity_physics_transform==Q_NULLPTR ){
-            /*Kinematic object: the motion state is updated according to the new position*/
-            current_global_matrix=current_global_matrix*entity_default_transform->transformMatrix();
-            rigid_body->setWorldTransformation(current_global_matrix);
+        if(entity_transform){
+            current_global_matrix=current_global_matrix*entity_transform->transformMatrix();
+            if(entity_transform->isDirty())
+                forceUpdateMS=true;
+            entity_transform->setDirty(false);
+        }
+        if(forceUpdateMS)
+            rigid_body->setWorldTransformation(current_global_matrix);//<------ make it smart considering the case of an update from the parent
+    }
+    /*Case 2: the entity has a component body info and either a abstract mesh or a the shape details to define the collition shape */
+    else if(entity_body_info!=Q_NULLPTR
+            && (entity_body_info->shapeDetails().size()>0 || !entity->geometry_renderer().isNull())){
+        PhysicsGeometryRenderer* entity_geometry_renderer=Q_NULLPTR;
+        if(!m_manager->m_rigid_bodies.contains(node_id)){
+            if(entity_body_info->shapeDetails().size()>0){
+                rigid_body=createRigidBodyFromShapeDetails(entity_body_info);
+            }
+            else if(!entity->geometry_renderer().isNull()){
+                entity_geometry_renderer=static_cast<PhysicsGeometryRenderer*>(m_manager->m_resources.operator [](entity->geometry_renderer()));
+                rigid_body=createRigidBodyFromMesh(entity_geometry_renderer);
+            }
+            m_manager->m_rigid_bodies[node_id]=rigid_body;
+            m_manager->m_physics_world->addBody(rigid_body);
         }
         else{
-            current_global_matrix=current_global_matrix*entity_physics_transform->transformMatrix();
+            rigid_body=m_manager->m_rigid_bodies[node_id];
         }
+        /*Update Collition Shape*/
+        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::ShapeDetailsChanged)){
+           //TODO
+        }
+        else if(entity_geometry_renderer!=Q_NULLPTR && entity_geometry_renderer->isDirty()){
+            //TODO
+        }
+        /*Update Motion State*/
+        PhysicsTransform* inputTransform=Q_NULLPTR;
+        if(!entity_body_info->inputTransform().isNull()){
+            inputTransform=static_cast<PhysicsTransform*>(m_manager->m_resources.operator [](entity_body_info->inputTransform()));
+        }
+        /*The input transform has changed; the new position is taken from that.*/
+        if(inputTransform!=Q_NULLPTR && inputTransform->isDirty()){
+            current_global_matrix=current_global_matrix*inputTransform->transformMatrix();
+            forceUpdateMS=true;
+            inputTransform->setDirty(false);
+        }
+        /*Otherwise use the matrix form the simulation*/
+        else{
+            current_global_matrix=rigid_body->worldTransformation();
+        }
+        if(forceUpdateMS)
+            rigid_body->setWorldTransformation(current_global_matrix);
 
         /*Update Body properties*/
-        if(entity_body_info!=Q_NULLPTR){
-            if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::MaskChanged)){
-                 rigid_body->setMask(entity_body_info->mask());
-                entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::MaskChanged;
-            }
-            if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::GroupChanged)){
-                    rigid_body->setGroup(entity_body_info->group());
-                    entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::GroupChanged;
-            }
-            if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::MassChanged)){
-                    rigid_body->setMass(entity_body_info->mass());
-                    entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::MassChanged;
-            }
-            if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::FallInertiaChanged)){
-                    rigid_body->setFallInertia(entity_body_info->fallInertia());
-                    entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::FallInertiaChanged;
-            }
-            if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::RestistutionChanged)){
-                    rigid_body->setRestitution(entity_body_info->restitution());
-                    entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::RestistutionChanged;
-            }
-            if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::FrictionChanged)){
-                    rigid_body->setFriction(entity_body_info->friction());
-                    entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::FrictionChanged;
-            }
-            if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::RollingFrictionChanged)){
-                    rigid_body->setRollingFriction(entity_body_info->rollingFriction());
-                    entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::RollingFrictionChanged;
-            }
+        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::MaskChanged)){
+            rigid_body->setMask(entity_body_info->mask());
+            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::MaskChanged;
         }
-        m_manager->m_rigid_bodies[node_id]=rigid_body;
+        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::GroupChanged)){
+            rigid_body->setGroup(entity_body_info->group());
+            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::GroupChanged;
+        }
+        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::MassChanged)){
+            rigid_body->setMass(entity_body_info->mass());
+            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::MassChanged;
+        }
+        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::FallInertiaChanged)){
+            rigid_body->setFallInertia(entity_body_info->fallInertia());
+            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::FallInertiaChanged;
+        }
+        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::RestistutionChanged)){
+            rigid_body->setRestitution(entity_body_info->restitution());
+            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::RestistutionChanged;
+        }
+        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::FrictionChanged)){
+            rigid_body->setFriction(entity_body_info->friction());
+            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::FrictionChanged;
+        }
+        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::RollingFrictionChanged)){
+            rigid_body->setRollingFriction(entity_body_info->rollingFriction());
+            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::RollingFrictionChanged;
+        }
+    }
+    else if(!entity->transform().isNull()){
+        /*Entity with only a transformation*/
+        PhysicsTransform* entity_transform=static_cast<PhysicsTransform*>(m_manager->m_resources.operator [](entity->transform()));
+        current_global_matrix=current_global_matrix*entity_transform->transformMatrix();
+        if(entity_transform->isDirty()){
+            forceUpdateMS=true;
+            entity_transform->setDirty(false);
+        }
     }
 
     /*Update Physic World settings*/
@@ -177,13 +158,77 @@ void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 
 
     /*Next call*/
     for(Qt3D::QNodeId childId : entity->childrenIds())
-        recursive_step(childId, current_global_matrix);
+        recursive_step(childId, current_global_matrix,forceUpdateMS);
 }
 
 
 
+PhysicsAbstractRigidBody* UpdatePhysicsEntitiesJob::createRigidBodyFromMesh(PhysicsGeometryRenderer* entity_geometry_renderer){
+    QVariantMap geometric_info;
+    if(entity_geometry_renderer->m_type==PhysicsGeometryRenderer::Mesh_Type::CUBOID){
+        geometric_info["Type"]="Cuboid";
+        geometric_info["X_Dim"]=entity_geometry_renderer->m_x_dim;
+        geometric_info["Y_Dim"]=entity_geometry_renderer->m_y_dim;
+        geometric_info["Z_Dim"]=entity_geometry_renderer->m_z_dim;
 
+    }
+    if(entity_geometry_renderer->m_type==PhysicsGeometryRenderer::Mesh_Type::SPHERE){
+        geometric_info["Type"]="Sphere";
+        geometric_info["Radius"]=entity_geometry_renderer->m_radius;
+    }
+    else{
+        geometric_info["Type"]="Generic";
+        Qt3D::QNodeId geometryId;
+        if(!entity_geometry_renderer->m_geometry.isNull()){
+            geometryId=entity_geometry_renderer->m_geometry;
+        }
+        else{
+            geometryId=entity_geometry_renderer->m_geometry_functor.data()->operator ()()->id();
+        }
+        PhysicsGeometry* geometry=static_cast<PhysicsGeometry*>(m_manager->m_resources.operator [](geometryId));
+        QVector<QVector3D> vertexPosition;
+        Q_FOREACH(Qt3D::QNodeId attrId,geometry->attributes()){
+            PhysicsAttribute* attribute=static_cast<PhysicsAttribute*>(m_manager->m_resources.operator [](attrId));
+            if(attribute->objectName()=="vertexPosition"){
+                vertexPosition=attribute->asVector3D();
+                break;
+            }
+        }
+        geometric_info["Points"]=QVariant::fromValue(vertexPosition);
+    }
+    if(entity_geometry_renderer!=Q_NULLPTR && entity_geometry_renderer->isDirty()){
+        entity_geometry_renderer->setDirty(false);
+    }
+    return m_manager->m_physics_factory->create_rigid_body(geometric_info);
+}
 
+PhysicsAbstractRigidBody* UpdatePhysicsEntitiesJob::createRigidBodyFromShapeDetails(PhysicsBodyInfoBackendNode* entity_body_info){
+    QVariantMap geometric_info;
+    QVariantMap shapeDetails=entity_body_info->shapeDetails();
+    QString type=shapeDetails["Type"].toString();
+    if(type=="Cuboid"){
+        geometric_info["Type"]="Cuboid";
+        geometric_info["X_Dim"]=shapeDetails["X_Dim"];
+        geometric_info["Y_Dim"]=shapeDetails["Y_Dim"];
+        geometric_info["Z_Dim"]=shapeDetails["Z_Dim"];
+    }
+    else if(type=="Sphere"){
+        geometric_info["Type"]="Sphere";
+        geometric_info["Radius"]=shapeDetails["Radius"];
+    }
+    else if(type=="StaticPlane"){
+        geometric_info["Type"]="StaticPlane";
+        geometric_info["PlaneNormal"]=shapeDetails["PlaneNormal"];
+        geometric_info["PlaneConstant"]=shapeDetails["PlaneConstant"];
+    }
+    else{
+        qFatal("Unknown shape type");
+    }
+    if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::ShapeDetailsChanged)){
+        entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::ShapeDetailsChanged;
+    }
+    return m_manager->m_physics_factory->create_rigid_body(geometric_info);
+}
 
 
 }

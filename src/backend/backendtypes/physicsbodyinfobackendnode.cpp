@@ -36,6 +36,7 @@ void PhysicsBodyInfoBackendNode::updateFromPeer(Qt3D::QNode *peer){
     setRestitution(body_info->restitution());
     setRollingFriction(body_info->rollingFriction());
     setShapeDetails(body_info->shapeDetails());
+    setInputTransform(body_info->inputTransform()->id());
 }
 
 void PhysicsBodyInfoBackendNode::setMass(qreal mass){
@@ -92,6 +93,13 @@ void PhysicsBodyInfoBackendNode::setFriction(qreal friction){
 
 }
 
+void PhysicsBodyInfoBackendNode::setInputTransform(Qt3D::QNodeId inputTranform){
+    if(inputTranform!=m_inputTransform){
+        m_inputTransform=inputTranform;
+        m_dirtyFlags.operator |=(InputTransformChanged);
+    }
+}
+
 
 
 void PhysicsBodyInfoBackendNode::sceneChangeEvent(const Qt3D::QSceneChangePtr &e){
@@ -116,6 +124,8 @@ void PhysicsBodyInfoBackendNode::sceneChangeEvent(const Qt3D::QSceneChangePtr &e
                 setShapeDetails(propertyChange->value().value<QVariantMap>());
             else if (propertyChange->propertyName() == QByteArrayLiteral("enabled"))
                 m_enabled = propertyChange->value().toBool();
+            else if (propertyChange->propertyName() == QByteArrayLiteral("inputMatrix"))
+                setInputTransform(propertyChange->value().value<Qt3D::QTransform*>()->id());
             break;
         }
         default:
@@ -125,11 +135,12 @@ void PhysicsBodyInfoBackendNode::sceneChangeEvent(const Qt3D::QSceneChangePtr &e
 
 void PhysicsBodyInfoBackendNode::notifyFrontEnd(QString operation, QVariantMap args){
     Qt3D::QBackendScenePropertyChangePtr e(new Qt3D::QBackendScenePropertyChange(Qt3D::NodeUpdated, peerUuid()));
-    if(operation=="attachPhysicsTransfrom"){
+    /*if(operation=="attachPhysicsTransfrom"){
         e->setPropertyName("attachPhysicsTransfrom");
         e->setValue(true);
     }
-    else if(operation=="updateTransform"){
+    else */
+    if(operation=="updateTransform"){
         e->setPropertyName("updateTransform");
         e->setValue(args["Matrix"]);
     }

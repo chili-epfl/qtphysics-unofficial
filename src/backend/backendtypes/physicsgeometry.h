@@ -1,21 +1,19 @@
-#ifndef PHYSICSMESH_H
-#define PHYSICSMESH_H
+#ifndef PHYSICSGEOMETRY_H
+#define PHYSICSGEOMETRY_H
 #include "backend_global.h"
 #include <Qt3DCore>
 #include <Qt3DRenderer>
-#include "jobs/updatephysicsentitiesjob.h"
-
+#include "jobs/debugjob.h"
 
 namespace Physics {
 
 class PhysicsManager;
-class BACKENDSHARED_EXPORT PhysicsMesh : public Qt3D::QBackendNode
+class BACKENDSHARED_EXPORT PhysicsGeometry : public Qt3D::QBackendNode
 {
 public:
-    enum Mesh_Type{SPHERE, CUBOID, GENERAL};
 
-    explicit PhysicsMesh();
-    ~PhysicsMesh();
+    explicit PhysicsGeometry();
+    ~PhysicsGeometry();
 
     void updateFromPeer(Qt3D::QNode *peer) Q_DECL_OVERRIDE;
 
@@ -24,34 +22,31 @@ public:
     bool isDirty(){return m_dirty;}
     void setDirty(bool dirty){m_dirty=dirty;}
     void setManager(PhysicsManager *manager);
-
+    inline int verticesPerPatch() const { return m_verticesPerPatch; }
+    inline QVector<Qt3D::QNodeId> attributes() const { return m_attributes; }
 protected:
     void sceneChangeEvent(const Qt3D::QSceneChangePtr &) Q_DECL_OVERRIDE;
 private:
-    void setMeshFunctor(Qt3D::QAbstractMeshFunctorPtr functor);
-
     QString m_objectName;
 
     bool m_dirty;
     bool m_enabled;
 
-    Qt3D::QAbstractMeshFunctorPtr m_meshfunctor;
+    QVector<Qt3D::QNodeId> m_attributes;
+    int m_verticesPerPatch;
 
     PhysicsManager* m_manager;
-    Mesh_Type m_type;
 
-    /*Variables for specifics mesh types*/
-    qreal m_radius;
-    qreal m_x_dim,m_y_dim,m_z_dim;
+    friend class DebugJob;
 
-friend class UpdatePhysicsEntitiesJob;
+
 };
 
 
-class BACKENDSHARED_EXPORT PhysicsMeshFunctor : public Qt3D::QBackendNodeFunctor
+class BACKENDSHARED_EXPORT PhysicsGeometryFunctor : public Qt3D::QBackendNodeFunctor
 {
 public:
-    explicit PhysicsMeshFunctor(PhysicsManager* manager);
+    explicit PhysicsGeometryFunctor(PhysicsManager* manager);
     Qt3D::QBackendNode *create(Qt3D::QNode *frontend, const Qt3D::QBackendNodeFactory *factory) const Q_DECL_OVERRIDE;
     Qt3D::QBackendNode *get(const Qt3D::QNodeId &id) const Q_DECL_OVERRIDE;
     void destroy(const Qt3D::QNodeId &id) const Q_DECL_OVERRIDE;
@@ -63,5 +58,4 @@ private:
 
 }
 
-
-#endif // PHYSICSMESH_H
+#endif // PHYSICSGEOMETRY_H

@@ -27,6 +27,7 @@ void PhysicsTransform::updateFromPeer(Qt3D::QNode *peer){
     Qt3D::QTransform *transform = static_cast<Qt3D::QTransform *>(peer);
     m_transformMatrix = transform->matrix();
     m_enabled = transform->isEnabled();
+    m_dirty=true;
 }
 
 void PhysicsTransform::sceneChangeEvent(const Qt3D::QSceneChangePtr &e){

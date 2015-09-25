@@ -66,6 +66,7 @@ void World::setSimulationRate(qreal rate){
 
 void World::stepSimulation(){
     m_dynamicsWorld->stepSimulation(1.0f/m_simulationRate,10);
+
 }
 
 

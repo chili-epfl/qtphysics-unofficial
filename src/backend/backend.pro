@@ -20,10 +20,9 @@ DEFINES += BACKEND_LIBRARY
 SOURCES += \
     backendtypes/physicsbodyinfobackendnode.cpp \
     backendtypes/physicsentity.cpp \
-    backendtypes/physicsmesh.cpp \
     backendtypes/physicstransform.cpp \
     jobs/debugjob.cpp \
-    jobs/insertphysicstransformjob.cpp \
+    #jobs/insertphysicstransformjob.cpp \
     physicsaspect.cpp \
     physicsmanager.cpp \
     backendtypes/physicsworldinfobackendnode.cpp \
@@ -31,16 +30,19 @@ SOURCES += \
     physics_entities/physicsabstractdynamicsworld.cpp \
     jobs/simulatestepjob.cpp \
     jobs/updatephysicsentitiesjob.cpp \
-    jobs/updatetransformsjob.cpp
+    jobs/updatetransformsjob.cpp \
+    backendtypes/physicsgeometryrenderer.cpp \
+    backendtypes/physicsgeometry.cpp \
+    backendtypes/physicsattribute.cpp \
+    backendtypes/physicsbuffer.cpp
 
 HEADERS +=\
         backend_global.h \
     backendtypes/physicsbodyinfobackendnode.h \
     backendtypes/physicsentity.h \
-    backendtypes/physicsmesh.h \
     backendtypes/physicstransform.h \
     jobs/debugjob.h \
-    jobs/insertphysicstransformjob.h \
+    #jobs/insertphysicstransformjob.h \
     physicsaspect.h \
     physicsmanager.h \
     physics_entities/physicsabstractrigidbody.h \
@@ -49,7 +51,11 @@ HEADERS +=\
     jobs/simulatestepjob.h \
     jobs/updatephysicsentitiesjob.h \
     jobs/updatetransformsjob.h \
-    physics_entities/physicsfactoryinterface.h
+    physics_entities/physicsfactoryinterface.h \
+    backendtypes/physicsgeometryrenderer.h \
+    backendtypes/physicsgeometry.h \
+    backendtypes/physicsattribute.h \
+    backendtypes/physicsbuffer.h
 
 
 headersDataFiles.path = $$[QT_INSTALL_HEADERS]/$$PROJECT_NAME/backend
