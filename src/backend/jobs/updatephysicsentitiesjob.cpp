@@ -41,14 +41,15 @@ void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 
         if(!entity->transform().isNull())
             entity_transform=static_cast<PhysicsTransform*>(m_manager->m_resources.operator [](entity->transform()));
 
-        if(!m_manager->m_rigid_bodies.contains(node_id)){
+        if(!m_manager->m_Id2RigidBodies.contains(node_id)){
             rigid_body=createRigidBodyFromMesh(entity_geometry_renderer);
-            m_manager->m_rigid_bodies[node_id]=rigid_body;
+            m_manager->m_Id2RigidBodies[node_id]=rigid_body;
+            m_manager->m_RigidBodies2Id[rigid_body]=node_id;
             m_manager->m_physics_world->addBody(rigid_body);
 
         }
         else{
-            rigid_body=m_manager->m_rigid_bodies[node_id];
+            rigid_body=m_manager->m_Id2RigidBodies[node_id];
         }
         /*Update Collition Shape*/
         if(entity_geometry_renderer!=Q_NULLPTR && entity_geometry_renderer->isDirty()){
@@ -69,7 +70,7 @@ void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 
     else if(entity_body_info!=Q_NULLPTR
             && (entity_body_info->shapeDetails().size()>0 || !entity->geometry_renderer().isNull())){
         PhysicsGeometryRenderer* entity_geometry_renderer=Q_NULLPTR;
-        if(!m_manager->m_rigid_bodies.contains(node_id)){
+        if(!m_manager->m_Id2RigidBodies.contains(node_id)){
             if(entity_body_info->shapeDetails().size()>0){
                 rigid_body=createRigidBodyFromShapeDetails(entity_body_info);
             }
@@ -77,11 +78,12 @@ void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 
                 entity_geometry_renderer=static_cast<PhysicsGeometryRenderer*>(m_manager->m_resources.operator [](entity->geometry_renderer()));
                 rigid_body=createRigidBodyFromMesh(entity_geometry_renderer);
             }
-            m_manager->m_rigid_bodies[node_id]=rigid_body;
+            m_manager->m_Id2RigidBodies[node_id]=rigid_body;
+            m_manager->m_RigidBodies2Id[rigid_body]=node_id;
             m_manager->m_physics_world->addBody(rigid_body);
         }
         else{
-            rigid_body=m_manager->m_rigid_bodies[node_id];
+            rigid_body=m_manager->m_Id2RigidBodies[node_id];
         }
         /*Update Collition Shape*/
         if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::ShapeDetailsChanged)){

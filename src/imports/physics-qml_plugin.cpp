@@ -18,5 +18,5 @@ void Qml_PhysicsPlugin::registerTypes(const char *uri)
 
     qmlRegisterType<Physics::PhysicsBodyInfo>(uri, 1, 0, "PhysicsBodyInfo");
     qmlRegisterType<Physics::PhysicsWorldInfo>(uri, 1, 0, "PhysicsWorldInfo");
-
+    qmlRegisterUncreatableType<Physics::PhysicsCollisionEvent>(uri, 1, 0, "PhysicsCollisionEvent", QStringLiteral("Events cannot be created"));
 }

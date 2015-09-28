@@ -144,6 +144,10 @@ void PhysicsBodyInfoBackendNode::notifyFrontEnd(QString operation, QVariantMap a
         e->setPropertyName("updateTransform");
         e->setValue(args["Matrix"]);
     }
+    else if(operation=="notifyCollision"){
+        e->setPropertyName("notifyCollision");
+        e->setValue(args);
+    }
     else{
         return;
     }

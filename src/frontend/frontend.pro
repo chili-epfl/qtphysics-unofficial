@@ -20,12 +20,14 @@ DESTDIR = test
 
 SOURCES += \
     physicsbodyinfo.cpp \
-    physicsworldinfo.cpp
+    physicsworldinfo.cpp \
+    physicscollisionevent.cpp
 
 HEADERS +=\
         frontend_global.h \
         physicsbodyinfo.h \
-    physicsworldinfo.h
+    physicsworldinfo.h \
+    physicscollisionevent.h
 
 headersDataFiles.path = $$[QT_INSTALL_HEADERS]/$$PROJECT_NAME/frontend
 headersDataFiles.files = $$PWD/*.h

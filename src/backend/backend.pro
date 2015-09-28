@@ -35,7 +35,7 @@ SOURCES += \
     backendtypes/physicsgeometry.cpp \
     backendtypes/physicsattribute.cpp \
     backendtypes/physicsbuffer.cpp \
-    jobs/debugdrawjob.cpp
+    jobs/notifycollisionsjob.cpp
 
 HEADERS +=\
         backend_global.h \
@@ -57,7 +57,7 @@ HEADERS +=\
     backendtypes/physicsgeometry.h \
     backendtypes/physicsattribute.h \
     backendtypes/physicsbuffer.h \
-    jobs/debugdrawjob.h
+    jobs/notifycollisionsjob.h
 
 
 headersDataFiles.path = $$[QT_INSTALL_HEADERS]/$$PROJECT_NAME/backend

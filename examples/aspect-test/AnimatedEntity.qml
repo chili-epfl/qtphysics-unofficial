@@ -79,7 +79,7 @@ Entity {
         id: torusTransform2
        Translate{
            dx:20
-           dy:10
+           dy:500
            dz:0.5
        }
     }
@@ -118,6 +118,7 @@ Entity {
     PhysicsBodyInfo{
         id:sphereBody
         restitution: 1
+        onCollided: console.log("hi")
 
         mass:1
         inputTransform: sphereTransform

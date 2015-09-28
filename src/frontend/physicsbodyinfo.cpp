@@ -131,13 +131,21 @@ void PhysicsBodyInfo::sceneChangeEvent(const Qt3D::QSceneChangePtr &change)
                 }
             }
     }*/
-    if(e->propertyName() == QByteArrayLiteral("updateTransform")){
+        if(e->propertyName() == QByteArrayLiteral("updateTransform")){
             QMatrix4x4 mat= e->value().value<QMatrix4x4>();
             m_outputTransform_matrix->setMatrix(mat);
             emit outputTransformChanged();
+        }
+        if(e->propertyName() == QByteArrayLiteral("notifyCollision")){
+            PhysicsCollisionEventPtr event;
+            emit collided(event);
         }
     }
 }
 
 
+
 }
+
+
+

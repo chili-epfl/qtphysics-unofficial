@@ -27,10 +27,10 @@ void UpdateTransformsJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 paren
         PhysicsTransform* transform=static_cast<PhysicsTransform*>(m_manager->m_resources[entity->transform()]);
         current_world_transform=current_world_transform*transform->transformMatrix();
     }
-    if(m_manager->m_rigid_bodies.contains(node_id)){
+    if(m_manager->m_Id2RigidBodies.contains(node_id)){
         if(!entity->physicsBodyInfo().isNull()){
             PhysicsBodyInfoBackendNode* body_info=static_cast<PhysicsBodyInfoBackendNode*>(m_manager->m_resources[entity->physicsBodyInfo()]);
-            PhysicsAbstractRigidBody* rigid_body=static_cast<PhysicsAbstractRigidBody*>(m_manager->m_rigid_bodies[node_id]);
+            PhysicsAbstractRigidBody* rigid_body=static_cast<PhysicsAbstractRigidBody*>(m_manager->m_Id2RigidBodies[node_id]);
             current_world_transform=rigid_body->worldTransformation();
             /*If the object is not statics (or kinematic) then update the position*/
             //if(rigid_body->mass()!=0){

@@ -8,8 +8,6 @@
 #include <QVector3D>
 #include <btBulletDynamicsCommon.h>
 
-#include "debugdraw.h"
-
 namespace Physics {
 
 namespace Bullet{
@@ -39,7 +37,9 @@ public:
 
     void setDebug(bool debug);
     bool debug(){return m_debug;}
-    QVariantList debugEntities(){return m_debugDraw->debug_entities;}
+
+    QVector<Collision> getCollisions();
+
 
 private slots:
     void onBodyDestroyed(QObject* obj);
@@ -56,6 +56,9 @@ private:
 
     QSet<AbstractBody*> m_bodies;
 
+    QHash<AbstractBody*,btCollisionObject*> m_PhysicsBodies2BulletBodies;
+    QHash<btCollisionObject*,AbstractBody*> m_BulletBodies2PhysicsBodies;
+
     btBroadphaseInterface* m_broadphase;
     btDefaultCollisionConfiguration* m_collisionConfiguration;
     btCollisionDispatcher* m_dispatcher;
@@ -63,8 +66,9 @@ private:
     btDynamicsWorld* m_dynamicsWorld;
 
     bool m_debug;
-    DebugDraw* m_debugDraw;
 
+    //the value is the life time: 0 to be removed,1 means old, 2 means new
+    QHash<Collision,ushort> m_collitions;
 
 };
 

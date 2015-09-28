@@ -35,4 +35,22 @@ void PhysicsManager::loadPhysicsFactories(){
                qWarning() << "Failed to load physics factory plugin ";
    }
 }
+QVector<PhysicsManager::Collision> PhysicsManager::getCollisions(){
+    /*Simply convert the collisions from the world to the format of the Physics manager*/
+    QVector<PhysicsManager::Collision> collisions;
+    QVector<PhysicsAbstractDynamicsWorld::Collision> collisions_from_world=m_physics_world->getCollisions();
+    Q_FOREACH(PhysicsAbstractDynamicsWorld::Collision c,collisions_from_world){
+        Collision collision;
+        collision.body1=m_RigidBodies2Id[c.body1];
+        collision.body2=m_RigidBodies2Id[c.body2];
+        collision.normalBody2=c.normalBody2;
+        collision.pointOnBody1=c.pointOnBody1;
+        collision.pointOnBody2=c.pointOnBody2;
+        collisions.append(collision);
+    }
+
+    return collisions;
+}
+
+
 }

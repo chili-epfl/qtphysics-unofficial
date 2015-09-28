@@ -4,8 +4,10 @@
 
 #include <Qt3DCore>
 #include <QVector3D>
+#include "physicscollisionevent.h"
 
 namespace Physics {
+
 
 class FRONTENDSHARED_EXPORT PhysicsBodyInfo: public Qt3D::QComponent
 {
@@ -25,6 +27,7 @@ class FRONTENDSHARED_EXPORT PhysicsBodyInfo: public Qt3D::QComponent
     Q_PROPERTY(QVariantMap shapeDetails READ shapeDetails WRITE setShapeDetails NOTIFY shapeDetailsChanged)
     Q_PROPERTY(Qt3D::QTransform* inputTransform READ inputTransform WRITE setInputTransform NOTIFY inputTransformChanged)
     Q_PROPERTY(Qt3D::QTransform* outputTransform READ outputTransform NOTIFY outputTransformChanged)
+
 public:
     explicit PhysicsBodyInfo(Qt3D::QNode* parent=0);
     ~PhysicsBodyInfo();
@@ -65,6 +68,7 @@ signals:
     void inputTransformChanged();
     void outputTransformChanged();
 
+    void collided(PhysicsCollisionEventPtr event);
 protected:
     void copy(const Qt3D::QNode *ref) Q_DECL_OVERRIDE;
 private:
