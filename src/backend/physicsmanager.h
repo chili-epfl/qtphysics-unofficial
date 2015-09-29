@@ -45,13 +45,24 @@ signals:
 public slots:
 
 private:
-
+    QHash<Collision,ushort> m_collitions;
     void loadPhysicsFactories();
     Qt3D::QNodeId m_rootId;
 
-
-
 };
+
+inline bool operator==(const PhysicsManager::Collision& c1,const PhysicsManager::Collision& c2)
+{
+    return (c1.body1 == c2.body1 && c1.body2 == c2.body2
+            && c1.pointOnBody1 == c2.pointOnBody1 && c1.pointOnBody2 == c2.pointOnBody2
+            && c1.normalBody2 == c2.normalBody2);
+}
+inline uint qHash(const PhysicsManager::Collision &key, uint seed)
+{
+    return Qt3D::qHash(key.body1, seed) ^ Qt3D::qHash(key.body2, seed);
+}
+
+
 
 }
 #endif // PHYSICSMANAGER_H

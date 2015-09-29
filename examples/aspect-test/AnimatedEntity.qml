@@ -67,6 +67,8 @@ Entity {
         mass:1
         restitution: 1
         inputTransform: torusTransform
+        onCollided: console.log("hi")
+
     }
 
     Entity {
@@ -118,7 +120,6 @@ Entity {
     PhysicsBodyInfo{
         id:sphereBody
         restitution: 1
-        onCollided: console.log("hi")
 
         mass:1
         inputTransform: sphereTransform
@@ -127,7 +128,7 @@ Entity {
     Entity {
         objectName: "Sphere"
         id: sphereEntity
-        components: [ sphereMesh, sphereBody, sphereBody.outputTransform ]
+       // components: [ sphereMesh, sphereBody, sphereBody.outputTransform ]
     }
 
     /*Floor is an entity non renderable

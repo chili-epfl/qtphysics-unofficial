@@ -18,25 +18,7 @@ public:
         QVector3D pointOnBody2;
         QVector3D normalBody2;
 
-        Collision& operator=(const Collision& c)
-         {
-             body1=c.body1;
-             body2=c.body2;
-             pointOnBody1=c.pointOnBody1;
-             pointOnBody2=c.pointOnBody2;
-             normalBody2=c.normalBody2;
-             return *this;
-        }
-        inline bool operator==(const Collision& c) const
-        {
-            return (body1 == c.body1 && body2 == c.body2);
-        }
-        inline uint qHash(const Collision &key, uint seed)
-        {
-            return qHash(*(key.body1), seed) ^ qHash(*(key.body2), seed);
-        }
-
-    };
+     };
 
     explicit PhysicsAbstractDynamicsWorld(QObject *parent = 0);
 

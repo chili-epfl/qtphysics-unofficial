@@ -65,7 +65,7 @@ void World::setSimulationRate(qreal rate){
 }
 
 void World::stepSimulation(){
-    m_dynamicsWorld->stepSimulation(1.0f/m_simulationRate,10);
+    m_dynamicsWorld->stepSimulation(1.0f/m_simulationRate);
     if(m_debug){
         //m_debugDraw->debug_entities.clear();
         //m_dynamicsWorld->debugDrawWorld();
@@ -134,10 +134,6 @@ void World::addbtRigidBody(btRigidBody* b,int group,int mask){
 
 QVector<World::Collision> World::getCollisions(){
     QVector<World::Collision> collitions;
-
-    Q_FOREACH(Collision c, m_collitions.keys())
-        m_collitions[c]=0;
-
     int numManifolds = m_dynamicsWorld->getDispatcher()->getNumManifolds();
     for (int i=0;i<numManifolds;i++)
     {
@@ -153,14 +149,9 @@ QVector<World::Collision> World::getCollisions(){
         for (int j=0;j<numContacts;j++)
         {
             btManifoldPoint& pt = contactManifold->getContactPoint(j);
-            if (pt.getDistance()<0.f)
+            if (pt.getDistance()<0.5f)
             {
-                if(m_collitions.contains(collition)){
-                    m_collitions[collition]=1;
-                }
-                else{
-                    m_collitions[collition]=2;
-                }
+                collitions.append(collition);
                 break;
                 //const btVector3& ptA = pt.getPositionWorldOnA();
                 //const btVector3& ptB = pt.getPositionWorldOnB();
@@ -168,16 +159,6 @@ QVector<World::Collision> World::getCollisions(){
             }
         }
     }
-
-    Q_FOREACH(Collision c, m_collitions.keys()){
-        if(m_collitions[c]==0){
-            m_collitions.remove(c);
-        }
-        else if(m_collitions[c]==2){
-            collitions.append(c);
-        }
-    }
-
     return collitions;
 }
 

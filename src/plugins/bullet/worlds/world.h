@@ -67,9 +67,6 @@ private:
 
     bool m_debug;
 
-    //the value is the life time: 0 to be removed,1 means old, 2 means new
-    QHash<Collision,ushort> m_collitions;
-
 };
 
 }}

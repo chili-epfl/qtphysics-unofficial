@@ -28,27 +28,18 @@ void ConvexHullShape::initShape(){
 
 void ConvexHullShape::initShape(qreal* points,int n_points){
     m_shape = new btConvexHullShape();
-    qDebug()<<"Creting";
     for(int i=0;i<3*n_points;i=i+3){
         btVector3 point(points[i],points[i+1],points[i+2]);
         ((btConvexHullShape*)m_shape)->addPoint(point);
-        qDebug()<<point.x()<<" "
-               <<point.y()<<" "
-               <<point.z();
     }
     btShapeHull* hull = new btShapeHull((btConvexHullShape*)m_shape);
     btScalar margin = m_shape->getMargin();
     hull->buildHull(margin);
     btConvexHullShape* old_shape=(btConvexHullShape*)m_shape;
-    qDebug()<<"Reducing";
     m_shape = new btConvexHullShape();
     for(int i=0;i<hull->numVertices();i++){
-        qDebug()<<hull->getVertexPointer()[i].x()<<" "
-               <<hull->getVertexPointer()[i].y()<<" "
-               <<hull->getVertexPointer()[i].z();
         ((btConvexHullShape*)m_shape)->addPoint(hull->getVertexPointer()[i]);
     }
-    qDebug()<<"sd";
     delete old_shape;
 
 }
