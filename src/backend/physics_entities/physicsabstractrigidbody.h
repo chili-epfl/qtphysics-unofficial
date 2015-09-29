@@ -16,6 +16,9 @@ public:
     virtual int group()=0;
     virtual void setMask(int mask)=0;
     virtual void setGroup(int group)=0;
+    virtual bool kinematic()=0;
+    virtual void setKinematic(bool kinematic)=0;
+
 
     virtual qreal mass()=0;
     virtual QVector3D fallInertia()=0;

@@ -32,6 +32,7 @@ void PhysicsBodyInfoBackendNode::updateFromPeer(Qt3D::QNode *peer){
     setFriction(body_info->friction());
     setGroup(body_info->group());
     setMask(body_info->mask());
+    setKinematic(body_info->kinematic());
     setMass(body_info->mass());
     setRestitution(body_info->restitution());
     setRollingFriction(body_info->rollingFriction());
@@ -69,6 +70,12 @@ void PhysicsBodyInfoBackendNode::setGroup(int group){
     if(group >0 && m_group!=group){
         m_group=group;
         m_dirtyFlags.operator |=(GroupChanged);
+    }
+}
+void PhysicsBodyInfoBackendNode::setKinematic(bool kinematic){
+    if(m_kinematic!=kinematic){
+        m_kinematic=kinematic;
+        m_dirtyFlags.operator |=(KinematicChanged);
     }
 }
 
@@ -114,6 +121,8 @@ void PhysicsBodyInfoBackendNode::sceneChangeEvent(const Qt3D::QSceneChangePtr &e
                 setGroup(propertyChange->value().toInt());
             else if (propertyChange->propertyName() == QByteArrayLiteral("mask"))
                 setMask(propertyChange->value().toInt());
+            else if (propertyChange->propertyName() == QByteArrayLiteral("kinematic"))
+                setKinematic(propertyChange->value().toBool());
             else if (propertyChange->propertyName() == QByteArrayLiteral("mass"))
                 setMass(propertyChange->value().toReal());
             else if (propertyChange->propertyName() == QByteArrayLiteral("restitution"))

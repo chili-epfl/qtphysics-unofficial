@@ -15,6 +15,7 @@ class FRONTENDSHARED_EXPORT PhysicsBodyInfo: public Qt3D::QComponent
     Q_PROPERTY(bool shareable READ shareable)
     Q_PROPERTY(int mask READ mask WRITE setMask NOTIFY maskChanged)
     Q_PROPERTY(int group READ group WRITE setGroup NOTIFY groupChanged)
+    Q_PROPERTY(bool kinematic READ kinematic WRITE setKinematic NOTIFY kinematicChanged)
 
     Q_PROPERTY(qreal restitution READ restitution WRITE setRestitution NOTIFY restitutionChanged)
     Q_PROPERTY(qreal friction READ friction WRITE setFriction NOTIFY frictionChanged)
@@ -35,9 +36,11 @@ public:
 
     virtual int mask(){return m_mask;}
     virtual int group(){return m_group;}
+    virtual bool kinematic(){return m_kinematic;}
 
     virtual void setMask(int mask);
     virtual void setGroup(int group);
+    virtual void setKinematic(bool kinematic);
 
     virtual qreal restitution(){return m_restitution;}
     virtual qreal rollingFriction(){return m_rollingFriction;}
@@ -55,9 +58,13 @@ public:
     virtual void setFallInertia(QVector3D fallInertia);
     virtual void setShapeDetails(QVariantMap shapeDetails);
     virtual void setInputTransform(Qt3D::QTransform* inputTransform);
+
+
+
 signals:
     void maskChanged(int mask);
     void groupChanged(int group);
+    void kinematicChanged(bool kinematic);
 
     void fallInertiaChanged(QVector3D fallInertia);
     void massChanged(qreal mass);
@@ -76,6 +83,7 @@ private:
 
     int m_mask;
     int m_group;
+    bool m_kinematic;
 
     qreal m_mass;
     QVector3D m_fallInertia;

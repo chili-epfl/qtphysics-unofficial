@@ -2,6 +2,7 @@ import Qt3D 2.0
 import Qt3D.Renderer 2.0
 import QtPhysics.unofficial 1.0
 import QtQuick 2.0 as QQ2
+import Qt3D.Input 2.0
 
 
 Entity {
@@ -23,6 +24,9 @@ Entity {
         controlledCamera: camera
     }
 
+    MouseController {
+        id: mouseController
+    }
     components: [
         FrameGraph {
             activeFrameGraph: Viewport {
@@ -56,9 +60,12 @@ Entity {
 
     Transform {
         id: torusTransform
-        Rotate{
+        /*Rotate{
             axis: Qt.vector3d(1,0,0)
             angle: 2
+        }*/
+        Translate{
+            id:torusTranslate
         }
     }
 
@@ -74,14 +81,28 @@ Entity {
     Entity {
         id: torusEntity
         objectName: "torus"
-        components: [ torusMesh, torusBodyinfo, torusBodyinfo.outputTransform ]
+
+        property MouseInput mouseInput : MouseInput {
+                    controller: mouseController
+
+                    onReleased: {
+                        switch (mouse.button) {
+                        case Qt.LeftButton:
+                            torusTranslate.setDy(10+Math.random());
+                            break;
+                        }
+                    }
+                }
+
+
+        components: [ torusMesh, torusBodyinfo, torusBodyinfo.outputTransform,mouseInput ]
     }
 
     Transform {
         id: torusTransform2
        Translate{
-           dx:20
-           dy:500
+           //dx:20
+           dy:50
            dz:0.5
        }
     }
@@ -99,11 +120,6 @@ Entity {
         restitution: 1
         inputTransform: torusTransform2
     }
-    Entity{
-        id: torusEntity2
-        objectName: "torus2"
-        components: [ torusMesh, torusBodyinfo2, torusBodyinfo2.outputTransform ]
-    }
 
     SphereMesh {
         id: sphereMesh
@@ -120,7 +136,7 @@ Entity {
     PhysicsBodyInfo{
         id:sphereBody
         restitution: 1
-
+        kinematic:false
         mass:1
         inputTransform: sphereTransform
     }
@@ -128,8 +144,14 @@ Entity {
     Entity {
         objectName: "Sphere"
         id: sphereEntity
-       // components: [ sphereMesh, sphereBody, sphereBody.outputTransform ]
+        components: [ sphereMesh, sphereBody, sphereBody.outputTransform ]
+        Entity{
+            id: torusEntity2
+            objectName: "torus2"
+            components: [ torusMesh, torusBodyinfo2, torusBodyinfo2.outputTransform ]
+        }
     }
+
 
     /*Floor is an entity non renderable
     but defined by the shape details*/

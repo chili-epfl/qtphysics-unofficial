@@ -8,6 +8,7 @@ AbstractBody::AbstractBody(QObject* parent):
     PhysicsAbstractRigidBody(parent),
     m_mask(1),
     m_group(1),
+    m_kinematic(false),
     m_changeFlags(NoChange),
     m_mass(0),
     m_fallInertia(),
@@ -37,6 +38,8 @@ void AbstractBody::initBody(){
     m_rigidBody->setFriction(m_friction);
 
     m_rigidBody->setRollingFriction(m_rollingFriction);
+
+    //setKinematic(m_kinematic);
 
     delete m_rigidBodyCI;
 }
@@ -75,6 +78,22 @@ void AbstractBody::setGroup(int group){
         m_changeFlags|=GroupChanged;
     }
 }
+
+void AbstractBody::setKinematic(bool kinematic){
+    if(m_kinematic!=kinematic){
+        m_kinematic=kinematic;
+        if(m_kinematic){
+            m_rigidBody->setCollisionFlags(m_rigidBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+            m_rigidBody->setActivationState(DISABLE_DEACTIVATION);
+        }
+        else{
+            m_rigidBody->setCollisionFlags(m_rigidBody->getCollisionFlags() & ~btCollisionObject::CF_KINEMATIC_OBJECT);
+            m_rigidBody->setActivationState(ACTIVE_TAG);
+
+        }
+    }
+}
+
 QMatrix4x4 AbstractBody::worldTransformation(){
    return static_cast<MotionState*>(m_motionState)->getWorldTransformAsQMatrix4x4();
 }

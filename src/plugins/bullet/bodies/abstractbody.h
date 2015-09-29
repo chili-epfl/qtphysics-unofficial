@@ -27,9 +27,11 @@ public:
 
     virtual int mask(){return m_mask;}
     virtual int group(){return m_group;}
+    virtual bool kinematic(){return m_kinematic;}
 
     virtual void setMask(int mask);
     virtual void setGroup(int group);
+    virtual void setKinematic(bool kinematic);
 
     virtual QMatrix4x4 worldTransformation();
     virtual void setWorldTransformation(QMatrix4x4 m);
@@ -61,6 +63,7 @@ protected:
 
     int m_mask;
     int m_group;
+    bool m_kinematic;
     ChangeFlags m_changeFlags;
     qreal m_mass;
     QVector3D m_fallInertia;

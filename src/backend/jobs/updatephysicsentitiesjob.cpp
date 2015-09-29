@@ -92,6 +92,41 @@ void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 
         else if(entity_geometry_renderer!=Q_NULLPTR && entity_geometry_renderer->isDirty()){
             //TODO
         }
+
+        /*Update Body properties*/
+        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::MaskChanged)){
+            rigid_body->setMask(entity_body_info->mask());
+            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::MaskChanged;
+        }
+        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::GroupChanged)){
+            rigid_body->setGroup(entity_body_info->group());
+            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::GroupChanged;
+        }
+        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::MassChanged)){
+            rigid_body->setMass(entity_body_info->mass());
+            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::MassChanged;
+        }
+        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::KinematicChanged)){
+            rigid_body->setKinematic(entity_body_info->kinematic());
+            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::KinematicChanged;
+        }
+        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::FallInertiaChanged)){
+            rigid_body->setFallInertia(entity_body_info->fallInertia());
+            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::FallInertiaChanged;
+        }
+        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::RestistutionChanged)){
+            rigid_body->setRestitution(entity_body_info->restitution());
+            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::RestistutionChanged;
+        }
+        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::FrictionChanged)){
+            rigid_body->setFriction(entity_body_info->friction());
+            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::FrictionChanged;
+        }
+        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::RollingFrictionChanged)){
+            rigid_body->setRollingFriction(entity_body_info->rollingFriction());
+            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::RollingFrictionChanged;
+        }
+
         /*Update Motion State*/
         PhysicsTransform* inputTransform=Q_NULLPTR;
         if(!entity_body_info->inputTransform().isNull()){
@@ -110,35 +145,7 @@ void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 
         if(forceUpdateMS)
             rigid_body->setWorldTransformation(current_global_matrix);
 
-        /*Update Body properties*/
-        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::MaskChanged)){
-            rigid_body->setMask(entity_body_info->mask());
-            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::MaskChanged;
-        }
-        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::GroupChanged)){
-            rigid_body->setGroup(entity_body_info->group());
-            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::GroupChanged;
-        }
-        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::MassChanged)){
-            rigid_body->setMass(entity_body_info->mass());
-            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::MassChanged;
-        }
-        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::FallInertiaChanged)){
-            rigid_body->setFallInertia(entity_body_info->fallInertia());
-            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::FallInertiaChanged;
-        }
-        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::RestistutionChanged)){
-            rigid_body->setRestitution(entity_body_info->restitution());
-            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::RestistutionChanged;
-        }
-        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::FrictionChanged)){
-            rigid_body->setFriction(entity_body_info->friction());
-            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::FrictionChanged;
-        }
-        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::RollingFrictionChanged)){
-            rigid_body->setRollingFriction(entity_body_info->rollingFriction());
-            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::RollingFrictionChanged;
-        }
+
     }
     else if(!entity->transform().isNull()){
         /*Entity with only a transformation*/
@@ -230,7 +237,6 @@ PhysicsAbstractRigidBody* UpdatePhysicsEntitiesJob::createRigidBodyFromMesh(Phys
                         rawBuffer += stride;
                     }
                 }
-
             }
         }
         QVector<QVector3D> v=vertexPosition;

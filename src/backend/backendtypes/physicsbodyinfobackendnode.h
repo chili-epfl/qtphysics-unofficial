@@ -24,7 +24,8 @@ public:
             FrictionChanged = 32,
             RollingFrictionChanged = 64,
             ShapeDetailsChanged = 128,
-            InputTransformChanged = 256
+            InputTransformChanged = 256,
+            KinematicChanged = 512
         };
     Q_DECLARE_FLAGS(DirtyFlags, DirtyFlag)
 
@@ -44,6 +45,9 @@ public:
 
     int group(){return m_group;}
     void setGroup(int group);
+
+    bool kinematic(){return m_kinematic;}
+    void setKinematic(bool kinematic);
 
     qreal restitution(){return m_restitution;}
     void setRestitution(qreal restitution);
@@ -78,6 +82,8 @@ private:
 
     int m_mask;
     int m_group;
+    bool m_kinematic;
+
     qreal m_mass;
     QVector3D m_fallInertia;
     qreal m_restitution;

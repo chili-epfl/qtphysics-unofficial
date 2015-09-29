@@ -6,6 +6,7 @@ PhysicsBodyInfo::PhysicsBodyInfo(Qt3D::QNode* parent):
     Qt3D::QComponent(parent),
     m_mask(1),
     m_group(1),
+    m_kinematic(false),
     m_mass(0),
     m_fallInertia(),
     m_restitution(0.0f),
@@ -29,6 +30,7 @@ void PhysicsBodyInfo::copy(const Qt3D::QNode *ref){
     m_mass=body_info->m_mass;
     m_mask=body_info->m_mask;
     m_group=body_info->m_group;
+    m_kinematic=body_info->m_kinematic;
     m_inputTransform=body_info->m_inputTransform;
     m_outputTransform=body_info->m_outputTransform;
     m_outputTransform_matrix=body_info->m_outputTransform_matrix;
@@ -69,6 +71,12 @@ void PhysicsBodyInfo::setGroup(int group){
     if(group >0 && m_group!=group){
         m_group=group;
         emit groupChanged(m_group);
+    }
+}
+void PhysicsBodyInfo::setKinematic(bool kinematic){
+    if(m_kinematic!=kinematic){
+        m_kinematic=kinematic;
+        emit kinematicChanged(m_kinematic);
     }
 }
 
