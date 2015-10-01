@@ -16,10 +16,19 @@ Two Qml componets are provided:
 
 Both components inherit from Qt3D:QComponent. The first one, PhysicsBodyInfo, allows to specify for an entity properties such as mass, restituition, friction etc;
 The entities belonging to the physic world are:
-* Object with an abstract mesh and a transformation but without a PhysicsBodyInfo -> those are static bodies (mass = 0)
+* Object with a mesh but without a PhysicsBodyInfo -> those are static bodies (mass = 0)
 * Object with an abstract mesh, a transformation and a PhysicsBodyInfo
 * Object with a transformation and a PhysicsBodyInfo that defines the collition shape with the property "ShapeDetails" ->  those are not rendered
 The property "ShapeDetails" allows to override the collition shape properties that otherwise would be inferred from the mesh of the entity. 
+
+PhysicsBodyInfo has two property:
+* InputTransform. This matrix is used to set the original position of the object or to force the motion state. When the matrix changes the motion state of the object is updated. NB. By "matrix changes" I  mean that a change is notified. For example, if you create button that set a traslation to dz:100, the matrix changes only if the prevoius value of dz was different. 
+* OutputTransorm: the matrix coming from the physics simulation
+
+A body can be declered as kinatic using the kinematic flag.
+PhysicsBodyInfo emit a signal collided(CollitionEvent*) when a collition happens.
+
+
 
 PhysicsWorldInfo defines general setting for the physic world, such as gravity.
 
@@ -32,10 +41,10 @@ On the backend, the module implements a Qt3D aspect. When  an entity contains a 
 
 The aspect executes sequentially those jobs:
 
-* Scan the scenegraph and add a Qtransfor to those Entities that have a PhysicsBodyInfo and disable the default tranform;
 * Visit the scenegraph and update the physic world. For each entry, create a rigid body and/or update its properties;
 * Run a simulation step
 * Update the transformation of the entities.
+* Update the collitions
 
 ##Bullet Plugin##
 The wrapper around Bullet is implemented as a plugin. It implements the interface PhysicsFactoryInterface, which defines the methods to create 
