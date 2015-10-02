@@ -1,11 +1,11 @@
-#include "staticplane.h"
+#include "rigidstaticplanebody.h"
 
 namespace Physics {
 
 namespace Bullet {
 
-StaticPlane::StaticPlane(QObject* parent):
-    AbstractBody(parent),
+RigidStaticPlaneBody::RigidStaticPlaneBody(QObject* parent):
+    AbstractRigidBody(parent),
     m_normal(0,1,0),
     m_planeConstant(0.0f)
 {
@@ -14,12 +14,12 @@ StaticPlane::StaticPlane(QObject* parent):
     initBody();
 }
 
-StaticPlane::~StaticPlane()
+RigidStaticPlaneBody::~RigidStaticPlaneBody()
 {
 
 }
 
-void StaticPlane::setPlaneConstant(qreal d){
+void RigidStaticPlaneBody::setPlaneConstant(qreal d){
     if(m_planeConstant!=d){
         m_planeConstant=d;      
         delete m_shape;
@@ -29,7 +29,7 @@ void StaticPlane::setPlaneConstant(qreal d){
     }
 }
 
-void StaticPlane::setNormal(QVector3D normal){
+void RigidStaticPlaneBody::setNormal(QVector3D normal){
     if(m_normal!=normal){
         m_normal=normal;
         delete m_shape;
@@ -38,13 +38,13 @@ void StaticPlane::setNormal(QVector3D normal){
         setMassProps();
     }
 }
-void StaticPlane::setMass(qreal mass){
+void RigidStaticPlaneBody::setMass(qreal mass){
     if(m_mass!=mass){
-        qWarning()<<"StaticPlane does not support mass";
+        qWarning()<<"RigidStaticPlaneBody does not support mass";
     }
 }
 
-void StaticPlane::initShape(){
+void RigidStaticPlaneBody::initShape(){
     m_shape = new btStaticPlaneShape(btVector3(m_normal.x(),m_normal.y(),m_normal.z()), m_planeConstant);
 }
 

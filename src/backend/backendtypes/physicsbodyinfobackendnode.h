@@ -10,7 +10,8 @@ namespace Physics {
 
 class PhysicsManager;
 
-/*PhysicsBodyInfoBackendNode: the representation of the node PhysicsBodyInfo in the backend*/
+/*PhysicsBodyInfoBackendNode: the representation of the node PhysicsBodyInfo in the backend.
+PhysicsSoftBodyInfo is handled as a special case*/
 class BACKENDSHARED_EXPORT PhysicsBodyInfoBackendNode : public Qt3D::QBackendNode
 {
 public:
@@ -26,55 +27,54 @@ public:
             ShapeDetailsChanged = 128,
             InputTransformChanged = 256,
             KinematicChanged = 512
-        };
+    };
     Q_DECLARE_FLAGS(DirtyFlags, DirtyFlag)
 
     explicit PhysicsBodyInfoBackendNode();
     ~PhysicsBodyInfoBackendNode();
 
-    void updateFromPeer(Qt3D::QNode *peer) Q_DECL_OVERRIDE;
+    virtual void updateFromPeer(Qt3D::QNode *peer) Q_DECL_OVERRIDE;
 
-    DirtyFlags& dirtyFlags(){return m_dirtyFlags;}
+    virtual DirtyFlags& dirtyFlags(){return m_dirtyFlags;}
 
-    QString objectName(){return m_objectName;}
+    virtual QString objectName(){return m_objectName;}
 
-    void setManager(PhysicsManager *manager);
+    virtual void setManager(PhysicsManager *manager);
 
-    int mask(){return m_mask;}
-    void setMask(int mask);
+    virtual int mask(){return m_mask;}
+    virtual void setMask(int mask);
 
-    int group(){return m_group;}
-    void setGroup(int group);
+    virtual int group(){return m_group;}
+    virtual void setGroup(int group);
 
-    bool kinematic(){return m_kinematic;}
-    void setKinematic(bool kinematic);
+    virtual bool kinematic(){return m_kinematic;}
+    virtual void setKinematic(bool kinematic);
 
-    qreal restitution(){return m_restitution;}
-    void setRestitution(qreal restitution);
+    virtual qreal restitution(){return m_restitution;}
+    virtual void setRestitution(qreal restitution);
 
-    qreal rollingFriction(){return m_rollingFriction;}
-    void setRollingFriction(qreal rollingFriction);
+    virtual qreal rollingFriction(){return m_rollingFriction;}
+    virtual void setRollingFriction(qreal rollingFriction);
 
-    qreal friction(){return m_friction;}
-    void setFriction(qreal friction);
+    virtual qreal friction(){return m_friction;}
+    virtual void setFriction(qreal friction);
 
-    qreal mass(){return m_mass;}
-    void setMass(qreal mass);
+    virtual qreal mass(){return m_mass;}
+    virtual void setMass(qreal mass);
 
-    QVector3D fallInertia(){return m_fallInertia;}
-    void setFallInertia(QVector3D fallInertia);
+    virtual QVector3D fallInertia(){return m_fallInertia;}
+    virtual void setFallInertia(QVector3D fallInertia);
 
-    const QVariantMap& shapeDetails(){return m_shapeDetails;}
-    void setShapeDetails(QVariantMap shapeDetails);
+    virtual const QVariantMap& shapeDetails(){return m_shapeDetails;}
+    virtual void setShapeDetails(QVariantMap shapeDetails);
 
-    Qt3D::QNodeId inputTransform(){return m_inputTransform;}
-    void setInputTransform(Qt3D::QNodeId inputTranform);
+    virtual Qt3D::QNodeId inputTransform(){return m_inputTransform;}
+    virtual void setInputTransform(Qt3D::QNodeId inputTranform);
 
-    void notifyFrontEnd(QString operation, QVariantMap args);
+    virtual void notifyFrontEnd(QString operation, QVariantMap args);
 protected:
-    void sceneChangeEvent(const Qt3D::QSceneChangePtr &) Q_DECL_OVERRIDE;
+    virtual void sceneChangeEvent(const Qt3D::QSceneChangePtr &) Q_DECL_OVERRIDE;
 
-private:
     DirtyFlags m_dirtyFlags;
 
     QString m_objectName;

@@ -1,4 +1,4 @@
-#include "sphereshape.h"
+#include "rigidspherebody.h"
 
 #include <bullet/BulletCollision/CollisionShapes/btSphereShape.h>
 
@@ -8,25 +8,25 @@ namespace Physics {
 namespace Bullet {
 
 
-SphereShape::SphereShape(QObject* parent):
-    AbstractBody(parent),
+RigidSphereBody::RigidSphereBody(QObject* parent):
+    AbstractRigidBody(parent),
     m_radius(1)
 {
     initShape();
     initBody();
 }
-SphereShape::~SphereShape()
+RigidSphereBody::~RigidSphereBody()
 {
 
 }
 
-void SphereShape::initShape(){
+void RigidSphereBody::initShape(){
     m_shape = new btSphereShape(m_radius);
 }
 
 
 
-void SphereShape::setRadius(qreal radius){
+void RigidSphereBody::setRadius(qreal radius){
     if(m_radius!=radius){
         m_radius=radius;
         delete m_shape;

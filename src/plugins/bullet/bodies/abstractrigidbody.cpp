@@ -1,10 +1,10 @@
-#include "abstractbody.h"
+#include "abstractrigidbody.h"
 #include "motionstate.h"
 namespace Physics {
 
 namespace Bullet {
 
-AbstractBody::AbstractBody(QObject* parent):
+AbstractRigidBody::AbstractRigidBody(QObject* parent):
     PhysicsAbstractRigidBody(parent),
     m_mask(1),
     m_group(1),
@@ -21,7 +21,7 @@ AbstractBody::AbstractBody(QObject* parent):
     m_rigidBody=Q_NULLPTR;
 }
 
-void AbstractBody::initBody(){
+void AbstractRigidBody::initBody(){
 
     btVector3 inertia(m_fallInertia.x(),m_fallInertia.y(),m_fallInertia.z());
     if(m_fallInertia.x()==0 && m_fallInertia.y()==0 && m_fallInertia.z()==0)
@@ -44,20 +44,20 @@ void AbstractBody::initBody(){
     delete m_rigidBodyCI;
 }
 
-void AbstractBody::setMass(qreal mass){
+void AbstractRigidBody::setMass(qreal mass){
     if(mass!=m_mass){
         m_mass=mass;
         setMassProps();
     }
 }
-void AbstractBody::setFallInertia(QVector3D fallInertia){
+void AbstractRigidBody::setFallInertia(QVector3D fallInertia){
     if(m_fallInertia!=fallInertia){
        m_fallInertia=fallInertia;
        setMassProps();
     }
 }
 
-void AbstractBody::setMassProps(){
+void AbstractRigidBody::setMassProps(){
     btVector3 inertia(m_fallInertia.x(),m_fallInertia.y(),m_fallInertia.z());
     if(m_fallInertia.x()==0 && m_fallInertia.y()==0 && m_fallInertia.z()==0)
         m_shape->calculateLocalInertia(m_mass,inertia);
@@ -67,19 +67,19 @@ void AbstractBody::setMassProps(){
     emit worldUpdateRequired();
 }
 
-void AbstractBody::setMask(int mask){
+void AbstractRigidBody::setMask(int mask){
     if(mask >0 && m_mask!=mask){
         m_changeFlags|=MaskChanged;
     }
 }
 
-void AbstractBody::setGroup(int group){
+void AbstractRigidBody::setGroup(int group){
     if(group >0 && m_group!=group){
         m_changeFlags|=GroupChanged;
     }
 }
 
-void AbstractBody::setKinematic(bool kinematic){
+void AbstractRigidBody::setKinematic(bool kinematic){
     if(m_kinematic!=kinematic){
         m_kinematic=kinematic;
         if(m_kinematic){
@@ -94,45 +94,45 @@ void AbstractBody::setKinematic(bool kinematic){
     }
 }
 
-QMatrix4x4 AbstractBody::worldTransformation(){
+QMatrix4x4 AbstractRigidBody::worldTransformation(){
    return static_cast<MotionState*>(m_motionState)->getWorldTransformAsQMatrix4x4();
 }
 
-void AbstractBody::setWorldTransformation(QMatrix4x4 m){   
+void AbstractRigidBody::setWorldTransformation(QMatrix4x4 m){
     static_cast<MotionState*>(m_motionState)->setWorldTransform(m);
     m_rigidBody->setMotionState(m_motionState);
 }
 
 
-void AbstractBody::setRestitution(qreal restitution){
+void AbstractRigidBody::setRestitution(qreal restitution){
     if(restitution!=m_restitution){
         m_restitution=restitution;
         m_rigidBody->setRestitution(m_restitution);
     }
 }
-void AbstractBody::setRollingFriction(qreal rollingFriction){
+void AbstractRigidBody::setRollingFriction(qreal rollingFriction){
     if(rollingFriction!=m_rollingFriction){
         m_rollingFriction=rollingFriction;
         m_rigidBody->setRollingFriction(m_rollingFriction);
     }
 }
-void AbstractBody::setFriction(qreal friction){
+void AbstractRigidBody::setFriction(qreal friction){
     if(friction!=m_friction){
         m_friction=friction;
         m_rigidBody->setFriction(m_friction);
     }
 }
 
-void AbstractBody::applyForce(QVector3D force,QVector3D relationPosition){
+void AbstractRigidBody::applyForce(QVector3D force,QVector3D relationPosition){
     m_rigidBody->applyForce(btVector3(force.x(),force.y(),force.z()),
                             btVector3(relationPosition.x(),relationPosition.y(),relationPosition.z()));
 }
 
-void AbstractBody::applyImpulse(QVector3D force,QVector3D relationPosition){
+void AbstractRigidBody::applyImpulse(QVector3D force,QVector3D relationPosition){
     m_rigidBody->applyImpulse(btVector3(force.x(),force.y(),force.z()),
                             btVector3(relationPosition.x(),relationPosition.y(),relationPosition.z()));
 }
-void AbstractBody::clearForces(){
+void AbstractRigidBody::clearForces(){
     m_rigidBody->clearForces();
 
 }

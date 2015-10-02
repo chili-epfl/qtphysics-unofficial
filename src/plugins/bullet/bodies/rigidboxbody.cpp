@@ -1,12 +1,12 @@
-#include "boxshape.h"
+#include "rigidboxbody.h"
 #include <bullet/BulletCollision/CollisionShapes/btBoxShape.h>
 
 namespace Physics {
 
 namespace Bullet {
 
-BoxShape::BoxShape(QObject* parent):
-    AbstractBody(parent),
+RigidBoxBody::RigidBoxBody(QObject* parent):
+    AbstractRigidBody(parent),
     m_dimension(1,1,1)
 
 {
@@ -14,12 +14,12 @@ BoxShape::BoxShape(QObject* parent):
     initBody();
 
 }
-BoxShape::~BoxShape()
+RigidBoxBody::~RigidBoxBody()
 {
 
 }
 
-void BoxShape::setDimension(QVector3D dimension){
+void RigidBoxBody::setDimension(QVector3D dimension){
     if(m_dimension!=dimension){
         m_dimension=dimension;
         delete m_shape;
@@ -28,7 +28,7 @@ void BoxShape::setDimension(QVector3D dimension){
         setMassProps();
     }
 }
-void BoxShape::initShape(){
+void RigidBoxBody::initShape(){
     m_shape = new btBoxShape(btVector3(m_dimension.x()/2,m_dimension.y()/2,m_dimension.z()/2));
 }
 

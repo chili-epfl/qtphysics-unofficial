@@ -1,32 +1,32 @@
-#include "convexhullshape.h"
+#include "rigidconvexhullbody.h"
 #include <bullet/BulletCollision/CollisionShapes/btShapeHull.h>
 namespace Physics {
 
 namespace Bullet {
 
 
-ConvexHullShape::ConvexHullShape(QObject* parent):
-    AbstractBody(parent)
+RigidConvexHullBody::RigidConvexHullBody(QObject* parent):
+    AbstractRigidBody(parent)
 {
     initShape();
     initBody();
 }
-ConvexHullShape::ConvexHullShape(qreal* points,int n_points,QObject* parent):
-    AbstractBody(parent)
+RigidConvexHullBody::RigidConvexHullBody(qreal* points,int n_points,QObject* parent):
+    AbstractRigidBody(parent)
 {
     initShape(points,n_points);
     initBody();
 
 }
 
-ConvexHullShape::~ConvexHullShape(){
+RigidConvexHullBody::~RigidConvexHullBody(){
 
 }
-void ConvexHullShape::initShape(){
+void RigidConvexHullBody::initShape(){
     initShape(Q_NULLPTR,0);
 }
 
-void ConvexHullShape::initShape(qreal* points,int n_points){
+void RigidConvexHullBody::initShape(qreal* points,int n_points){
     m_shape = new btConvexHullShape();
     for(int i=0;i<3*n_points;i=i+3){
         btVector3 point(points[i],points[i+1],points[i+2]);
@@ -44,11 +44,11 @@ void ConvexHullShape::initShape(qreal* points,int n_points){
 
 }
 
-void ConvexHullShape::addPoint(QVector3D p){
+void RigidConvexHullBody::addPoint(QVector3D p){
     ((btConvexHullShape*)m_shape)->addPoint(btVector3(p.x(),p.y(),p.z()));
 }
 
-void ConvexHullShape::updatePoints(qreal* points,int n_points){
+void RigidConvexHullBody::updatePoints(qreal* points,int n_points){
     delete m_shape;
     btScalar* bt_points=new btScalar[3*n_points];
     for(int i=0;i<3*n_points;i++)

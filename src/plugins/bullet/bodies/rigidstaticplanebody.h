@@ -1,19 +1,19 @@
-#ifndef STATICPLANE_H
-#define STATICPLANE_H
+#ifndef RigidStaticPlaneBody_H
+#define RigidStaticPlaneBody_H
 
-#include "abstractbody.h"
+#include "abstractrigidbody.h"
 #include <QVector3D>
 
 namespace Physics {
 
 namespace Bullet {
 
-class StaticPlane : public AbstractBody
+class RigidStaticPlaneBody : public AbstractRigidBody
 {
     Q_OBJECT
 public:
-    explicit StaticPlane(QObject* parent=0);
-    ~StaticPlane();
+    explicit RigidStaticPlaneBody(QObject* parent=0);
+    ~RigidStaticPlaneBody();
     QVector3D normal(){return m_normal;}
     void setNormal(QVector3D normal);
     qreal planeConstant(){return m_planeConstant;}
@@ -32,4 +32,4 @@ private:
 
 }
 }
-#endif // STATICPLANE_H
+#endif // RigidStaticPlaneBody_H

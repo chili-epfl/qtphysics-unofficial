@@ -2,6 +2,8 @@
 
 
 #include <physicsbodyinfo.h>
+#include <physicssoftbodyinfo.h>
+
 #include "../physicsmanager.h"
 #include <Qt3DRenderer>
 
@@ -38,6 +40,7 @@ void PhysicsBodyInfoBackendNode::updateFromPeer(Qt3D::QNode *peer){
     setRollingFriction(body_info->rollingFriction());
     setShapeDetails(body_info->shapeDetails());
     setInputTransform(body_info->inputTransform()->id());
+
 }
 
 void PhysicsBodyInfoBackendNode::setMass(qreal mass){

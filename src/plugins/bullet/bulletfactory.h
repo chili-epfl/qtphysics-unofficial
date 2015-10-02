@@ -17,6 +17,8 @@ public:
     BulletFactory(QObject *parent = 0);
     PhysicsAbstractRigidBody* create_rigid_body(QVariantMap geometric_info);
     PhysicsAbstractDynamicsWorld* create_dynamics_world();
+    PhysicsAbstractSoftBody* create_soft_body(QVariantMap geometric_info);
+    PhysicsAbstractSoftRigidDynamicsWorld* create_soft_rigid_dynamics_world();
 };
 
 

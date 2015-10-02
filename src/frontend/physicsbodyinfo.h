@@ -78,7 +78,7 @@ signals:
     void collided(PhysicsCollisionEventPtr event);
 protected:
     void copy(const Qt3D::QNode *ref) Q_DECL_OVERRIDE;
-private:
+
     QT3D_CLONEABLE(PhysicsBodyInfo)
 
     int m_mask;

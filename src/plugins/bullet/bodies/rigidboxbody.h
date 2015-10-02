@@ -1,19 +1,19 @@
-#ifndef BOXSHAPE_H
-#define BOXSHAPE_H
+#ifndef RigidBoxBody_H
+#define RigidBoxBody_H
 
-#include "abstractbody.h"
+#include "abstractrigidbody.h"
 #include <QVector3D>
 
 namespace Physics {
 
 namespace Bullet {
 
-class BoxShape: public AbstractBody
+class RigidBoxBody: public AbstractRigidBody
 {
     Q_OBJECT
 public:
-    explicit BoxShape(QObject* parent=0);
-    ~BoxShape();
+    explicit RigidBoxBody(QObject* parent=0);
+    ~RigidBoxBody();
 
     QVector3D dimension(){return m_dimension;}
     void setDimension(QVector3D dimention);
@@ -27,4 +27,4 @@ private:
 }
 
 }
-#endif // BOXSHAPE_H
+#endif // RigidBoxBody_H

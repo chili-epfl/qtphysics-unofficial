@@ -1,22 +1,20 @@
-#include "world.h"
+#include "dynamicsworld.h"
 namespace Physics {
 
 namespace Bullet{
 
-World::World(QObject *parent):
+DynamicsWorld::DynamicsWorld(QObject *parent):
     PhysicsAbstractDynamicsWorld(parent)
 {
-
-    m_type=DISCRETEDYNAMICSWORLD;
     m_simulationRate=60.0;
     m_gravity=QVector3D(0,-10,0);
     init();
 }
 
-World::~World()
+DynamicsWorld::~DynamicsWorld()
 {
 /*
-    for(AbstractBody* c: m_collitionShapes.values())
+    for(AbstractRigidBody* c: m_collitionShapes.values())
         delete c;
 
     delete m_simThread;
@@ -29,42 +27,26 @@ World::~World()
 */
 }
 
-void World::init(){
+void DynamicsWorld::init(){
 
     m_broadphase = new btDbvtBroadphase();
     m_collisionConfiguration = new btDefaultCollisionConfiguration();
     m_dispatcher = new btCollisionDispatcher(m_collisionConfiguration);
     m_solver = new btSequentialImpulseConstraintSolver;
 
-    switch (m_type) {
-    case DISCRETEDYNAMICSWORLD:
-        m_dynamicsWorld = new btDiscreteDynamicsWorld(m_dispatcher, m_broadphase, m_solver, m_collisionConfiguration);
-        break;
-    case SOFTRIGIDDYNAMICSWORLD:
+   m_dynamicsWorld = new btDiscreteDynamicsWorld(m_dispatcher, m_broadphase, m_solver, m_collisionConfiguration);
 
-        break;
-    default:
-        qFatal("Bullet: unknown world type");
-        break;
-    }
-
-    m_dynamicsWorld->setGravity(btVector3(m_gravity.x(),m_gravity.y(),m_gravity.z()));
+   m_dynamicsWorld->setGravity(btVector3(m_gravity.x(),m_gravity.y(),m_gravity.z()));
 
 }
 
-void World::setType(WorldType type){
-    if(m_type!=type){
-        m_type=type;
-    }
-}
-
-void World::setSimulationRate(qreal rate){
+void DynamicsWorld::setSimulationRate(qreal rate){
     if(m_simulationRate!=rate){
         m_simulationRate=rate;
     }
 }
 
-void World::stepSimulation(){
+void DynamicsWorld::stepSimulation(){
     m_dynamicsWorld->stepSimulation(1.0f/m_simulationRate);
     if(m_debug){
         //m_debugDraw->debug_entities.clear();
@@ -73,34 +55,34 @@ void World::stepSimulation(){
 
 }
 
-void World::setGravity(QVector3D gravity){
+void DynamicsWorld::setGravity(QVector3D gravity){
     if(m_gravity!=gravity){
         m_gravity=gravity;
         m_dynamicsWorld->setGravity(btVector3(m_gravity.x(),m_gravity.y(),m_gravity.z()));
     }
 }
-void World::setDebug(bool debug){
+void DynamicsWorld::setDebug(bool debug){
     if(m_debug!=debug){
         m_debug=debug;
     }
 }
 
 
-void World::removeBody(PhysicsAbstractRigidBody* c){
-    if(!c->inherits("Physics::Bullet::AbstractBody"))
+void DynamicsWorld::removeRigidBody(PhysicsAbstractRigidBody* c){
+    if(!c->inherits("Physics::Bullet::AbstractRigidBody"))
         qWarning("The body was defined with a plugin different from Bullet");
      else{
-        Physics::Bullet::AbstractBody* c_cast=static_cast<Physics::Bullet::AbstractBody*>(c);
+        Physics::Bullet::AbstractRigidBody* c_cast=static_cast<Physics::Bullet::AbstractRigidBody*>(c);
         m_PhysicsBodies2BulletBodies.remove(c_cast);
         m_BulletBodies2PhysicsBodies.remove(c_cast->bulletBody());
         removebtRigidBody(c_cast->bulletBody());
     }
 }
-void World::addBody(PhysicsAbstractRigidBody* c){
-   if(!c->inherits("Physics::Bullet::AbstractBody"))
+void DynamicsWorld::addRigidBody(PhysicsAbstractRigidBody* c){
+   if(!c->inherits("Physics::Bullet::AbstractRigidBody"))
        qWarning("The body was defined with a plugin different from Bullet");
     else{
-       Physics::Bullet::AbstractBody* c_cast=static_cast<Physics::Bullet::AbstractBody*>(c);
+       Physics::Bullet::AbstractRigidBody* c_cast=static_cast<Physics::Bullet::AbstractRigidBody*>(c);
        m_PhysicsBodies2BulletBodies[c_cast]=c_cast->bulletBody();
        m_BulletBodies2PhysicsBodies[c_cast->bulletBody()]=c_cast;
        addbtRigidBody(c_cast->bulletBody(),c_cast->group(),c_cast->mask());
@@ -108,10 +90,10 @@ void World::addBody(PhysicsAbstractRigidBody* c){
        connect(c_cast,SIGNAL(worldUpdateRequired()),this,SLOT(onBodyRequireUpdate()));
    }
 }
-void World::onBodyRequireUpdate(){
+void DynamicsWorld::onBodyRequireUpdate(){
     QObject* sender=QObject::sender();
-    if(sender->inherits("Physics::Bullet::AbstractBody")){
-        Physics::Bullet::AbstractBody* sender_cast=static_cast<Physics::Bullet::AbstractBody*>(sender);
+    if(sender->inherits("Physics::Bullet::AbstractRigidBody")){
+        Physics::Bullet::AbstractRigidBody* sender_cast=static_cast<Physics::Bullet::AbstractRigidBody*>(sender);
         removebtRigidBody(sender_cast->bulletBody());
         addbtRigidBody(sender_cast->bulletBody(),sender_cast->group(),sender_cast->mask());
     }
@@ -119,21 +101,21 @@ void World::onBodyRequireUpdate(){
 }
 
 
-void World::onBodyDestroyed(QObject* obj){
+void DynamicsWorld::onBodyDestroyed(QObject* obj){
     if(obj->inherits("PhysicsAbstractRigidBody"))
-        removeBody(static_cast<PhysicsAbstractRigidBody*>(obj));
+        removeRigidBody(static_cast<PhysicsAbstractRigidBody*>(obj));
 }
 
-void World::removebtRigidBody(btRigidBody* b){
+void DynamicsWorld::removebtRigidBody(btRigidBody* b){
     m_dynamicsWorld->removeRigidBody(b);
 }
-void World::addbtRigidBody(btRigidBody* b,int group,int mask){
+void DynamicsWorld::addbtRigidBody(btRigidBody* b,int group,int mask){
     m_dynamicsWorld->addRigidBody(b,group,mask);
 }
 
 
-QVector<World::Collision> World::getCollisions(){
-    QVector<World::Collision> collitions;
+QVector<DynamicsWorld::Collision> DynamicsWorld::getCollisions(){
+    QVector<DynamicsWorld::Collision> collitions;
     int numManifolds = m_dynamicsWorld->getDispatcher()->getNumManifolds();
     for (int i=0;i<numManifolds;i++)
     {

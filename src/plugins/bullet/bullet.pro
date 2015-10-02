@@ -17,25 +17,25 @@ DESTDIR = $$[QT_INSTALL_PLUGINS]/physicsfactories
 
 SOURCES += \
     bulletfactory.cpp \
-    bodies/boxshape.cpp \
     #bodies/compoundshape.cpp \
-    bodies/convexhullshape.cpp \
     bodies/motionstate.cpp \
-    bodies/sphereshape.cpp \
-    bodies/abstractbody.cpp \
-    worlds/world.cpp \
-    bodies/staticplane.cpp
+    worlds/dynamicsworld.cpp \
+    bodies/abstractrigidbody.cpp \
+    bodies/rigidboxbody.cpp \
+    bodies/rigidstaticplanebody.cpp \
+    bodies/rigidconvexhullbody.cpp \
+    bodies/rigidspherebody.cpp
 
 HEADERS += \
     bulletfactory.h \
-    bodies/boxshape.h \
     #bodies/compoundshape.h \
-    bodies/convexhullshape.h \
     bodies/motionstate.h \
-    bodies/sphereshape.h \
-    bodies/abstractbody.h \
-    worlds/world.h \
-    bodies/staticplane.h
+    worlds/dynamicsworld.h \
+    bodies/abstractrigidbody.h \
+    bodies/rigidboxbody.h \
+    bodies/rigidconvexhullbody.h \
+    bodies/rigidspherebody.h \
+    bodies/rigidstaticplanebody.h
 DISTFILES += bullet.json \
 
 

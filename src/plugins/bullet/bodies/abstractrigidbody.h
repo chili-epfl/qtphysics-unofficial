@@ -1,5 +1,5 @@
-#ifndef ABSTRACTBODY_H
-#define ABSTRACTBODY_H
+#ifndef AbstractRigidBody_H
+#define AbstractRigidBody_H
 #include <physics_entities/physicsabstractrigidbody.h>
 
 #include <bullet/btBulletCollisionCommon.h>
@@ -13,7 +13,7 @@ namespace Physics {
 namespace Bullet {
 
 
-class AbstractBody : public PhysicsAbstractRigidBody {
+class AbstractRigidBody : public PhysicsAbstractRigidBody {
     Q_OBJECT
 
 public:
@@ -23,7 +23,7 @@ public:
         GroupChanged=2
     };
     Q_DECLARE_FLAGS(ChangeFlags, ChangeFlag)
-    explicit AbstractBody(QObject* parent=0);
+    explicit AbstractRigidBody(QObject* parent=0);
 
     virtual int mask(){return m_mask;}
     virtual int group(){return m_group;}
@@ -77,6 +77,6 @@ protected:
     btRigidBody* m_rigidBody;
 
 };
-Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractBody::ChangeFlags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractRigidBody::ChangeFlags)
 }}
-#endif // ABSTRACTBODY_H
+#endif // AbstractRigidBody_H

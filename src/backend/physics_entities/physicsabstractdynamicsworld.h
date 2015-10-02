@@ -11,6 +11,7 @@ class PhysicsAbstractDynamicsWorld : public QObject
 {
     Q_OBJECT
 public:
+
     struct Collision{
         PhysicsAbstractRigidBody* body1;
         PhysicsAbstractRigidBody* body2;
@@ -24,8 +25,8 @@ public:
 
     enum WorldType{DISCRETEDYNAMICSWORLD,SOFTRIGIDDYNAMICSWORLD};
 
-    virtual WorldType type()=0;
-    virtual void setType(WorldType type)=0;
+    virtual WorldType type(){return DISCRETEDYNAMICSWORLD;}
+
     virtual qreal simulationRate()=0;
     virtual void setSimulationRate(qreal rate)=0;
     virtual void stepSimulation()=0;
@@ -35,8 +36,8 @@ public:
     virtual void setDebug(bool debug)=0;
     virtual bool debug()=0;
 
-    virtual void addBody(PhysicsAbstractRigidBody* body)=0;
-    virtual void removeBody(PhysicsAbstractRigidBody* body)=0;
+    virtual void addRigidBody(PhysicsAbstractRigidBody* body)=0;
+    virtual void removeRigidBody(PhysicsAbstractRigidBody* body)=0;
 
     virtual QVector<Collision> getCollisions()=0;
 

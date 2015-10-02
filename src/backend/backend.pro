@@ -35,7 +35,10 @@ SOURCES += \
     backendtypes/physicsgeometry.cpp \
     backendtypes/physicsattribute.cpp \
     backendtypes/physicsbuffer.cpp \
-    jobs/notifycollisionsjob.cpp
+    jobs/notifycollisionsjob.cpp \
+    backendtypes/physicssoftbodyinfobackendnode.cpp \
+    physics_entities/physicsabstractsoftbody.cpp \
+    physics_entities/physicsabstractsoftrigiddynamicsworld.cpp
 
 HEADERS +=\
         backend_global.h \
@@ -57,7 +60,10 @@ HEADERS +=\
     backendtypes/physicsgeometry.h \
     backendtypes/physicsattribute.h \
     backendtypes/physicsbuffer.h \
-    jobs/notifycollisionsjob.h
+    jobs/notifycollisionsjob.h \
+    backendtypes/physicssoftbodyinfobackendnode.h \
+    physics_entities/physicsabstractsoftbody.h \
+    physics_entities/physicsabstractsoftrigiddynamicsworld.h
 
 
 headersDataFiles.path = $$[QT_INSTALL_HEADERS]/$$PROJECT_NAME/backend

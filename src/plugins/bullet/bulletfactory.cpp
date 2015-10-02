@@ -1,10 +1,10 @@
 #include "bulletfactory.h"
 
-#include "worlds/world.h"
-#include "bodies/boxshape.h"
-#include "bodies/convexhullshape.h"
-#include "bodies/staticplane.h"
-#include "bodies/sphereshape.h"
+#include "worlds/dynamicsworld.h"
+#include "bodies/rigidboxbody.h"
+#include "bodies/rigidconvexhullbody.h"
+#include "bodies/rigidstaticplanebody.h"
+#include "bodies/rigidspherebody.h"
 
 namespace Physics {
 
@@ -18,19 +18,19 @@ PhysicsAbstractRigidBody* BulletFactory::create_rigid_body(QVariantMap geometric
     if(geometric_info.contains("Type")){
         QString type=geometric_info["Type"].toString();
         if(type=="Cuboid"){
-            BoxShape* b=new BoxShape();
+            RigidBoxBody* b=new RigidBoxBody();
             b->setDimension(QVector3D(geometric_info["X_Dim"].toFloat(),
                             geometric_info["Y_Dim"].toFloat(),
                             geometric_info["Z_Dim"].toFloat()));
             return b;
         }
         else if(type=="Sphere"){
-            SphereShape* b=new SphereShape();
+            RigidSphereBody* b=new RigidSphereBody();
             b->setRadius(geometric_info["Radius"].toFloat());
             return b;
         }
         else if(type=="StaticPlane"){
-            StaticPlane* b=new StaticPlane();
+            RigidStaticPlaneBody* b=new RigidStaticPlaneBody();
             b->setPlaneConstant(geometric_info["PlaneConstant"].toFloat());
             b->setNormal(geometric_info["PlaneNormal"].value<QVector3D>());
             return b;
@@ -46,7 +46,7 @@ PhysicsAbstractRigidBody* BulletFactory::create_rigid_body(QVariantMap geometric
                 _points[i+2]=p.z();
                 i+=3;
             }
-            ConvexHullShape* b=new ConvexHullShape(_points,points.size(),0);
+            RigidConvexHullBody* b=new RigidConvexHullBody(_points,points.size(),0);
             delete _points;
             return b;
         }
@@ -63,8 +63,17 @@ PhysicsAbstractRigidBody* BulletFactory::create_rigid_body(QVariantMap geometric
 }
 
 PhysicsAbstractDynamicsWorld* BulletFactory::create_dynamics_world(){
-    return new World();
+    return new DynamicsWorld();
 }
+
+PhysicsAbstractSoftBody* BulletFactory::create_soft_body(QVariantMap geometric_info){
+    return Q_NULLPTR;
+}
+PhysicsAbstractSoftRigidDynamicsWorld* BulletFactory::create_soft_rigid_dynamics_world(){
+    return Q_NULLPTR;
+}
+
+
 
 }
 

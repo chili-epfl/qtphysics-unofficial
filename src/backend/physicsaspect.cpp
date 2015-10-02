@@ -7,10 +7,13 @@
 #include "backendtypes/physicsattribute.h"
 #include "backendtypes/physicstransform.h"
 #include "backendtypes/physicsbodyinfobackendnode.h"
+#include "backendtypes/physicssoftbodyinfobackendnode.h"
 #include "backendtypes/physicsworldinfobackendnode.h"
 #include "backendtypes/physicsbuffer.h"
 
 #include <physicsbodyinfo.h>
+#include <physicssoftbodyinfo.h>
+
 #include <physicsworldinfo.h>
 
 #include "jobs/debugjob.h"
@@ -42,6 +45,7 @@ PhysicsAspect::PhysicsAspect(QObject* parent):
     registerBackendType<Qt3D::QTransform>(Qt3D::QBackendNodeFunctorPtr(new Physics::PhysicsTransformFunctor(m_manager)));
     registerBackendType<Physics::PhysicsBodyInfo>(Qt3D::QBackendNodeFunctorPtr(new Physics::PhysicsBodyInfoBackendNodeFunctor(m_manager)));
     registerBackendType<Physics::PhysicsWorldInfo>(Qt3D::QBackendNodeFunctorPtr(new Physics::PhysicsWorldInfoBackendNodeFunctor(m_manager)));
+    registerBackendType<Physics::PhysicsSoftBodyInfo>(Qt3D::QBackendNodeFunctorPtr(new Physics::PhysicsSoftBodyInfoBackendNodeFunctor(m_manager)));
 
 }
 

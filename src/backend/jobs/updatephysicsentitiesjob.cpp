@@ -45,7 +45,7 @@ void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 
             rigid_body=createRigidBodyFromMesh(entity_geometry_renderer);
             m_manager->m_Id2RigidBodies[node_id]=rigid_body;
             m_manager->m_RigidBodies2Id[rigid_body]=node_id;
-            m_manager->m_physics_world->addBody(rigid_body);
+            m_manager->m_physics_world->addRigidBody(rigid_body);
 
         }
         else{
@@ -80,7 +80,7 @@ void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 
             }
             m_manager->m_Id2RigidBodies[node_id]=rigid_body;
             m_manager->m_RigidBodies2Id[rigid_body]=node_id;
-            m_manager->m_physics_world->addBody(rigid_body);
+            m_manager->m_physics_world->addRigidBody(rigid_body);
         }
         else{
             rigid_body=m_manager->m_Id2RigidBodies[node_id];
