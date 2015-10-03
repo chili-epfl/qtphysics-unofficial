@@ -75,7 +75,7 @@ signals:
     void inputTransformChanged();
     void outputTransformChanged();
 
-    void collided(PhysicsCollisionEventPtr event);
+    void collided(PhysicsCollisionEvent* event);
 protected:
     void copy(const Qt3D::QNode *ref) Q_DECL_OVERRIDE;
 

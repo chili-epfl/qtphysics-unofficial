@@ -5,6 +5,8 @@ import QtQuick 2.0 as QQ2
 import Qt3D.Input 2.0
 
 
+
+
 Entity {
     id: sceneRoot
     objectName: "Root"
@@ -50,12 +52,14 @@ Entity {
         }
     ]
 
-    TorusMesh {
+    CylinderMesh {
         id: torusMesh
-        radius: 2
+        /*radius: 2
         minorRadius: 1
         rings: 50
-        slices: 50
+        slices: 50*/
+        radius:4
+        length: 10
     }
 
     Transform {
@@ -74,7 +78,7 @@ Entity {
         mass:1
         restitution: 1
         inputTransform: torusTransform
-        onCollided: console.log("hi")
+        onCollided: {console.log(event.contactPointOnBody)}
 
     }
 

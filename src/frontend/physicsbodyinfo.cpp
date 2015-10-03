@@ -145,8 +145,13 @@ void PhysicsBodyInfo::sceneChangeEvent(const Qt3D::QSceneChangePtr &change)
             emit outputTransformChanged();
         }
         if(e->propertyName() == QByteArrayLiteral("notifyCollision")){
-            PhysicsCollisionEventPtr event;
-            emit collided(event);
+            PhysicsCollisionEventPtr event(new PhysicsCollisionEvent(this));
+            QVariantMap args= e->value().value<QVariantMap>();
+            event->setTarget(args["target"].value<Qt3D::QNodeId>());
+            event->setContactPointOnBody(args["target"].value<QVector3D>());
+            event->setContactPointOnTarget(args["target"].value<QVector3D>());
+            event->setNormalOnTarget(args["target"].value<QVector3D>());
+            emit collided(event.data());
         }
     }
 }
