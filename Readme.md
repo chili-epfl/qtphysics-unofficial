@@ -16,9 +16,9 @@ Two Qml componets are provided:
 
 Both components inherit from Qt3D:QComponent. The first one, PhysicsBodyInfo, allows to specify for an entity properties such as mass, restituition, friction etc;
 The entities belonging to the physic world are:
-* Object with a mesh but without a PhysicsBodyInfo -> those are static bodies (mass = 0)
-* Object with an abstract mesh, a transformation and a PhysicsBodyInfo
-* Object with a transformation and a PhysicsBodyInfo that defines the collition shape with the property "ShapeDetails" ->  those are not rendered
+* Object with an abstract mesh and a PhysicsBodyInfo
+* Object with a PhysicsBodyInfo that defines the collition shape with the property "ShapeDetails" ->  those are not rendered
+
 The property "ShapeDetails" allows to override the collition shape properties that otherwise would be inferred from the mesh of the entity. 
 
 PhysicsBodyInfo has two property:
