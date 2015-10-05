@@ -28,105 +28,72 @@ void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 
 
     QMatrix4x4 current_global_matrix=parent_matrix;
 
-    short scenario=0;
     PhysicsBodyInfoBackendNode* entity_body_info=Q_NULLPTR;
     if(!entity->physicsBodyInfo().isNull())
         entity_body_info=static_cast<PhysicsBodyInfoBackendNode*>(m_manager->m_resources.operator [](entity->physicsBodyInfo()));
 
-
-    /*Scenario 1: Static objects, they must have at least the component abstract mesh (default transform is I)*/
-    if(entity->physicsBodyInfo().isNull()
-            && !entity->geometry_renderer().isNull()){
-        scenario=1;
-    }
-    /*Scenario 2: the entity has a component body info and either a abstract mesh or a the shape details to define the collition shape */
-    else if(!entity->physicsBodyInfo().isNull()
-            && (entity_body_info->shapeDetails().size()>0 || !entity->geometry_renderer().isNull())){
-        scenario=2;
-    }
-
-    PhysicsAbstractRigidBody* rigid_body=retrievePhysicalBody(entity,entity_body_info,scenario);
+    PhysicsAbstractRigidBody* rigid_body=retrievePhysicalBody(entity,entity_body_info);
     if(rigid_body){
-        if(scenario==1){
-            /*Update Collition Shape*/
-            //if(entity_geometry_renderer!=Q_NULLPTR && entity_geometry_renderer->isDirty()){
-               //TODO
-            //}
-            /*Update Motion State*/
-            PhysicsTransform* entity_transform=Q_NULLPTR;
-            if(!entity->transform().isNull())
-                entity_transform=static_cast<PhysicsTransform*>(m_manager->m_resources.operator [](entity->transform()));
 
-            if(entity_transform){
-                current_global_matrix=current_global_matrix*entity_transform->transformMatrix();
-                if(entity_transform->isDirty())
-                    forceUpdateMS=true;
-                entity_transform->setDirty(false);
-            }
-            if(forceUpdateMS)
-                rigid_body->setWorldTransformation(current_global_matrix);
+        /*Update Collition Shape*/
+        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::ShapeDetailsChanged)){
+            //TODO
         }
-        else if (scenario==2){
-            /*Update Collition Shape*/
-            if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::ShapeDetailsChanged)){
-               //TODO
-            }
-            //else if(entity_geometry_renderer!=Q_NULLPTR && entity_geometry_renderer->isDirty()){
-                //TODO
-            //}
-            /*Update Motion State*/
-            PhysicsTransform* inputTransform=Q_NULLPTR;
-            if(!entity_body_info->inputTransform().isNull()){
-                inputTransform=static_cast<PhysicsTransform*>(m_manager->m_resources.operator [](entity_body_info->inputTransform()));
-            }
-            /*The input transform has changed; the new position is taken from that.*/
-            if(inputTransform!=Q_NULLPTR && inputTransform->isDirty()){
-                current_global_matrix=current_global_matrix*inputTransform->transformMatrix();
-                forceUpdateMS=true;
-                inputTransform->setDirty(false);
-            }
-            /*Otherwise use the matrix form the simulation*/
-            else{
-                current_global_matrix=rigid_body->worldTransformation();
-            }
-            if(forceUpdateMS)
-                rigid_body->setWorldTransformation(current_global_matrix);
-
-            /*Update Body properties*/
-            if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::MaskChanged)){
-                rigid_body->setMask(entity_body_info->mask());
-                entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::MaskChanged;
-            }
-            if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::GroupChanged)){
-                rigid_body->setGroup(entity_body_info->group());
-                entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::GroupChanged;
-            }
-            if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::MassChanged)){
-                rigid_body->setMass(entity_body_info->mass());
-                entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::MassChanged;
-            }
-            if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::KinematicChanged)){
-                rigid_body->setKinematic(entity_body_info->kinematic());
-                entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::KinematicChanged;
-            }
-            if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::FallInertiaChanged)){
-                rigid_body->setFallInertia(entity_body_info->fallInertia());
-                entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::FallInertiaChanged;
-            }
-            if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::RestistutionChanged)){
-                rigid_body->setRestitution(entity_body_info->restitution());
-                entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::RestistutionChanged;
-            }
-            if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::FrictionChanged)){
-                rigid_body->setFriction(entity_body_info->friction());
-                entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::FrictionChanged;
-            }
-            if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::RollingFrictionChanged)){
-                rigid_body->setRollingFriction(entity_body_info->rollingFriction());
-                entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::RollingFrictionChanged;
-            }
-
+        //else if(entity_geometry_renderer!=Q_NULLPTR && entity_geometry_renderer->isDirty()){
+        //TODO
+        //}
+        /*Update Motion State*/
+        PhysicsTransform* inputTransform=Q_NULLPTR;
+        if(!entity_body_info->inputTransform().isNull()){
+            inputTransform=static_cast<PhysicsTransform*>(m_manager->m_resources.operator [](entity_body_info->inputTransform()));
         }
+        /*The input transform has changed; the new position is taken from that.*/
+        if(inputTransform!=Q_NULLPTR && inputTransform->isDirty()){
+            current_global_matrix=current_global_matrix*inputTransform->transformMatrix();
+            forceUpdateMS=true;
+            inputTransform->setDirty(false);
+        }
+        /*Otherwise use the matrix form the simulation*/
+        else{
+            current_global_matrix=rigid_body->worldTransformation();
+        }
+        if(forceUpdateMS)
+            rigid_body->setWorldTransformation(current_global_matrix);
+
+        /*Update Body properties*/
+        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::MaskChanged)){
+            rigid_body->setMask(entity_body_info->mask());
+            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::MaskChanged;
+        }
+        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::GroupChanged)){
+            rigid_body->setGroup(entity_body_info->group());
+            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::GroupChanged;
+        }
+        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::MassChanged)){
+            rigid_body->setMass(entity_body_info->mass());
+            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::MassChanged;
+        }
+        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::KinematicChanged)){
+            rigid_body->setKinematic(entity_body_info->kinematic());
+            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::KinematicChanged;
+        }
+        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::FallInertiaChanged)){
+            rigid_body->setFallInertia(entity_body_info->fallInertia());
+            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::FallInertiaChanged;
+        }
+        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::RestistutionChanged)){
+            rigid_body->setRestitution(entity_body_info->restitution());
+            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::RestistutionChanged;
+        }
+        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::FrictionChanged)){
+            rigid_body->setFriction(entity_body_info->friction());
+            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::FrictionChanged;
+        }
+        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::RollingFrictionChanged)){
+            rigid_body->setRollingFriction(entity_body_info->rollingFriction());
+            entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::RollingFrictionChanged;
+        }
+
 
     }
     else{
@@ -156,22 +123,12 @@ void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 
         recursive_step(childId, current_global_matrix,forceUpdateMS);
 }
 
-PhysicsAbstractRigidBody* UpdatePhysicsEntitiesJob::retrievePhysicalBody(PhysicsEntity* entity,PhysicsBodyInfoBackendNode* entity_body_info,short scenario){
+PhysicsAbstractRigidBody* UpdatePhysicsEntitiesJob::retrievePhysicalBody(PhysicsEntity* entity,PhysicsBodyInfoBackendNode* entity_body_info){
     if(m_manager->m_Id2RigidBodies.contains(entity->peerUuid()))
         return m_manager->m_Id2RigidBodies[entity->peerUuid()];
-
-
-    if(scenario==1){
-        PhysicsGeometryRenderer* entity_geometry_renderer=static_cast<PhysicsGeometryRenderer*>(m_manager->m_resources.operator [](entity->geometry_renderer()));
-        PhysicsAbstractRigidBody* rigid_body=createRigidBodyFromMesh(entity_geometry_renderer);
-        if(rigid_body){
-            m_manager->m_Id2RigidBodies[entity->peerUuid()]=rigid_body;
-            m_manager->m_RigidBodies2Id[rigid_body]=entity->peerUuid();
-            m_manager->m_physics_world->addRigidBody(rigid_body);
-        }
-        return rigid_body;
-    }/*Case 2: the entity has a component body info and either a abstract mesh or a the shape details to define the collition shape */
-    else if(scenario==2){
+   /*The entity has a component body info and either a abstract mesh or a the shape details to define the collition shape */
+   if(!entity->physicsBodyInfo().isNull()
+               && (entity_body_info->shapeDetails().size()>0 || !entity->geometry_renderer().isNull())){
         PhysicsGeometryRenderer* entity_geometry_renderer=Q_NULLPTR;
         PhysicsAbstractRigidBody* rigid_body;
         if(entity_body_info->shapeDetails().size()>0){
@@ -219,7 +176,6 @@ PhysicsAbstractRigidBody* UpdatePhysicsEntitiesJob::createRigidBodyFromMesh(Phys
         Q_FOREACH(Qt3D::QNodeId attrId,geometry->attributes()){
             PhysicsAttribute* attribute=static_cast<PhysicsAttribute*>(m_manager->m_resources.operator [](attrId));
             if(!attribute) continue;
-
             if(attribute->objectName()=="vertexPosition"){
                 vertexPosition=attribute->asVector3D();             
             }
