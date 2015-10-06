@@ -31,6 +31,7 @@ void PhysicsBodyInfo::copy(const Qt3D::QNode *ref){
     m_mask=body_info->m_mask;
     m_group=body_info->m_group;
     m_kinematic=body_info->m_kinematic;
+
     m_inputTransform=body_info->m_inputTransform;
     m_outputTransform=body_info->m_outputTransform;
     m_outputTransform_matrix=body_info->m_outputTransform_matrix;

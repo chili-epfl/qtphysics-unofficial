@@ -50,8 +50,6 @@ private:
     qreal m_simulationRate;
     QVector3D m_gravity;
 
-    QSet<AbstractRigidBody*> m_bodies;
-
     QHash<AbstractRigidBody*,btCollisionObject*> m_PhysicsBodies2BulletBodies;
     QHash<btCollisionObject*,AbstractRigidBody*> m_BulletBodies2PhysicsBodies;
 

@@ -39,7 +39,8 @@ void PhysicsBodyInfoBackendNode::updateFromPeer(Qt3D::QNode *peer){
     setRestitution(body_info->restitution());
     setRollingFriction(body_info->rollingFriction());
     setShapeDetails(body_info->shapeDetails());
-    setInputTransform(body_info->inputTransform()->id());
+    if(body_info->inputTransform())
+        setInputTransform(body_info->inputTransform()->id());
 
 }
 
