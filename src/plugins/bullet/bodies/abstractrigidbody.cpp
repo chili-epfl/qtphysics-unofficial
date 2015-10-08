@@ -95,7 +95,7 @@ void AbstractRigidBody::setKinematic(bool kinematic){
 }
 
 QMatrix4x4 AbstractRigidBody::worldTransformation(){
-   return static_cast<MotionState*>(m_motionState)->getWorldTransformAsQMatrix4x4();
+       return static_cast<MotionState*>(m_motionState)->getWorldTransformAsQMatrix4x4();
 }
 
 void AbstractRigidBody::setWorldTransformation(QMatrix4x4 m){

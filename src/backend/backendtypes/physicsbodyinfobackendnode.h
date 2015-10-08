@@ -71,7 +71,12 @@ public:
     virtual Qt3D::QNodeId inputTransform(){return m_inputTransform;}
     virtual void setInputTransform(Qt3D::QNodeId inputTranform);
 
+    virtual QMatrix4x4 localTransform() {return m_local_transform;}
+    virtual void setLocalTransform(QMatrix4x4 m){m_local_transform=m;}
+
     virtual void notifyFrontEnd(QString operation, QVariantMap args);
+
+
 protected:
     virtual void sceneChangeEvent(const Qt3D::QSceneChangePtr &) Q_DECL_OVERRIDE;
 
@@ -94,6 +99,8 @@ protected:
     Qt3D::QNodeId m_inputTransform;
 
     PhysicsManager* m_manager;
+
+    QMatrix4x4 m_local_transform;
 
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(PhysicsBodyInfoBackendNode::DirtyFlags)

@@ -27,7 +27,6 @@ void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 
     PhysicsEntity* entity= static_cast<PhysicsEntity*>(m_manager->m_resources.operator [](node_id));
 
     QMatrix4x4 current_global_matrix=parent_matrix;
-
     PhysicsBodyInfoBackendNode* entity_body_info=Q_NULLPTR;
     if(!entity->physicsBodyInfo().isNull())
         entity_body_info=static_cast<PhysicsBodyInfoBackendNode*>(m_manager->m_resources.operator [](entity->physicsBodyInfo()));
@@ -47,20 +46,25 @@ void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 
         if(!entity_body_info->inputTransform().isNull()){
             inputTransform=static_cast<PhysicsTransform*>(m_manager->m_resources.operator [](entity_body_info->inputTransform()));
         }
+        //qDebug()<<"Bah";
+        //qDebug()<<current_global_matrix;
         /*The input transform has changed; the new position is taken from that.*/
-        if(inputTransform!=Q_NULLPTR && (inputTransform->isDirty() || isBodyNew)){
+  //     qDebug()<<current_global_matrix;
+        if(inputTransform!=Q_NULLPTR && (inputTransform->isDirty() || isBodyNew )){
             current_global_matrix=current_global_matrix*inputTransform->transformMatrix();
             forceUpdateMS=true;
             inputTransform->setDirty(false);
         }
         /*Otherwise use the matrix form the simulation*/
         else{
-            current_global_matrix=rigid_body->worldTransformation();
+//            qDebug()<<"Inside";
+            current_global_matrix=current_global_matrix*entity_body_info->localTransform();
+            //rigid_body->worldTransformation();
         }
+//        qDebug()<<current_global_matrix;
         if(forceUpdateMS){
             rigid_body->setWorldTransformation(current_global_matrix);
         }
-
         /*Update Body properties*/
         if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::MaskChanged)){
             rigid_body->setMask(entity_body_info->mask());

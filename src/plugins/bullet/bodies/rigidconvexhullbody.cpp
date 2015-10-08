@@ -38,11 +38,9 @@ void RigidConvexHullBody::initShape(qreal* points,int n_points){
     btConvexHullShape* old_shape=(btConvexHullShape*)m_shape;
     m_shape = new btConvexHullShape();
     for(int i=0;i<hull->numVertices();i++){
-        qDebug()<<hull->getVertexPointer()[i].x()<<" "<<hull->getVertexPointer()[i].y()<<" "<<hull->getVertexPointer()[i].z();
         ((btConvexHullShape*)m_shape)->addPoint(hull->getVertexPointer()[i]);
     }
     delete old_shape;
-    qDebug()<<"end";
 
 }
 

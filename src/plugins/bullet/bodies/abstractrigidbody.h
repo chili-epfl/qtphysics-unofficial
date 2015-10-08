@@ -75,7 +75,6 @@ protected:
     btMotionState* m_motionState;
 
     btRigidBody* m_rigidBody;
-
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractRigidBody::ChangeFlags)
 }}

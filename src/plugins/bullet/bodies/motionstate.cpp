@@ -18,14 +18,15 @@ MotionState::MotionState(const btTransform &startTrans, const btTransform &cente
 MotionState::MotionState(const QMatrix4x4 startTrans, const QMatrix4x4 centerOfMassOffset,QObject* parent)
     :QObject(parent)
 {
-    btMatrix3x3 w_rotation(startTrans.operator ()(0,0),startTrans.operator ()(1,0),startTrans.operator ()(2,0),
-                         startTrans.operator ()(0,1),startTrans.operator ()(1,1),startTrans.operator ()(2,1),
-                         startTrans.operator ()(0,2),startTrans.operator ()(1,2),startTrans.operator ()(2,2));
+    btMatrix3x3 w_rotation(startTrans.operator ()(0,0),startTrans.operator ()(0,1),startTrans.operator ()(0,2),
+                           startTrans.operator ()(1,0),startTrans.operator ()(1,1),startTrans.operator ()(1,2),
+                           startTrans.operator ()(2,0),startTrans.operator ()(2,1),startTrans.operator ()(2,2));
+
     btVector3 w_translation(startTrans.operator ()(0,3),startTrans.operator ()(1,3),startTrans.operator ()(2,3));
     m_graphicsWorldTrans=btTransform(w_rotation,w_translation);
-    btMatrix3x3 c_rotation(centerOfMassOffset.operator ()(0,0),centerOfMassOffset.operator ()(1,0),centerOfMassOffset.operator ()(2,0),
-                           centerOfMassOffset.operator ()(0,1),centerOfMassOffset.operator ()(1,1),centerOfMassOffset.operator ()(2,1),
-                           centerOfMassOffset.operator ()(0,2),centerOfMassOffset.operator ()(1,2),centerOfMassOffset.operator ()(2,2));
+    btMatrix3x3 c_rotation(centerOfMassOffset.operator ()(0,0),centerOfMassOffset.operator ()(0,1),centerOfMassOffset.operator ()(0,2),
+                           centerOfMassOffset.operator ()(1,0),centerOfMassOffset.operator ()(1,1),centerOfMassOffset.operator ()(1,2),
+                           centerOfMassOffset.operator ()(2,0),centerOfMassOffset.operator ()(2,1),centerOfMassOffset.operator ()(2,2));
     btVector3 c_translation(centerOfMassOffset.operator ()(0,3),centerOfMassOffset.operator ()(1,3),centerOfMassOffset.operator ()(2,3));
 
     m_centerOfMassOffset=btTransform(c_rotation,c_translation);
@@ -41,9 +42,9 @@ void MotionState::getWorldTransform(btTransform &centerOfMassWorldTrans) const{
 
 
 void MotionState::setWorldTransform(QMatrix4x4 m){
-    btMatrix3x3 w_rotation(m.operator ()(0,0),m.operator ()(1,0),m.operator ()(2,0),
-                           m.operator ()(0,1),m.operator ()(1,1),m.operator ()(2,1),
-                           m.operator ()(0,2),m.operator ()(1,2),m.operator ()(2,2));
+    btMatrix3x3 w_rotation(m.operator ()(0,0),m.operator ()(0,1),m.operator ()(0,2),
+                           m.operator ()(1,0),m.operator ()(1,1),m.operator ()(1,2),
+                           m.operator ()(2,0),m.operator ()(2,1),m.operator ()(2,2));
     btVector3 w_translation(m.operator ()(0,3),m.operator ()(1,3),m.operator ()(2,3));
     btDefaultMotionState::setWorldTransform(btTransform(w_rotation,w_translation));
 }
