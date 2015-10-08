@@ -32,7 +32,8 @@ void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 
     if(!entity->physicsBodyInfo().isNull())
         entity_body_info=static_cast<PhysicsBodyInfoBackendNode*>(m_manager->m_resources.operator [](entity->physicsBodyInfo()));
 
-    PhysicsAbstractRigidBody* rigid_body=retrievePhysicalBody(entity,entity_body_info);
+    bool isBodyNew=false;
+    PhysicsAbstractRigidBody* rigid_body=retrievePhysicalBody(entity,entity_body_info,isBodyNew);
     if(rigid_body){
         /*Update Collition Shape*/
         if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::ShapeDetailsChanged)){
@@ -47,7 +48,7 @@ void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 
             inputTransform=static_cast<PhysicsTransform*>(m_manager->m_resources.operator [](entity_body_info->inputTransform()));
         }
         /*The input transform has changed; the new position is taken from that.*/
-        if(inputTransform!=Q_NULLPTR && inputTransform->isDirty()){
+        if(inputTransform!=Q_NULLPTR && (inputTransform->isDirty() || isBodyNew)){
             current_global_matrix=current_global_matrix*inputTransform->transformMatrix();
             forceUpdateMS=true;
             inputTransform->setDirty(false);
@@ -56,8 +57,9 @@ void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 
         else{
             current_global_matrix=rigid_body->worldTransformation();
         }
-        if(forceUpdateMS)
+        if(forceUpdateMS){
             rigid_body->setWorldTransformation(current_global_matrix);
+        }
 
         /*Update Body properties*/
         if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::MaskChanged)){
@@ -92,8 +94,6 @@ void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 
             rigid_body->setRollingFriction(entity_body_info->rollingFriction());
             entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::RollingFrictionChanged;
         }
-
-
     }
     else{
         if(!entity->transform().isNull()){
@@ -122,7 +122,8 @@ void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 
         recursive_step(childId, current_global_matrix,forceUpdateMS);
 }
 
-PhysicsAbstractRigidBody* UpdatePhysicsEntitiesJob::retrievePhysicalBody(PhysicsEntity* entity,PhysicsBodyInfoBackendNode* entity_body_info){
+PhysicsAbstractRigidBody* UpdatePhysicsEntitiesJob::retrievePhysicalBody(PhysicsEntity* entity,PhysicsBodyInfoBackendNode* entity_body_info, bool& isBodyNew){
+    isBodyNew=false;
     if(m_manager->m_Id2RigidBodies.contains(entity->peerUuid()))
         return m_manager->m_Id2RigidBodies[entity->peerUuid()];
    /*The entity has a component body info and either a abstract mesh or a the shape details to define the collition shape */
@@ -141,6 +142,7 @@ PhysicsAbstractRigidBody* UpdatePhysicsEntitiesJob::retrievePhysicalBody(Physics
             m_manager->m_Id2RigidBodies[entity->peerUuid()]=rigid_body;
             m_manager->m_RigidBodies2Id[rigid_body]=entity->peerUuid();
             m_manager->m_physics_world->addRigidBody(rigid_body);
+            isBodyNew=true;
         }
         return rigid_body;
     }

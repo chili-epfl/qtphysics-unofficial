@@ -22,7 +22,7 @@ protected:
      void run() Q_DECL_OVERRIDE;
 private:
      void recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 parent_matrix,bool forceUpdateMS);
-     PhysicsAbstractRigidBody* retrievePhysicalBody(PhysicsEntity* entity,PhysicsBodyInfoBackendNode* entity_body_info);
+     PhysicsAbstractRigidBody* retrievePhysicalBody(PhysicsEntity* entity,PhysicsBodyInfoBackendNode* entity_body_info,bool& isBodyNew);
      PhysicsAbstractRigidBody* createRigidBodyFromMesh(PhysicsGeometryRenderer* entity_mesh);
      PhysicsAbstractRigidBody* createRigidBodyFromShapeDetails(PhysicsBodyInfoBackendNode* entity_body_info);
      PhysicsManager* m_manager;
