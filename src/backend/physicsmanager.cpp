@@ -35,13 +35,9 @@ void PhysicsManager::loadPhysicsFactories(){
                qWarning() << "Failed to load physics factory plugin ";
    }
 }
-/*Simply convert the collisions from the world to the format of the Physics manager.
-Moreover, avoid that the same collition is thrown multiple times.*/
-QVector<PhysicsManager::Collision> PhysicsManager::getCollisions(){
-    Q_FOREACH(Collision c, m_collitions.keys()){
-        m_collitions[c]=0;
-    }
-    QVector<PhysicsManager::Collision> collisions;
+/*Simply convert the collisions from the world to the format of the Physics manager.*/
+QVector<Collision> PhysicsManager::getCollisions(){
+    QVector<Collision> collisions;
     QVector<PhysicsAbstractDynamicsWorld::Collision> collisions_from_world=m_physics_world->getCollisions();
     Q_FOREACH(PhysicsAbstractDynamicsWorld::Collision c,collisions_from_world){
         Collision collision;
@@ -50,23 +46,8 @@ QVector<PhysicsManager::Collision> PhysicsManager::getCollisions(){
         collision.normalBody2=c.normalBody2;
         collision.pointOnBody1=c.pointOnBody1;
         collision.pointOnBody2=c.pointOnBody2;
-        if(m_collitions.contains(collision)){
-            m_collitions[collision]=1;
-        }
-        else{
-            m_collitions[collision]=2;
-        }
+        collisions.append(collision);
     }
-
-    Q_FOREACH(Collision c, m_collitions.keys()){
-        if(m_collitions[c]==0){
-            m_collitions.remove(c);
-        }
-        else if(m_collitions[c]==2){
-            collisions.append(c);
-        }
-    }
-
     return collisions;
 }
 

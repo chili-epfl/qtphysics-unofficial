@@ -1,5 +1,5 @@
 #include "physicsbodyinfo.h"
-
+#include <QVariantList>
 namespace Physics {
 
 PhysicsBodyInfo::PhysicsBodyInfo(Qt3D::QNode* parent):
@@ -106,6 +106,23 @@ void PhysicsBodyInfo::setInputTransform(Qt3D::QTransform* inputTransform){
     emit inputTransformChanged();
 }
 
+QQmlListProperty<PhysicsCollisionEvent> PhysicsBodyInfo::collitionsList(){
+    return QQmlListProperty<PhysicsCollisionEvent>(this, 0,
+                                                 PhysicsBodyInfo::qmlComponentsCount,
+                                                 PhysicsBodyInfo::qmlComponentAt);
+
+}
+
+PhysicsCollisionEvent* PhysicsBodyInfo::qmlComponentAt(QQmlListProperty<PhysicsCollisionEvent> *list, int index){
+    PhysicsBodyInfo *self = static_cast<PhysicsBodyInfo *>(list->object);
+    return self->m_collitionsList.at(index).data();
+}
+
+int PhysicsBodyInfo::qmlComponentsCount(QQmlListProperty<PhysicsCollisionEvent> *list){
+     PhysicsBodyInfo *self = static_cast<PhysicsBodyInfo *>(list->object);
+     return self->m_collitionsList.size();
+}
+
 
 void PhysicsBodyInfo::sceneChangeEvent(const Qt3D::QSceneChangePtr &change)
 {
@@ -146,16 +163,35 @@ void PhysicsBodyInfo::sceneChangeEvent(const Qt3D::QSceneChangePtr &change)
             emit outputTransformChanged();
         }
         if(e->propertyName() == QByteArrayLiteral("notifyCollision")){
-            PhysicsCollisionEventPtr event(new PhysicsCollisionEvent(this));
-            QVariantMap args= e->value().value<QVariantMap>();
-            event->setTarget(args["target"].value<Qt3D::QNodeId>());
-            event->setContactPointOnBody(args["target"].value<QVector3D>());
-            event->setContactPointOnTarget(args["target"].value<QVector3D>());
-            event->setNormalOnTarget(args["target"].value<QVector3D>());
-            emit collided(event.data());
+            PhysicsCollisionEventPtrList collitions_list=e->value().value<PhysicsCollisionEventPtrList>();
+            if(collitions_list.size()==0){
+                if(m_hasCollided){
+                    m_hasCollided=false;
+                    emit hasCollidedChanged(m_hasCollided);
+                }
+                m_collitionsList.clear();
+                emit collitionsListChanged();
+            }
+            else{
+                m_collitionsList.clear();
+                Q_FOREACH(PhysicsCollisionEventPtr event_ptr,collitions_list){
+                    m_collitionsList.append(event_ptr);
+                    if(m_collitionsList.last()->isNew()){
+                        emit collided(m_collitionsList.last().data());
+                    }
+                }
+                if(!m_hasCollided){
+                    m_hasCollided=true;
+                    emit hasCollidedChanged(m_hasCollided);
+                }
+                emit collitionsListChanged();
+            }
         }
     }
 }
+
+
+
 
 
 

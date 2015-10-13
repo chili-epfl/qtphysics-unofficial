@@ -5,6 +5,7 @@
 
 #include <Qt3DCore>
 #include <Qt3DRenderer>
+#include "../physicscollition.h"
 
 namespace Physics {
 
@@ -74,8 +75,10 @@ public:
     virtual QMatrix4x4 localTransform() {return m_local_transform;}
     virtual void setLocalTransform(QMatrix4x4 m){m_local_transform=m;}
 
-    virtual void notifyFrontEnd(QString operation, QVariantMap args);
+    virtual void notifyFrontEnd(QString operation);
 
+    virtual QHash<Physics::Collision,ushort>& collitions(){return m_collitions;}
+    virtual void resetCollitions();
 
 protected:
     virtual void sceneChangeEvent(const Qt3D::QSceneChangePtr &) Q_DECL_OVERRIDE;
@@ -99,6 +102,8 @@ protected:
     Qt3D::QNodeId m_inputTransform;
 
     PhysicsManager* m_manager;
+
+    QHash<Physics::Collision,ushort> m_collitions;
 
     QMatrix4x4 m_local_transform;
 

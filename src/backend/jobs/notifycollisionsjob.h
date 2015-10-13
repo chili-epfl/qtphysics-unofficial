@@ -7,7 +7,7 @@
 namespace Physics {
 
 class PhysicsManager;
-
+class PhysicsBodyInfoBackendNode;
 class BACKENDSHARED_EXPORT NotifyCollisionsJob: public Qt3D::QAspectJob
 {
 public:
@@ -15,6 +15,8 @@ public:
 protected:
      void run() Q_DECL_OVERRIDE;
 private:
+    void resetCollitions(Qt3D::QNodeId nodeId,QVector<PhysicsBodyInfoBackendNode*>& bodies_to_notify);
+
     PhysicsManager* m_manager;
 };
 }

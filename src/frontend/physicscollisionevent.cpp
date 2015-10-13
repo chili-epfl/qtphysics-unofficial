@@ -8,7 +8,8 @@ PhysicsCollisionEvent::PhysicsCollisionEvent(QObject* parent):
     m_target(),
     m_contactPointOnBody(0,0,0),
     m_contactPointOnTarget(0,0,0),
-    m_normalOnTarget(0,0,0)
+    m_normalOnTarget(0,0,0),
+    m_isNew(true)
 {
 
 }
@@ -23,6 +24,9 @@ void PhysicsCollisionEvent::setContactPointOnTarget(QVector3D point){
 }
 void PhysicsCollisionEvent::setNormalOnTarget(QVector3D normal){
     m_normalOnTarget=normal;
+}
+void PhysicsCollisionEvent::setIsNew(bool val){
+    m_isNew=val;
 }
 
 

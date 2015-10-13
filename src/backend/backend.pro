@@ -63,7 +63,8 @@ HEADERS +=\
     jobs/notifycollisionsjob.h \
     backendtypes/physicssoftbodyinfobackendnode.h \
     physics_entities/physicsabstractsoftbody.h \
-    physics_entities/physicsabstractsoftrigiddynamicsworld.h
+    physics_entities/physicsabstractsoftrigiddynamicsworld.h \
+    physicscollition.h
 
 
 headersDataFiles.path = $$[QT_INSTALL_HEADERS]/$$PROJECT_NAME/backend

@@ -22,19 +22,25 @@ public:
     QVector3D contactPointOnTarget(){return m_contactPointOnTarget;}
     QVector3D normalOnTarget(){return m_normalOnTarget;}
 
+    bool isNew(){return m_isNew;}
+
     void setTarget(Qt3D::QNodeId target);
     void setContactPointOnBody(QVector3D point);
     void setContactPointOnTarget(QVector3D point);
     void setNormalOnTarget(QVector3D normal);
-
+    void setIsNew(bool val);
 private:
-
     Qt3D::QNodeId m_target;
     QVector3D m_contactPointOnBody;
     QVector3D m_contactPointOnTarget;
     QVector3D m_normalOnTarget;
+    bool m_isNew;
 };
+
 typedef QSharedPointer<PhysicsCollisionEvent> PhysicsCollisionEventPtr;
+typedef QList<PhysicsCollisionEventPtr> PhysicsCollisionEventPtrList;
+typedef QList<PhysicsCollisionEvent> PhysicsCollisionEventList;
+
 }
 
 

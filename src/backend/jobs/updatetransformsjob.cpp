@@ -35,9 +35,7 @@ void UpdateTransformsJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 paren
             /*If the object is not statics (or kinematic) then update the position*/
             //if(rigid_body->mass()!=0){
             body_info->setLocalTransform(parent_matrix.inverted()*rigid_body->worldTransformation());
-                QVariantMap args;
-                args["Matrix"]=parent_matrix.inverted()*rigid_body->worldTransformation();
-                body_info->notifyFrontEnd("updateTransform",args);
+            body_info->notifyFrontEnd("updateTransform");
             //}
         }
     }

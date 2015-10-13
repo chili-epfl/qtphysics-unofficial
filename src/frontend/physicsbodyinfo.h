@@ -5,9 +5,8 @@
 #include <Qt3DCore>
 #include <QVector3D>
 #include "physicscollisionevent.h"
-
+#include <QQmlListProperty>
 namespace Physics {
-
 
 class FRONTENDSHARED_EXPORT PhysicsBodyInfo: public Qt3D::QComponent
 {
@@ -22,6 +21,9 @@ class FRONTENDSHARED_EXPORT PhysicsBodyInfo: public Qt3D::QComponent
     Q_PROPERTY(qreal rollingFriction READ rollingFriction WRITE setRollingFriction NOTIFY rollingFrictionChanged)
     Q_PROPERTY(qreal mass READ mass WRITE setMass NOTIFY massChanged)
     Q_PROPERTY(QVector3D fallInertia READ fallInertia WRITE setFallInertia NOTIFY fallInertiaChanged)
+
+    Q_PROPERTY(bool hasCollided READ hasCollided NOTIFY hasCollidedChanged)
+    Q_PROPERTY(QQmlListProperty<Physics::PhysicsCollisionEvent> collitionsList READ collitionsList NOTIFY collitionsListChanged)
 
     /*Shape details allows to override the details of the collition shape that otherwise would be
     * derived by the mesh. It's also useful to create object with a specific collition shape but with an empty mesh*/
@@ -59,7 +61,8 @@ public:
     virtual void setShapeDetails(QVariantMap shapeDetails);
     virtual void setInputTransform(Qt3D::QTransform* inputTransform);
 
-
+    QQmlListProperty<PhysicsCollisionEvent> collitionsList();
+    bool hasCollided(){return m_hasCollided;}
 
 signals:
     void maskChanged(int mask);
@@ -76,6 +79,8 @@ signals:
     void outputTransformChanged();
 
     void collided(PhysicsCollisionEvent* event);
+    void hasCollidedChanged(bool val);
+    void collitionsListChanged();
 protected:
     void copy(const Qt3D::QNode *ref) Q_DECL_OVERRIDE;
 
@@ -95,6 +100,14 @@ protected:
     Qt3D::QTransform* m_inputTransform;
     Qt3D::QTransform* m_outputTransform;
     Qt3D::QMatrixTransform* m_outputTransform_matrix;
+
+    PhysicsCollisionEventPtrList m_collitionsList;
+
+    bool m_hasCollided;
+
+private:
+    static PhysicsCollisionEvent *qmlComponentAt(QQmlListProperty<PhysicsCollisionEvent> *list, int index);
+    static int qmlComponentsCount(QQmlListProperty<PhysicsCollisionEvent> *list);
 
 };
 
