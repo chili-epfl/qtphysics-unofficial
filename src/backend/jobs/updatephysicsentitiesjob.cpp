@@ -25,7 +25,6 @@ void UpdatePhysicsEntitiesJob::run(){
 void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 parent_matrix,bool forceUpdateMS){
     if(node_id.isNull()) return;
     PhysicsEntity* entity= static_cast<PhysicsEntity*>(m_manager->m_resources.operator [](node_id));
-
     QMatrix4x4 current_global_matrix=parent_matrix;
     PhysicsBodyInfoBackendNode* entity_body_info=Q_NULLPTR;
     if(!entity->physicsBodyInfo().isNull())

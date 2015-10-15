@@ -28,8 +28,13 @@ void PhysicsEntity::setManager(PhysicsManager *manager){
 PhysicsEntity::~PhysicsEntity(){
     m_manager->m_resources.remove(peerUuid());
     for (Qt3D::QNodeId id : m_childrenId){
-        if(m_manager->m_resources.contains(id))
-            delete m_manager->m_resources.operator [](id);
+        if(m_manager->m_resources.contains(id)){
+            Physics::PhysicsEntity* child=static_cast<Physics::PhysicsEntity*>(m_manager->m_resources.operator [](id));
+            child->setParentEntity(Q_NULLPTR);
+        }
+    }
+    if(this->parent()){
+        this->parent()->removeChildId(peerUuid());
     }
 }
 
@@ -41,7 +46,6 @@ void PhysicsEntity::updateFromPeer(Qt3D::QNode *peer){
     m_physicsBodyInfo=Qt3D::QNodeId();
     m_transform=Qt3D::QNodeId();
     m_physicsWorldInfo=Qt3D::QNodeId();
-
     for(Qt3D::QComponent* comp : entity->components()){
         addComponent(comp);
     }
