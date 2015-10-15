@@ -170,6 +170,7 @@ void PhysicsBodyInfoBackendNode::notifyFrontEnd(QString operation){
         if(m_collitions.values().contains(0) || m_collitions.values().contains(2)){
             e->setPropertyName("notifyCollision");
             Q_FOREACH(Collision c, m_collitions.keys()){
+                //qDebug()<<c.body1<<" "<<c.body2;
                 if(m_collitions[c]==0){
                     m_collitions.remove(c);
                     continue;
@@ -181,22 +182,25 @@ void PhysicsBodyInfoBackendNode::notifyFrontEnd(QString operation){
                 else{
                     collition_event->setIsNew(true);
                 }
-                if(c.body1==peerUuid()){
+
+                //if(c.body1==peerUuid()){
                     collition_event->setTarget(c.body2);
                     collition_event->setContactPointOnBody(c.pointOnBody1);
                     collition_event->setContactPointOnTarget(c.pointOnBody2);
                     collition_event->setNormalOnTarget(QVector3D());
-                }
+                /*}
                 else{
                     collition_event->setTarget(c.body1);
                     collition_event->setContactPointOnBody(c.pointOnBody2);
                     collition_event->setContactPointOnTarget(c.pointOnBody1);
                     collition_event->setNormalOnTarget(QVector3D());
-                }
+                }*/
                 PhysicsCollisionEventPtr event_ptr;
                 event_ptr.reset(collition_event);
                 collitions_list.append(event_ptr);
+
             }
+            //qDebug()<<"end";
             e->setValue(QVariant::fromValue(collitions_list));
         }
         else return;

@@ -133,6 +133,8 @@ QVector<DynamicsWorld::Collision> DynamicsWorld::getCollisions(){
             btManifoldPoint& pt = contactManifold->getContactPoint(j);
             if (pt.getDistance()<0.5f)
             {
+                collition.pointOnBody1= QVector3D(pt.getPositionWorldOnA().x(),pt.getPositionWorldOnA().y(),pt.getPositionWorldOnA().z());
+                collition.pointOnBody2=QVector3D(pt.getPositionWorldOnB().x(),pt.getPositionWorldOnB().y(),pt.getPositionWorldOnB().z());
                 collitions.append(collition);
                 break;
                 //const btVector3& ptA = pt.getPositionWorldOnA();

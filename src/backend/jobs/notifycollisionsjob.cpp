@@ -16,7 +16,6 @@ NotifyCollisionsJob::NotifyCollisionsJob(PhysicsManager* manager):
     m_manager=manager;
 }
 void NotifyCollisionsJob::run(){
-
     QVector<PhysicsBodyInfoBackendNode*> bodies_to_notify;
     resetCollitions(m_manager->rootEntityId(),bodies_to_notify);
 
@@ -30,9 +29,12 @@ void NotifyCollisionsJob::run(){
             }
             else {
                 body_info->collitions().operator [](c)=2;
+
             }
         }
         if(!entity2->physicsBodyInfo().isNull()){
+            /*Swap the collition bodies*/
+            c.swapBodies();
             PhysicsBodyInfoBackendNode* body_info=static_cast<PhysicsBodyInfoBackendNode*>(m_manager->m_resources[entity2->physicsBodyInfo()]);
             if(body_info->collitions().contains(c)){
                 body_info->collitions().operator [](c)=1;
@@ -42,6 +44,7 @@ void NotifyCollisionsJob::run(){
             }
         }
     }
+
     Q_FOREACH(PhysicsBodyInfoBackendNode* b, bodies_to_notify){
         b->notifyFrontEnd("notifyCollision");
     }

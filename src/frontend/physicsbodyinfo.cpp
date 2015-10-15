@@ -123,6 +123,10 @@ int PhysicsBodyInfo::qmlComponentsCount(QQmlListProperty<PhysicsCollisionEvent> 
      return self->m_collitionsList.size();
 }
 
+bool PhysicsBodyInfo::collitionTest(Qt3D::QNodeId id){
+    return m_collitionsCache.contains(id);
+}
+
 
 void PhysicsBodyInfo::sceneChangeEvent(const Qt3D::QSceneChangePtr &change)
 {
@@ -170,12 +174,15 @@ void PhysicsBodyInfo::sceneChangeEvent(const Qt3D::QSceneChangePtr &change)
                     emit hasCollidedChanged(m_hasCollided);
                 }
                 m_collitionsList.clear();
+                m_collitionsCache.clear();
                 emit collitionsListChanged();
             }
             else{
                 m_collitionsList.clear();
+                m_collitionsCache.clear();
                 Q_FOREACH(PhysicsCollisionEventPtr event_ptr,collitions_list){
                     m_collitionsList.append(event_ptr);
+                    m_collitionsCache.insert(event_ptr->target());
                     if(m_collitionsList.last()->isNew()){
                         emit collided(m_collitionsList.last().data());
                     }

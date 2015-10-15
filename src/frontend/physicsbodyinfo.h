@@ -64,6 +64,8 @@ public:
     QQmlListProperty<PhysicsCollisionEvent> collitionsList();
     bool hasCollided(){return m_hasCollided;}
 
+    bool collitionTest(Qt3D::QNodeId);
+
 signals:
     void maskChanged(int mask);
     void groupChanged(int group);
@@ -78,7 +80,7 @@ signals:
     void inputTransformChanged();
     void outputTransformChanged();
 
-    void collided(PhysicsCollisionEvent* event);
+    void collided(Physics::PhysicsCollisionEvent* event);
     void hasCollidedChanged(bool val);
     void collitionsListChanged();
 protected:
@@ -102,10 +104,9 @@ protected:
     Qt3D::QMatrixTransform* m_outputTransform_matrix;
 
     PhysicsCollisionEventPtrList m_collitionsList;
-
+    QSet<Qt3D::QNodeId> m_collitionsCache;
     bool m_hasCollided;
 
-private:
     static PhysicsCollisionEvent *qmlComponentAt(QQmlListProperty<PhysicsCollisionEvent> *list, int index);
     static int qmlComponentsCount(QQmlListProperty<PhysicsCollisionEvent> *list);
 

@@ -9,6 +9,7 @@ namespace Physics {
 class BACKENDSHARED_EXPORT Collision{
 
 public:
+
     Qt3D::QNodeId body1;
     Qt3D::QNodeId body2;
     QVector3D pointOnBody1;
@@ -16,13 +17,27 @@ public:
     QVector3D normalBody2;
     bool isNew;
 
+    void swapBodies(){
+        /**TODO: Swapping the normal???*/
+        Qt3D::QNodeId tmp=this->body1;
+        QVector3D tmp_v1=this->pointOnBody1;
+        this->body1=this->body2;
+        this->pointOnBody1=this->pointOnBody2;
+        this->body2=tmp;
+        this->pointOnBody2=tmp_v1;
+    }
+
 };
 
 inline bool operator==(const Collision& c1,const Collision& c2)
 {
-    return (c1.body1 == c2.body1 && c1.body2 == c2.body2
-            && c1.pointOnBody1 == c2.pointOnBody1 && c1.pointOnBody2 == c2.pointOnBody2
-            && c1.normalBody2 == c2.normalBody2);
+    return (
+                (
+                 (c1.body1 == c2.body1 && c1.body2 == c2.body2 && c1.pointOnBody1 == c2.pointOnBody1 && c1.pointOnBody2 == c2.pointOnBody2)
+                 ||
+                 (c1.body1 == c2.body2 && c1.body2 == c2.body1 && c1.pointOnBody1 == c2.pointOnBody2 && c1.pointOnBody2 == c2.pointOnBody1)
+                 )
+             && c1.normalBody2 == c2.normalBody2);
 }
 inline uint qHash(const Collision &key, uint seed)
 {
