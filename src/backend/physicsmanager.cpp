@@ -46,6 +46,8 @@ QVector<Collision> PhysicsManager::getCollisions(){
         collision.normalBody2=c.normalBody2;
         collision.pointOnBody1=c.pointOnBody1;
         collision.pointOnBody2=c.pointOnBody2;
+        collision.pointOnBody1Local=c.pointOnBody1Local;
+        collision.pointOnBody2Local=c.pointOnBody2Local;
         collisions.append(collision);
     }
     return collisions;

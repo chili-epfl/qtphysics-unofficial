@@ -135,6 +135,8 @@ QVector<DynamicsWorld::Collision> DynamicsWorld::getCollisions(){
             {
                 collition.pointOnBody1= QVector3D(pt.getPositionWorldOnA().x(),pt.getPositionWorldOnA().y(),pt.getPositionWorldOnA().z());
                 collition.pointOnBody2=QVector3D(pt.getPositionWorldOnB().x(),pt.getPositionWorldOnB().y(),pt.getPositionWorldOnB().z());
+                collition.pointOnBody1Local= QVector3D(pt.m_localPointA.x(),pt.m_localPointA.y(),pt.m_localPointA.z());
+                collition.pointOnBody2Local=QVector3D(pt.m_localPointB.x(),pt.m_localPointB.y(),pt.m_localPointB.z());
                 collitions.append(collition);
                 break;
                 //const btVector3& ptA = pt.getPositionWorldOnA();

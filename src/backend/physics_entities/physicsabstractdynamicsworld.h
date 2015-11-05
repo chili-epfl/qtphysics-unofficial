@@ -17,6 +17,8 @@ public:
         PhysicsAbstractRigidBody* body2;
         QVector3D pointOnBody1;
         QVector3D pointOnBody2;
+        QVector3D pointOnBody1Local;
+        QVector3D pointOnBody2Local;
         QVector3D normalBody2;
 
      };

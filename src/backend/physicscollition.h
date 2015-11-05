@@ -13,7 +13,9 @@ public:
     Qt3D::QNodeId body1;
     Qt3D::QNodeId body2;
     QVector3D pointOnBody1;
-    QVector3D pointOnBody2;
+    QVector3D pointOnBody2;    
+    QVector3D pointOnBody1Local;
+    QVector3D pointOnBody2Local;
     QVector3D normalBody2;
     bool isNew;
 

@@ -187,6 +187,8 @@ void PhysicsBodyInfoBackendNode::notifyFrontEnd(QString operation){
                     collition_event->setTarget(c.body2);
                     collition_event->setContactPointOnBody(c.pointOnBody1);
                     collition_event->setContactPointOnTarget(c.pointOnBody2);
+                    collition_event->setContactPointOnBodyLocal(c.pointOnBody1Local);
+                    collition_event->setContactPointOnTargetLocal(c.pointOnBody2Local);
                     collition_event->setNormalOnTarget(QVector3D());
                 /*}
                 else{
