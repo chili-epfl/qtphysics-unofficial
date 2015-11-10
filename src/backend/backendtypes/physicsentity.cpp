@@ -36,6 +36,7 @@ PhysicsEntity::~PhysicsEntity(){
     if(this->parent()){
         this->parent()->removeChildId(peerUuid());
     }
+    m_manager->garbage.insert(peerUuid());
 }
 
 void PhysicsEntity::updateFromPeer(Qt3D::QNode *peer){

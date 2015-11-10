@@ -20,6 +20,16 @@ UpdatePhysicsEntitiesJob::UpdatePhysicsEntitiesJob(PhysicsManager* manager):
 
 void UpdatePhysicsEntitiesJob::run(){
     recursive_step(m_manager->rootEntityId(),QMatrix4x4(),false);
+    Q_FOREACH(Qt3D::QNodeId id,m_manager->garbage){
+        if(m_manager->m_Id2RigidBodies.contains(id)){
+            PhysicsAbstractRigidBody* body =m_manager->m_Id2RigidBodies[id];
+            m_manager->m_Id2RigidBodies.remove(id);
+            m_manager->m_RigidBodies2Id.remove(body);
+            m_manager->m_physics_world->removeRigidBody(body);
+            delete body;
+        }
+    }
+    m_manager->garbage.clear();
 }
 
 void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 parent_matrix,bool forceUpdateMS){
@@ -29,7 +39,11 @@ void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 
     PhysicsBodyInfoBackendNode* entity_body_info=Q_NULLPTR;
     if(!entity->physicsBodyInfo().isNull())
         entity_body_info=static_cast<PhysicsBodyInfoBackendNode*>(m_manager->m_resources.operator [](entity->physicsBodyInfo()));
-
+    else {
+        if(m_manager->m_Id2RigidBodies.contains(node_id)){
+            m_manager->garbage.insert(node_id);
+        }
+    }
     bool isBodyNew=false;
     PhysicsAbstractRigidBody* rigid_body=retrievePhysicalBody(entity,entity_body_info,isBodyNew);
     if(rigid_body){

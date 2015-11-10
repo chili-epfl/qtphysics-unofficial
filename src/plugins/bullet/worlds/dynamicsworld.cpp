@@ -102,12 +102,15 @@ void DynamicsWorld::onBodyRequireUpdate(){
 
 
 void DynamicsWorld::onBodyDestroyed(QObject* obj){
-    if(obj->inherits("PhysicsAbstractRigidBody"))
-        removeRigidBody(static_cast<PhysicsAbstractRigidBody*>(obj));
+//    btRigidBody* btBody= (btRigidBody*)m_PhysicsBodies2BulletBodies[(AbstractRigidBody*)obj];
+//    m_PhysicsBodies2BulletBodies.remove((AbstractRigidBody*)obj);
+//    m_BulletBodies2PhysicsBodies.remove(btBody);
+//    removebtRigidBody(btBody);
 }
 
 void DynamicsWorld::removebtRigidBody(btRigidBody* b){
     m_dynamicsWorld->removeRigidBody(b);
+    delete b;
 }
 void DynamicsWorld::addbtRigidBody(btRigidBody* b,int group,int mask){
     m_dynamicsWorld->addRigidBody(b,group,mask);

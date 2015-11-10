@@ -27,6 +27,7 @@ public:
 
     void setRootEntityId(Qt3D::QNodeId rootId){m_rootId=rootId;}
     Qt3D::QNodeId rootEntityId(){return m_rootId;}
+
     QHash<Qt3D::QNodeId,Qt3D::QBackendNode*> m_resources;
 
     QHash<Qt3D::QNodeId,PhysicsAbstractRigidBody*> m_Id2RigidBodies;
@@ -34,6 +35,8 @@ public:
 
     QHash<Qt3D::QNodeId,PhysicsAbstractSoftBody*> m_Id2SoftBodies;
     QHash<PhysicsAbstractSoftBody*,Qt3D::QNodeId> m_SoftBodies2Id;
+
+    QSet<Qt3D::QNodeId> garbage;
 
     PhysicsAbstractDynamicsWorld* m_physics_world;
 
