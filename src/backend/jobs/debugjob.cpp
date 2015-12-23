@@ -21,7 +21,7 @@ void DebugJob::run(){
     //qDebug()<<"End";
 }
 
-void DebugJob::print(Qt3D::QNodeId id){
+void DebugJob::print(Qt3DCore::QNodeId id){
     if(id.isNull()) return;
     PhysicsEntity* e= static_cast<PhysicsEntity*>(m_manager->m_resources.operator [](id));
     qDebug()<< e->objectName();
@@ -29,7 +29,7 @@ void DebugJob::print(Qt3D::QNodeId id){
         PhysicsGeometryRenderer* gr= static_cast<PhysicsGeometryRenderer*>(m_manager->m_resources.operator [](e->geometry_renderer()));
         if(!gr->m_geometry.isNull()){
             PhysicsGeometry* g=static_cast<PhysicsGeometry*>(m_manager->m_resources.operator [](gr->m_geometry));
-            Q_FOREACH(Qt3D::QNodeId att, g->attributes()){
+            Q_FOREACH(Qt3DCore::QNodeId att, g->attributes()){
                 PhysicsAttribute* a=static_cast<PhysicsAttribute*>(m_manager->m_resources.operator [](att));
                 if(a->objectName()=="vertexPosition"){
                    qDebug()<<a->asVector3D();
@@ -37,7 +37,7 @@ void DebugJob::print(Qt3D::QNodeId id){
             }
         }
     }
-    for(Qt3D::QNodeId childId : e->childrenIds())
+    for(Qt3DCore::QNodeId childId : e->childrenIds())
         print(childId);
 }
 

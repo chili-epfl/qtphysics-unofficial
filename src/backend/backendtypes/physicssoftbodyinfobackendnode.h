@@ -13,32 +13,32 @@ public:
 
     explicit PhysicsSoftBodyInfoBackendNode();
     ~PhysicsSoftBodyInfoBackendNode();
-    virtual void updateFromPeer(Qt3D::QNode *peer) Q_DECL_OVERRIDE;
+    virtual void updateFromPeer(Qt3DCore::QNode *peer) Q_DECL_OVERRIDE;
 
-    Qt3D::QNodeId inputMesh(){return m_inputMesh;}
-    void setInputMesh(Qt3D::QNodeId inputMesh);
+    Qt3DCore::QNodeId inputMesh(){return m_inputMesh;}
+    void setInputMesh(Qt3DCore::QNodeId inputMesh);
 
     bool isDirtyMesh(){return m_dirtyMesh;}
     void setDirtyMesh(bool val){m_dirtyMesh=val;}
 
 protected:
-    virtual void sceneChangeEvent(const Qt3D::QSceneChangePtr &) Q_DECL_OVERRIDE;
+    virtual void sceneChangeEvent(const Qt3DCore::QSceneChangePtr &) Q_DECL_OVERRIDE;
 
     bool m_dirtyMesh;
 
-    Qt3D::QNodeId m_inputMesh;
+    Qt3DCore::QNodeId m_inputMesh;
 
 
 
 };
 
-class BACKENDSHARED_EXPORT PhysicsSoftBodyInfoBackendNodeFunctor : public Qt3D::QBackendNodeFunctor
+class BACKENDSHARED_EXPORT PhysicsSoftBodyInfoBackendNodeFunctor : public Qt3DCore::QBackendNodeFunctor
 {
 public:
     explicit PhysicsSoftBodyInfoBackendNodeFunctor(PhysicsManager* manager);
-    Qt3D::QBackendNode *create(Qt3D::QNode *frontend, const Qt3D::QBackendNodeFactory *factory) const Q_DECL_OVERRIDE;
-    Qt3D::QBackendNode *get(const Qt3D::QNodeId &id) const Q_DECL_OVERRIDE;
-    void destroy(const Qt3D::QNodeId &id) const Q_DECL_OVERRIDE;
+    Qt3DCore::QBackendNode *create(Qt3DCore::QNode *frontend, const Qt3DCore::QBackendNodeFactory *factory) const Q_DECL_OVERRIDE;
+    Qt3DCore::QBackendNode *get(const Qt3DCore::QNodeId &id) const Q_DECL_OVERRIDE;
+    void destroy(const Qt3DCore::QNodeId &id) const Q_DECL_OVERRIDE;
 private:
     PhysicsManager* m_manager;
 };

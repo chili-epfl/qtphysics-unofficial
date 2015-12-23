@@ -2,7 +2,6 @@
 #define PhysicsASPECT_H
 
 #include "backend_global.h"
-#include <Qt3DCore/QAbstractAspect>
 
 
 QT_BEGIN_NAMESPACE
@@ -11,20 +10,20 @@ namespace Physics {
 
 class PhysicsManager;
 
-class BACKENDSHARED_EXPORT PhysicsAspect: public Qt3D::QAbstractAspect
+class BACKENDSHARED_EXPORT PhysicsAspect: public Qt3DCore::QAbstractAspect
 {
 public:
     explicit PhysicsAspect(QObject* parent=0);
 
-    QVector<Qt3D::QAspectJobPtr> jobsToExecute(qint64 time) Q_DECL_OVERRIDE;
-    void sceneNodeAdded(Qt3D::QSceneChangePtr &e) Q_DECL_OVERRIDE;
-    void sceneNodeRemoved(Qt3D::QSceneChangePtr &e) Q_DECL_OVERRIDE;
+    QVector<Qt3DCore::QAspectJobPtr> jobsToExecute(qint64 time) Q_DECL_OVERRIDE;
+    void sceneNodeAdded(Qt3DCore::QSceneChangePtr &e) Q_DECL_OVERRIDE;
+    void sceneNodeRemoved(Qt3DCore::QSceneChangePtr &e) Q_DECL_OVERRIDE;
 
 private:
-    void setRootEntity(Qt3D::QEntity *rootObject) Q_DECL_OVERRIDE;
+    void setRootEntity(Qt3DCore::QEntity *rootObject) Q_DECL_OVERRIDE;
     void onInitialize(const QVariantMap &data) Q_DECL_OVERRIDE;
     void onCleanup() Q_DECL_OVERRIDE;
-    void visitNode(Qt3D::QNode *node);
+    void visitNode(Qt3DCore::QNode *node);
 
     PhysicsManager* m_manager;
 

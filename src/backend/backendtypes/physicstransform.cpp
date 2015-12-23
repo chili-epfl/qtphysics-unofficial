@@ -1,11 +1,10 @@
 #include "physicstransform.h"
 #include "../physicsmanager.h"
-#include <Qt3DRenderer>
 
 namespace Physics {
 
 PhysicsTransform::PhysicsTransform():
-    Qt3D::QBackendNode(),
+    Qt3DCore::QBackendNode(),
     m_objectName(),
     m_dirty(false),
     m_enabled(false),
@@ -23,16 +22,16 @@ PhysicsTransform::~PhysicsTransform(){
     m_manager->m_resources.remove(peerUuid());
 }
 
-void PhysicsTransform::updateFromPeer(Qt3D::QNode *peer){
-    Qt3D::QTransform *transform = static_cast<Qt3D::QTransform *>(peer);
+void PhysicsTransform::updateFromPeer(Qt3DCore::QNode *peer){
+    Qt3DCore::QTransform *transform = static_cast<Qt3DCore::QTransform *>(peer);
     m_transformMatrix = transform->matrix();
     m_enabled = transform->isEnabled();
     m_dirty=true;
 }
 
-void PhysicsTransform::sceneChangeEvent(const Qt3D::QSceneChangePtr &e){
-    if (e->type() == Qt3D::NodeUpdated) {
-            const Qt3D::QScenePropertyChangePtr &propertyChange = qSharedPointerCast<Qt3D::QScenePropertyChange>(e);
+void PhysicsTransform::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &e){
+    if (e->type() == Qt3DCore::NodeUpdated) {
+            const Qt3DCore::QScenePropertyChangePtr &propertyChange = qSharedPointerCast<Qt3DCore::QScenePropertyChange>(e);
             if (propertyChange->propertyName() == QByteArrayLiteral("matrix")){
                 m_transformMatrix = propertyChange->value().value<QMatrix4x4>();
                 m_dirty=true;
@@ -49,7 +48,7 @@ PhysicsTransformFunctor::PhysicsTransformFunctor(PhysicsManager* manager)
 }
 
 
-Qt3D::QBackendNode *PhysicsTransformFunctor::create(Qt3D::QNode *frontend, const Qt3D::QBackendNodeFactory *factory)
+Qt3DCore::QBackendNode *PhysicsTransformFunctor::create(Qt3DCore::QNode *frontend, const Qt3DCore::QBackendNodeFactory *factory)
 const {
     PhysicsTransform* transform=new PhysicsTransform();
     m_manager->m_resources.insert(frontend->id(),transform);
@@ -58,14 +57,14 @@ const {
     transform->setPeer(frontend);
     return transform;
 }
-Qt3D::QBackendNode *PhysicsTransformFunctor::get(const Qt3D::QNodeId &id) const
+Qt3DCore::QBackendNode *PhysicsTransformFunctor::get(const Qt3DCore::QNodeId &id) const
 {
     if(m_manager->m_resources.contains(id))
         return m_manager->m_resources.operator [](id);
     else
         return Q_NULLPTR;
 }
-void PhysicsTransformFunctor::destroy(const Qt3D::QNodeId &id) const
+void PhysicsTransformFunctor::destroy(const Qt3DCore::QNodeId &id) const
 {
     if(m_manager->m_resources.contains(id))
         delete m_manager->m_resources.operator [](id);

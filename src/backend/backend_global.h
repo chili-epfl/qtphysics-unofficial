@@ -9,4 +9,8 @@
 #  define BACKENDSHARED_EXPORT Q_DECL_IMPORT
 #endif
 
+
+#include <Qt3DRender>
+
+
 #endif // BACKEND_GLOBAL_H

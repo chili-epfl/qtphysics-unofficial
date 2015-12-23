@@ -5,12 +5,11 @@
 #include <physicssoftbodyinfo.h>
 
 #include "../physicsmanager.h"
-#include <Qt3DRenderer>
 
 namespace Physics {
 
 PhysicsBodyInfoBackendNode::PhysicsBodyInfoBackendNode():
-    Qt3D::QBackendNode(Qt3D::QBackendNode::ReadWrite),
+    Qt3DCore::QBackendNode(Qt3DCore::QBackendNode::ReadWrite),
     m_dirtyFlags(Clean),
     m_objectName(),
     m_enabled(false)
@@ -26,7 +25,7 @@ PhysicsBodyInfoBackendNode::~PhysicsBodyInfoBackendNode(){
     m_manager->m_resources.remove(peerUuid());
 }
 
-void PhysicsBodyInfoBackendNode::updateFromPeer(Qt3D::QNode *peer){
+void PhysicsBodyInfoBackendNode::updateFromPeer(Qt3DCore::QNode *peer){
     PhysicsBodyInfo *body_info = static_cast<PhysicsBodyInfo*>(peer);
     m_objectName = peer->objectName();
     m_enabled=body_info->isEnabled();
@@ -104,7 +103,7 @@ void PhysicsBodyInfoBackendNode::setFriction(qreal friction){
 
 }
 
-void PhysicsBodyInfoBackendNode::setInputTransform(Qt3D::QNodeId inputTranform){
+void PhysicsBodyInfoBackendNode::setInputTransform(Qt3DCore::QNodeId inputTranform){
     if(inputTranform!=m_inputTransform){
         m_inputTransform=inputTranform;
         m_dirtyFlags.operator |=(InputTransformChanged);
@@ -113,10 +112,10 @@ void PhysicsBodyInfoBackendNode::setInputTransform(Qt3D::QNodeId inputTranform){
 
 
 
-void PhysicsBodyInfoBackendNode::sceneChangeEvent(const Qt3D::QSceneChangePtr &e){
+void PhysicsBodyInfoBackendNode::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &e){
     switch (e->type()) {
-        case Qt3D::NodeUpdated: {
-            Qt3D::QScenePropertyChangePtr propertyChange = qSharedPointerCast<Qt3D::QScenePropertyChange>(e);
+        case Qt3DCore::NodeUpdated: {
+            Qt3DCore::QScenePropertyChangePtr propertyChange = qSharedPointerCast<Qt3DCore::QScenePropertyChange>(e);
             if (propertyChange->propertyName() == QByteArrayLiteral("fallInertia"))
                 setFallInertia(propertyChange->value().value<QVector3D>());
             else if (propertyChange->propertyName() == QByteArrayLiteral("friction"))
@@ -138,7 +137,7 @@ void PhysicsBodyInfoBackendNode::sceneChangeEvent(const Qt3D::QSceneChangePtr &e
             else if (propertyChange->propertyName() == QByteArrayLiteral("enabled"))
                 m_enabled = propertyChange->value().toBool();
             else if (propertyChange->propertyName() == QByteArrayLiteral("inputMatrix"))
-                setInputTransform(propertyChange->value().value<Qt3D::QTransform*>()->id());
+                setInputTransform(propertyChange->value().value<Qt3DCore::QTransform*>()->id());
             break;
         }
         default:
@@ -155,7 +154,7 @@ void PhysicsBodyInfoBackendNode::resetCollisions(){
 
 
 void PhysicsBodyInfoBackendNode::notifyFrontEnd(QString operation){
-    Qt3D::QBackendScenePropertyChangePtr e(new Qt3D::QBackendScenePropertyChange(Qt3D::NodeUpdated, peerUuid()));
+    Qt3DCore::QBackendScenePropertyChangePtr e(new Qt3DCore::QBackendScenePropertyChange(Qt3DCore::NodeUpdated, peerUuid()));
     /*if(operation=="attachPhysicsTransfrom"){
         e->setPropertyName("attachPhysicsTransfrom");
         e->setValue(true);
@@ -224,7 +223,7 @@ PhysicsBodyInfoBackendNodeFunctor::PhysicsBodyInfoBackendNodeFunctor(PhysicsMana
 }
 
 
-Qt3D::QBackendNode *PhysicsBodyInfoBackendNodeFunctor::create(Qt3D::QNode *frontend, const Qt3D::QBackendNodeFactory *factory)
+Qt3DCore::QBackendNode *PhysicsBodyInfoBackendNodeFunctor::create(Qt3DCore::QNode *frontend, const Qt3DCore::QBackendNodeFactory *factory)
 const {
     PhysicsBodyInfoBackendNode* body_info=new PhysicsBodyInfoBackendNode();
     m_manager->m_resources.insert(frontend->id(),body_info);
@@ -233,14 +232,14 @@ const {
     body_info->setPeer(frontend);
     return body_info;
 }
-Qt3D::QBackendNode *PhysicsBodyInfoBackendNodeFunctor::get(const Qt3D::QNodeId &id) const
+Qt3DCore::QBackendNode *PhysicsBodyInfoBackendNodeFunctor::get(const Qt3DCore::QNodeId &id) const
 {
     if(m_manager->m_resources.contains(id))
         return m_manager->m_resources.operator [](id);
     else
         return Q_NULLPTR;
 }
-void PhysicsBodyInfoBackendNodeFunctor::destroy(const Qt3D::QNodeId &id) const
+void PhysicsBodyInfoBackendNodeFunctor::destroy(const Qt3DCore::QNodeId &id) const
 {
     if(m_manager->m_resources.contains(id))
         delete m_manager->m_resources.operator [](id);

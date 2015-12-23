@@ -2,13 +2,11 @@
 #define DEBUGJOB_H
 #include "backend_global.h"
 
-#include <Qt3DCore/qaspectjob.h>
-#include <Qt3DCore/QNodeId>
 namespace Physics {
 
 class PhysicsManager;
 
-class BACKENDSHARED_EXPORT DebugJob: public Qt3D::QAspectJob
+class BACKENDSHARED_EXPORT DebugJob: public Qt3DCore::QAspectJob
 {
 
 public:
@@ -16,7 +14,7 @@ public:
 protected:
      void run() Q_DECL_OVERRIDE;
 private:
-     void print(Qt3D::QNodeId id);
+     void print(Qt3DCore::QNodeId id);
      PhysicsManager* m_manager;
 };
 

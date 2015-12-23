@@ -2,9 +2,8 @@
 #define PHYSICSMANAGER_H
 
 #include "backend_global.h"
-#include <Qt3DCore/QNodeId>
 #include <QHash>
-#include <Qt3DCore/QBackendNode>
+
 #include "physics_entities/physicsabstractrigidbody.h"
 #include "physics_entities/physicsabstractsoftbody.h"
 #include "physics_entities/physicsabstractdynamicsworld.h"
@@ -25,18 +24,18 @@ public:
     PhysicsManager();
     ~PhysicsManager();
 
-    void setRootEntityId(Qt3D::QNodeId rootId){m_rootId=rootId;}
-    Qt3D::QNodeId rootEntityId(){return m_rootId;}
+    void setRootEntityId(Qt3DCore::QNodeId rootId){m_rootId=rootId;}
+    Qt3DCore::QNodeId rootEntityId(){return m_rootId;}
 
-    QHash<Qt3D::QNodeId,Qt3D::QBackendNode*> m_resources;
+    QHash<Qt3DCore::QNodeId,Qt3DCore::QBackendNode*> m_resources;
 
-    QHash<Qt3D::QNodeId,PhysicsAbstractRigidBody*> m_Id2RigidBodies;
-    QHash<PhysicsAbstractRigidBody*,Qt3D::QNodeId> m_RigidBodies2Id;
+    QHash<Qt3DCore::QNodeId,PhysicsAbstractRigidBody*> m_Id2RigidBodies;
+    QHash<PhysicsAbstractRigidBody*,Qt3DCore::QNodeId> m_RigidBodies2Id;
 
-    QHash<Qt3D::QNodeId,PhysicsAbstractSoftBody*> m_Id2SoftBodies;
-    QHash<PhysicsAbstractSoftBody*,Qt3D::QNodeId> m_SoftBodies2Id;
+    QHash<Qt3DCore::QNodeId,PhysicsAbstractSoftBody*> m_Id2SoftBodies;
+    QHash<PhysicsAbstractSoftBody*,Qt3DCore::QNodeId> m_SoftBodies2Id;
 
-    QSet<Qt3D::QNodeId> garbage;
+    QSet<Qt3DCore::QNodeId> garbage;
 
     PhysicsAbstractDynamicsWorld* m_physics_world;
 
@@ -50,7 +49,7 @@ public slots:
 
 private:
     void loadPhysicsFactories();
-    Qt3D::QNodeId m_rootId;
+    Qt3DCore::QNodeId m_rootId;
 
 };
 

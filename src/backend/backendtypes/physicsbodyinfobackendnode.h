@@ -3,8 +3,6 @@
 
 #include "backend_global.h"
 
-#include <Qt3DCore>
-#include <Qt3DRenderer>
 #include "../physicscollision.h"
 
 namespace Physics {
@@ -13,7 +11,7 @@ class PhysicsManager;
 
 /*PhysicsBodyInfoBackendNode: the representation of the node PhysicsBodyInfo in the backend.
 PhysicsSoftBodyInfo is handled as a special case*/
-class BACKENDSHARED_EXPORT PhysicsBodyInfoBackendNode : public Qt3D::QBackendNode
+class BACKENDSHARED_EXPORT PhysicsBodyInfoBackendNode : public Qt3DCore::QBackendNode
 {
 public:
     enum DirtyFlag {
@@ -34,7 +32,7 @@ public:
     explicit PhysicsBodyInfoBackendNode();
     ~PhysicsBodyInfoBackendNode();
 
-    virtual void updateFromPeer(Qt3D::QNode *peer) Q_DECL_OVERRIDE;
+    virtual void updateFromPeer(Qt3DCore::QNode *peer) Q_DECL_OVERRIDE;
 
     virtual DirtyFlags& dirtyFlags(){return m_dirtyFlags;}
 
@@ -69,8 +67,8 @@ public:
     virtual const QVariantMap& shapeDetails(){return m_shapeDetails;}
     virtual void setShapeDetails(QVariantMap shapeDetails);
 
-    virtual Qt3D::QNodeId inputTransform(){return m_inputTransform;}
-    virtual void setInputTransform(Qt3D::QNodeId inputTranform);
+    virtual Qt3DCore::QNodeId inputTransform(){return m_inputTransform;}
+    virtual void setInputTransform(Qt3DCore::QNodeId inputTranform);
 
     virtual QMatrix4x4 localTransform() {return m_local_transform;}
     virtual void setLocalTransform(QMatrix4x4 m){m_local_transform=m;}
@@ -81,7 +79,7 @@ public:
     virtual void resetCollisions();
 
 protected:
-    virtual void sceneChangeEvent(const Qt3D::QSceneChangePtr &) Q_DECL_OVERRIDE;
+    virtual void sceneChangeEvent(const Qt3DCore::QSceneChangePtr &) Q_DECL_OVERRIDE;
 
     DirtyFlags m_dirtyFlags;
 
@@ -99,7 +97,7 @@ protected:
     qreal m_rollingFriction;
 
     QVariantMap m_shapeDetails;
-    Qt3D::QNodeId m_inputTransform;
+    Qt3DCore::QNodeId m_inputTransform;
 
     PhysicsManager* m_manager;
 
@@ -111,13 +109,13 @@ protected:
 Q_DECLARE_OPERATORS_FOR_FLAGS(PhysicsBodyInfoBackendNode::DirtyFlags)
 
 
-class BACKENDSHARED_EXPORT PhysicsBodyInfoBackendNodeFunctor : public Qt3D::QBackendNodeFunctor
+class BACKENDSHARED_EXPORT PhysicsBodyInfoBackendNodeFunctor : public Qt3DCore::QBackendNodeFunctor
 {
 public:
     explicit PhysicsBodyInfoBackendNodeFunctor(PhysicsManager* manager);
-    Qt3D::QBackendNode *create(Qt3D::QNode *frontend, const Qt3D::QBackendNodeFactory *factory) const Q_DECL_OVERRIDE;
-    Qt3D::QBackendNode *get(const Qt3D::QNodeId &id) const Q_DECL_OVERRIDE;
-    void destroy(const Qt3D::QNodeId &id) const Q_DECL_OVERRIDE;
+    Qt3DCore::QBackendNode *create(Qt3DCore::QNode *frontend, const Qt3DCore::QBackendNodeFactory *factory) const Q_DECL_OVERRIDE;
+    Qt3DCore::QBackendNode *get(const Qt3DCore::QNodeId &id) const Q_DECL_OVERRIDE;
+    void destroy(const Qt3DCore::QNodeId &id) const Q_DECL_OVERRIDE;
 private:
     PhysicsManager* m_manager;
 };

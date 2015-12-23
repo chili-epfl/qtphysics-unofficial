@@ -2,21 +2,17 @@
 #define PHYSICSBUFFER_H
 
 #include "backend_global.h"
-
-#include <Qt3DCore>
-#include <Qt3DRenderer>
-
 namespace Physics {
 
 class PhysicsManager;
-class BACKENDSHARED_EXPORT PhysicsBuffer : public Qt3D::QBackendNode
+class BACKENDSHARED_EXPORT PhysicsBuffer : public Qt3DCore::QBackendNode
 {
 public:
 
     explicit PhysicsBuffer();
     ~PhysicsBuffer();
 
-    void updateFromPeer(Qt3D::QNode *peer) Q_DECL_OVERRIDE;
+    void updateFromPeer(Qt3DCore::QNode *peer) Q_DECL_OVERRIDE;
 
     QString objectName(){return m_objectName;}
 
@@ -24,22 +20,22 @@ public:
     void setDirty(bool dirty){m_dirty=dirty;}
     void setManager(PhysicsManager *manager);
 
-    inline Qt3D::QBuffer::BufferType type() const { return m_type; }
-    inline Qt3D::QBuffer::UsageType usage() const { return m_usage; }
+    inline Qt3DRender::QBuffer::BufferType type() const { return m_type; }
+    inline Qt3DRender::QBuffer::UsageType usage() const { return m_usage; }
     inline QByteArray data() const { return m_data; }
-    inline Qt3D::QBufferFunctorPtr bufferFunctor() const { return m_functor; }
+    inline Qt3DRender::QBufferFunctorPtr bufferFunctor() const { return m_functor; }
 
 protected:
-    void sceneChangeEvent(const Qt3D::QSceneChangePtr &) Q_DECL_OVERRIDE;
+    void sceneChangeEvent(const Qt3DCore::QSceneChangePtr &) Q_DECL_OVERRIDE;
 private:
     QString m_objectName;
 
     bool m_dirty;
 
-    Qt3D::QBuffer::BufferType m_type;
-    Qt3D::QBuffer::UsageType m_usage;
+    Qt3DRender::QBuffer::BufferType m_type;
+    Qt3DRender::QBuffer::UsageType m_usage;
     QByteArray m_data;
-    Qt3D::QBufferFunctorPtr m_functor;
+    Qt3DRender::QBufferFunctorPtr m_functor;
 
     PhysicsManager* m_manager;
 
@@ -47,13 +43,13 @@ private:
 };
 
 
-class BACKENDSHARED_EXPORT PhysicsBufferFunctor : public Qt3D::QBackendNodeFunctor
+class BACKENDSHARED_EXPORT PhysicsBufferFunctor : public Qt3DCore::QBackendNodeFunctor
 {
 public:
     explicit PhysicsBufferFunctor(PhysicsManager* manager);
-    Qt3D::QBackendNode *create(Qt3D::QNode *frontend, const Qt3D::QBackendNodeFactory *factory) const Q_DECL_OVERRIDE;
-    Qt3D::QBackendNode *get(const Qt3D::QNodeId &id) const Q_DECL_OVERRIDE;
-    void destroy(const Qt3D::QNodeId &id) const Q_DECL_OVERRIDE;
+    Qt3DCore::QBackendNode *create(Qt3DCore::QNode *frontend, const Qt3DCore::QBackendNodeFactory *factory) const Q_DECL_OVERRIDE;
+    Qt3DCore::QBackendNode *get(const Qt3DCore::QNodeId &id) const Q_DECL_OVERRIDE;
+    void destroy(const Qt3DCore::QNodeId &id) const Q_DECL_OVERRIDE;
 private:
     PhysicsManager* m_manager;
 

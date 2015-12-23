@@ -2,14 +2,13 @@
 #define PhysicsWorldInfo_H
 #include "frontend_global.h"
 
-#include <Qt3DCore/QComponent>
 #include <QVector3D>
 
 namespace Physics {
 
 
 class FRONTENDSHARED_EXPORT PhysicsWorldInfo:
-        public Qt3D::QComponent
+        public Qt3DCore::QComponent
 {
     Q_OBJECT
     Q_PROPERTY(QVector3D gravity READ gravity WRITE setGravity NOTIFY gravityChanged)
@@ -17,7 +16,7 @@ class FRONTENDSHARED_EXPORT PhysicsWorldInfo:
 public:
     explicit PhysicsWorldInfo(QNode* parent=0);
     ~PhysicsWorldInfo();
-    void sceneChangeEvent(const Qt3D::QSceneChangePtr &change) Q_DECL_OVERRIDE;
+    void sceneChangeEvent(const Qt3DCore::QSceneChangePtr &change) Q_DECL_OVERRIDE;
     void copy(const QNode *ref) Q_DECL_OVERRIDE;
 
     QVector3D gravity() const {return m_gravity;}

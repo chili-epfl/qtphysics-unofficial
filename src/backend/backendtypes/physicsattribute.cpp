@@ -2,22 +2,21 @@
 
 #include "../physicsmanager.h"
 #include "physicsbuffer.h"
-#include <Qt3DRenderer>
 
 namespace Physics {
 
 PhysicsAttribute::PhysicsAttribute():
-    Qt3D::QBackendNode(),
+    Qt3DCore::QBackendNode(),
     m_objectName(),
     m_dirty(false),
     m_bufferId(),
-    m_dataType(Qt3D::QAbstractAttribute::Float),
+    m_dataType(Qt3DRender::QAbstractAttribute::Float),
     m_dataSize(1),
     m_count(0),
     m_byteStride(0),
     m_byteOffset(0),
     m_divisor(0),
-    m_attributeType(Qt3D::QAbstractAttribute::VertexAttribute)
+    m_attributeType(Qt3DRender::QAbstractAttribute::VertexAttribute)
 {
     m_manager=Q_NULLPTR;
 }
@@ -31,8 +30,8 @@ PhysicsAttribute::~PhysicsAttribute(){
     m_manager->m_resources.remove(peerUuid());
 }
 
-void PhysicsAttribute::updateFromPeer(Qt3D::QNode *peer){
-    Qt3D::QAttribute *attribute = static_cast<Qt3D::QAttribute *>(peer);
+void PhysicsAttribute::updateFromPeer(Qt3DCore::QNode *peer){
+    Qt3DRender::QAttribute *attribute = static_cast<Qt3DRender::QAttribute *>(peer);
         if (attribute) {
             m_dataType = attribute->dataType();
             m_dataSize = attribute->dataSize();
@@ -47,16 +46,16 @@ void PhysicsAttribute::updateFromPeer(Qt3D::QNode *peer){
             m_dirty = true;
     }
 }
-void PhysicsAttribute::sceneChangeEvent(const Qt3D::QSceneChangePtr &e){
-    Qt3D::QScenePropertyChangePtr propertyChange = qSharedPointerCast<Qt3D::QScenePropertyChange>(e);
+void PhysicsAttribute::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &e){
+    Qt3DCore::QScenePropertyChangePtr propertyChange = qSharedPointerCast<Qt3DCore::QScenePropertyChange>(e);
         QByteArray propertyName = propertyChange->propertyName();
         switch (e->type()) {
-        case Qt3D::NodeUpdated: {
+        case Qt3DCore::NodeUpdated: {
             if (propertyName == QByteArrayLiteral("name")) {
                 m_objectName = propertyChange->value().value<QString>();
                 m_dirty = true;
             } else if (propertyName == QByteArrayLiteral("dataType")) {
-                m_dataType = static_cast<Qt3D::QAbstractAttribute::DataType>(propertyChange->value().value<int>());
+                m_dataType = static_cast<Qt3DRender::QAbstractAttribute::DataType>(propertyChange->value().value<int>());
                 m_dirty = true;
             } else if (propertyName == QByteArrayLiteral("dataSize")) {
                 m_dataSize = propertyChange->value().value<uint>();
@@ -74,21 +73,21 @@ void PhysicsAttribute::sceneChangeEvent(const Qt3D::QSceneChangePtr &e){
                 m_divisor = propertyChange->value().value<uint>();
                 m_dirty = true;
             } else if (propertyName == QByteArrayLiteral("attributeType")) {
-                m_attributeType = static_cast<Qt3D::QAbstractAttribute::AttributeType>(propertyChange->value().value<int>());
+                m_attributeType = static_cast<Qt3DRender::QAbstractAttribute::AttributeType>(propertyChange->value().value<int>());
                 m_dirty = true;
             }
             break;
         }
-        case Qt3D::NodeAdded: {
+        case Qt3DCore::NodeAdded: {
             if (propertyName == QByteArrayLiteral("buffer")) {
-                m_bufferId = propertyChange->value().value<Qt3D::QNodeId>();
+                m_bufferId = propertyChange->value().value<Qt3DCore::QNodeId>();
                 m_dirty = true;
             }
             break;
         }
-        case Qt3D::NodeRemoved: {
+        case Qt3DCore::NodeRemoved: {
             if (propertyName == QByteArrayLiteral("buffer")) {
-                m_bufferId = Qt3D::QNodeId();
+                m_bufferId = Qt3DCore::QNodeId();
                 m_dirty = true;
             }
             break;
@@ -120,7 +119,7 @@ QVector<QVector3D> PhysicsAttribute::asVector3D() const{
     const float* fptr;
     int stride;
     switch (m_dataType) {
-    case Qt3D::QAttribute::Float:
+    case Qt3DRender::QAttribute::Float:
         stride = sizeof(float) * m_dataSize;
         break;
     default:
@@ -150,7 +149,7 @@ PhysicsAttributeFunctor::PhysicsAttributeFunctor(PhysicsManager* manager)
 }
 
 
-Qt3D::QBackendNode *PhysicsAttributeFunctor::create(Qt3D::QNode *frontend, const Qt3D::QBackendNodeFactory *factory)
+Qt3DCore::QBackendNode *PhysicsAttributeFunctor::create(Qt3DCore::QNode *frontend, const Qt3DCore::QBackendNodeFactory *factory)
 const {
     PhysicsAttribute* attribute=new PhysicsAttribute();
     m_manager->m_resources.insert(frontend->id(),attribute);
@@ -159,14 +158,14 @@ const {
     attribute->setPeer(frontend);
     return attribute;
 }
-Qt3D::QBackendNode *PhysicsAttributeFunctor::get(const Qt3D::QNodeId &id) const
+Qt3DCore::QBackendNode *PhysicsAttributeFunctor::get(const Qt3DCore::QNodeId &id) const
 {
     if(m_manager->m_resources.contains(id))
         return m_manager->m_resources.operator [](id);
     else
         return Q_NULLPTR;
 }
-void PhysicsAttributeFunctor::destroy(const Qt3D::QNodeId &id) const
+void PhysicsAttributeFunctor::destroy(const Qt3DCore::QNodeId &id) const
 {
     if(m_manager->m_resources.contains(id))
         delete m_manager->m_resources.operator [](id);

@@ -2,12 +2,11 @@
 
 
 #include "../physicsmanager.h"
-#include <Qt3DRenderer>
 
 namespace Physics {
 
 PhysicsGeometry::PhysicsGeometry():
-    Qt3D::QBackendNode(),
+    Qt3DCore::QBackendNode(),
     m_objectName(),
     m_dirty(false),
     m_enabled(false),
@@ -26,11 +25,11 @@ PhysicsGeometry::~PhysicsGeometry(){
     m_manager->m_resources.remove(peerUuid());
 }
 
-void PhysicsGeometry::updateFromPeer(Qt3D::QNode *peer){
-    Qt3D::QGeometry *geometry = static_cast<Qt3D::QGeometry *>(peer);
+void PhysicsGeometry::updateFromPeer(Qt3DCore::QNode *peer){
+    Qt3DRender::QGeometry *geometry = static_cast<Qt3DRender::QGeometry *>(peer);
        if (geometry != Q_NULLPTR) {
            m_attributes.reserve(geometry->attributes().size());
-           Q_FOREACH (Qt3D::QAbstractAttribute *attribute, geometry->attributes())
+           Q_FOREACH (Qt3DRender::QAbstractAttribute *attribute, geometry->attributes())
                m_attributes.push_back(attribute->id());
            m_verticesPerPatch = geometry->verticesPerPatch();
            m_dirty = true;
@@ -38,25 +37,25 @@ void PhysicsGeometry::updateFromPeer(Qt3D::QNode *peer){
 }
 
 
-void PhysicsGeometry::sceneChangeEvent(const Qt3D::QSceneChangePtr &e){
-    Qt3D::QScenePropertyChangePtr propertyChange = qSharedPointerCast<Qt3D::QScenePropertyChange>(e);
+void PhysicsGeometry::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &e){
+    Qt3DCore::QScenePropertyChangePtr propertyChange = qSharedPointerCast<Qt3DCore::QScenePropertyChange>(e);
     QByteArray propertyName = propertyChange->propertyName();
     switch (e->type()) {
-    case Qt3D::NodeAdded: {
+    case Qt3DCore::NodeAdded: {
         if (propertyName == QByteArrayLiteral("attribute")) {
-            m_attributes.push_back(propertyChange->value().value<Qt3D::QNodeId>());
+            m_attributes.push_back(propertyChange->value().value<Qt3DCore::QNodeId>());
             m_dirty = true;
         }
         break;
     }
-    case Qt3D::NodeRemoved: {
+    case Qt3DCore::NodeRemoved: {
         if (propertyName == QByteArrayLiteral("attribute")) {
-            m_attributes.removeOne(propertyChange->value().value<Qt3D::QNodeId>());
+            m_attributes.removeOne(propertyChange->value().value<Qt3DCore::QNodeId>());
             m_dirty = true;
         }
         break;
     }
-    case Qt3D::NodeUpdated:
+    case Qt3DCore::NodeUpdated:
         if (propertyName == QByteArrayLiteral("verticesPerPatch")) {
             m_verticesPerPatch = propertyChange->value().value<int>();
             break;
@@ -73,7 +72,7 @@ PhysicsGeometryFunctor::PhysicsGeometryFunctor(PhysicsManager* manager)
 }
 
 
-Qt3D::QBackendNode *PhysicsGeometryFunctor::create(Qt3D::QNode *frontend, const Qt3D::QBackendNodeFactory *factory)
+Qt3DCore::QBackendNode *PhysicsGeometryFunctor::create(Qt3DCore::QNode *frontend, const Qt3DCore::QBackendNodeFactory *factory)
 const {
     PhysicsGeometry* geometry=new PhysicsGeometry();
     m_manager->m_resources.insert(frontend->id(),geometry);
@@ -82,14 +81,14 @@ const {
     geometry->setPeer(frontend);
     return geometry;
 }
-Qt3D::QBackendNode *PhysicsGeometryFunctor::get(const Qt3D::QNodeId &id) const
+Qt3DCore::QBackendNode *PhysicsGeometryFunctor::get(const Qt3DCore::QNodeId &id) const
 {
     if(m_manager->m_resources.contains(id))
         return m_manager->m_resources.operator [](id);
     else
         return Q_NULLPTR;
 }
-void PhysicsGeometryFunctor::destroy(const Qt3D::QNodeId &id) const
+void PhysicsGeometryFunctor::destroy(const Qt3DCore::QNodeId &id) const
 {
     if(m_manager->m_resources.contains(id))
         delete m_manager->m_resources.operator [](id);

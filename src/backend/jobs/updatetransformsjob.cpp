@@ -19,7 +19,7 @@ void UpdateTransformsJob::run(){
     recursive_step(m_manager->rootEntityId(),QMatrix4x4());
 }
 
-void UpdateTransformsJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 parent_matrix){
+void UpdateTransformsJob::recursive_step(Qt3DCore::QNodeId node_id, QMatrix4x4 parent_matrix){
     if(node_id.isNull()) return;
     QMatrix4x4 current_world_transform=parent_matrix;
     PhysicsEntity* entity=static_cast<PhysicsEntity*>(m_manager->m_resources[node_id]);
@@ -39,7 +39,7 @@ void UpdateTransformsJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 paren
             //}
         }
     }
-    Q_FOREACH(Qt3D::QNodeId id, entity->childrenIds()){
+    Q_FOREACH(Qt3DCore::QNodeId id, entity->childrenIds()){
         recursive_step(id,current_world_transform);
     }
 }

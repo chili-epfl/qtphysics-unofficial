@@ -2,20 +2,19 @@
 #define PHYSICSTRANSFORM_H
 #include "backend_global.h"
 
-#include <Qt3DCore>
-#include <Qt3DRenderer>
+
 
 
 namespace Physics {
 
 class PhysicsManager;
 
-class BACKENDSHARED_EXPORT PhysicsTransform : public Qt3D::QBackendNode
+class BACKENDSHARED_EXPORT PhysicsTransform : public Qt3DCore::QBackendNode
 {
 public:
     explicit PhysicsTransform();
     ~PhysicsTransform();
-    void updateFromPeer(Qt3D::QNode *peer) Q_DECL_OVERRIDE;
+    void updateFromPeer(Qt3DCore::QNode *peer) Q_DECL_OVERRIDE;
 
     QString objectName(){return m_objectName;}
 
@@ -27,7 +26,7 @@ public:
     const QMatrix4x4& transformMatrix(){return m_transformMatrix;}
 
 protected:
-    void sceneChangeEvent(const Qt3D::QSceneChangePtr &) Q_DECL_OVERRIDE;
+    void sceneChangeEvent(const Qt3DCore::QSceneChangePtr &) Q_DECL_OVERRIDE;
 private:
     QString m_objectName;
 
@@ -40,13 +39,13 @@ private:
 };
 
 
-class BACKENDSHARED_EXPORT PhysicsTransformFunctor : public Qt3D::QBackendNodeFunctor
+class BACKENDSHARED_EXPORT PhysicsTransformFunctor : public Qt3DCore::QBackendNodeFunctor
 {
 public:
     explicit PhysicsTransformFunctor(PhysicsManager* manager);
-    Qt3D::QBackendNode *create(Qt3D::QNode *frontend, const Qt3D::QBackendNodeFactory *factory) const Q_DECL_OVERRIDE;
-    Qt3D::QBackendNode *get(const Qt3D::QNodeId &id) const Q_DECL_OVERRIDE;
-    void destroy(const Qt3D::QNodeId &id) const Q_DECL_OVERRIDE;
+    Qt3DCore::QBackendNode *create(Qt3DCore::QNode *frontend, const Qt3DCore::QBackendNodeFactory *factory) const Q_DECL_OVERRIDE;
+    Qt3DCore::QBackendNode *get(const Qt3DCore::QNodeId &id) const Q_DECL_OVERRIDE;
+    void destroy(const Qt3DCore::QNodeId &id) const Q_DECL_OVERRIDE;
 private:
     PhysicsManager* m_manager;
 

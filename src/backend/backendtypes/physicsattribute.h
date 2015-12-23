@@ -3,20 +3,17 @@
 
 #include "backend_global.h"
 
-#include <Qt3DCore>
-#include <Qt3DRenderer>
-
 namespace Physics {
 
 class PhysicsManager;
-class BACKENDSHARED_EXPORT PhysicsAttribute : public Qt3D::QBackendNode
+class BACKENDSHARED_EXPORT PhysicsAttribute : public Qt3DCore::QBackendNode
 {
 public:
 
     explicit PhysicsAttribute();
     ~PhysicsAttribute();
 
-    void updateFromPeer(Qt3D::QNode *peer) Q_DECL_OVERRIDE;
+    void updateFromPeer(Qt3DCore::QNode *peer) Q_DECL_OVERRIDE;
 
     QString objectName(){return m_objectName;}
 
@@ -24,30 +21,30 @@ public:
     void setDirty(bool dirty){m_dirty=dirty;}
     void setManager(PhysicsManager *manager);
 
-    inline Qt3D::QNodeId bufferId() const { return m_bufferId; }
-    inline Qt3D::QAbstractAttribute::DataType dataType() const { return m_dataType; }
+    inline Qt3DCore::QNodeId bufferId() const { return m_bufferId; }
+    inline Qt3DRender::QAbstractAttribute::DataType dataType() const { return m_dataType; }
     inline uint dataSize() const { return m_dataSize; }
     inline uint count() const { return m_count; }
     inline uint byteStride() const { return m_byteStride; }
     inline uint byteOffset() const { return m_byteOffset; }
     inline uint divisor() const { return m_divisor; }
-    inline Qt3D::QAbstractAttribute::AttributeType attributeType() const { return m_attributeType; }
+    inline Qt3DRender::QAbstractAttribute::AttributeType attributeType() const { return m_attributeType; }
     QVector<QVector3D> asVector3D() const;
 protected:
-    void sceneChangeEvent(const Qt3D::QSceneChangePtr &) Q_DECL_OVERRIDE;
+    void sceneChangeEvent(const Qt3DCore::QSceneChangePtr &) Q_DECL_OVERRIDE;
 private:
     QString m_objectName;
 
     bool m_dirty;
 
-    Qt3D::QNodeId m_bufferId;
-    Qt3D::QAbstractAttribute::DataType m_dataType;
+    Qt3DCore::QNodeId m_bufferId;
+    Qt3DRender::QAbstractAttribute::DataType m_dataType;
     uint m_dataSize;
     uint m_count;
     uint m_byteStride;
     uint m_byteOffset;
     uint m_divisor;
-    Qt3D::QAbstractAttribute::AttributeType m_attributeType;
+    Qt3DRender::QAbstractAttribute::AttributeType m_attributeType;
 
     PhysicsManager* m_manager;
 
@@ -55,13 +52,13 @@ private:
 };
 
 
-class BACKENDSHARED_EXPORT PhysicsAttributeFunctor : public Qt3D::QBackendNodeFunctor
+class BACKENDSHARED_EXPORT PhysicsAttributeFunctor : public Qt3DCore::QBackendNodeFunctor
 {
 public:
     explicit PhysicsAttributeFunctor(PhysicsManager* manager);
-    Qt3D::QBackendNode *create(Qt3D::QNode *frontend, const Qt3D::QBackendNodeFactory *factory) const Q_DECL_OVERRIDE;
-    Qt3D::QBackendNode *get(const Qt3D::QNodeId &id) const Q_DECL_OVERRIDE;
-    void destroy(const Qt3D::QNodeId &id) const Q_DECL_OVERRIDE;
+    Qt3DCore::QBackendNode *create(Qt3DCore::QNode *frontend, const Qt3DCore::QBackendNodeFactory *factory) const Q_DECL_OVERRIDE;
+    Qt3DCore::QBackendNode *get(const Qt3DCore::QNodeId &id) const Q_DECL_OVERRIDE;
+    void destroy(const Qt3DCore::QNodeId &id) const Q_DECL_OVERRIDE;
 private:
     PhysicsManager* m_manager;
 

@@ -4,7 +4,7 @@ TARGET = physics
 include("dependencies.pri")
 
 QT += qml quick
-QT += 3dcore 3drenderer 3dquick
+QT += 3dcore 3drender 3dquick
 
 CONFIG += qt plugin c++11
 CONFIG -= android_install

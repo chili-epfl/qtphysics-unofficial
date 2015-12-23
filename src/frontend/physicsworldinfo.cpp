@@ -1,20 +1,18 @@
 #include "physicsworldinfo.h"
 #include <QVariantList>
-#include <Qt3DCore>
-#include <Qt3DRenderer>
 
 namespace Physics {
 
 
 PhysicsWorldInfo::PhysicsWorldInfo(QNode* parent):
-    Qt3D::QComponent(parent),
+    Qt3DCore::QComponent(parent),
     m_gravity(0, -10, 0)
 {
 
 }
 
 PhysicsWorldInfo::~PhysicsWorldInfo(){
-    Qt3D::QNode::cleanup();
+    Qt3DCore::QNode::cleanup();
 }
 
 void PhysicsWorldInfo::setGravity(QVector3D gravity){
@@ -24,17 +22,17 @@ void PhysicsWorldInfo::setGravity(QVector3D gravity){
     }
 }
 
-void PhysicsWorldInfo::copy(const Qt3D::QNode *ref){
-    Qt3D::QComponent::copy(ref);
+void PhysicsWorldInfo::copy(const Qt3DCore::QNode *ref){
+    Qt3DCore::QComponent::copy(ref);
     const PhysicsWorldInfo* world_info = static_cast<const PhysicsWorldInfo *>(ref);
     m_gravity=world_info->gravity();
 
 }
 
-void PhysicsWorldInfo::sceneChangeEvent(const Qt3D::QSceneChangePtr &change)
+void PhysicsWorldInfo::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &change)
 {
-    Qt3D::QScenePropertyChangePtr e = qSharedPointerCast< Qt3D::QScenePropertyChange>(change);
-    if (e->type() == Qt3D::NodeUpdated) {
+    Qt3DCore::QScenePropertyChangePtr e = qSharedPointerCast< Qt3DCore::QScenePropertyChange>(change);
+    if (e->type() == Qt3DCore::NodeUpdated) {
 
     }
 }

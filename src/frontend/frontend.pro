@@ -6,7 +6,7 @@
 
 include("../common.pri")
 
-QT+= 3dcore 3drenderer 3dquick
+QT+= 3dcore 3drender 3dquick
 
 CONFIG += c++11
 

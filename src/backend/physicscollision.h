@@ -1,7 +1,6 @@
 #ifndef PHYSICSCOLLISION
 #define PHYSICSCOLLISION
 #include "backend_global.h"
-#include <Qt3DCore/QNodeId>
 #include <QVector3D>
 
 namespace Physics {
@@ -10,8 +9,8 @@ class BACKENDSHARED_EXPORT Collision{
 
 public:
 
-    Qt3D::QNodeId body1;
-    Qt3D::QNodeId body2;
+    Qt3DCore::QNodeId body1;
+    Qt3DCore::QNodeId body2;
     QVector3D pointOnBody1;
     QVector3D pointOnBody2;    
     QVector3D pointOnBody1Local;
@@ -21,7 +20,7 @@ public:
 
     void swapBodies(){
         /**TODO: Swapping the normal???*/
-        Qt3D::QNodeId tmp=this->body1;
+        Qt3DCore::QNodeId tmp=this->body1;
         QVector3D tmp_v1=this->pointOnBody1;
         this->body1=this->body2;
         this->pointOnBody1=this->pointOnBody2;
@@ -43,7 +42,7 @@ inline bool operator==(const Collision& c1,const Collision& c2)
 }
 inline uint qHash(const Collision &key, uint seed)
 {
-    return Qt3D::qHash(key.body1, seed) ^ Qt3D::qHash(key.body2, seed);
+    return Qt3DCore::qHash(key.body1, seed) ^ Qt3DCore::qHash(key.body2, seed);
 }
 
 

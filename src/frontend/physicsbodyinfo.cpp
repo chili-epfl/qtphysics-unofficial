@@ -2,8 +2,8 @@
 #include <QVariantList>
 namespace Physics {
 
-PhysicsBodyInfo::PhysicsBodyInfo(Qt3D::QNode* parent):
-    Qt3D::QComponent(parent),
+PhysicsBodyInfo::PhysicsBodyInfo(Qt3DCore::QNode* parent):
+    Qt3DCore::QComponent(parent),
     m_mask(1),
     m_group(1),
     m_kinematic(false),
@@ -14,13 +14,13 @@ PhysicsBodyInfo::PhysicsBodyInfo(Qt3D::QNode* parent):
     m_rollingFriction(0.0f)
 {
     m_inputTransform=Q_NULLPTR;
-    m_outputTransform=new Qt3D::QTransform(this);
-    m_outputTransform_matrix=new Qt3D::QMatrixTransform(m_outputTransform);
+    m_outputTransform=new Qt3DCore::QTransform(this);
+    m_outputTransform_matrix=new Qt3DCore::QMatrixTransform(m_outputTransform);
     m_outputTransform->addTransform(m_outputTransform_matrix);
     setShareable(false);
 }
-void PhysicsBodyInfo::copy(const Qt3D::QNode *ref){
-    Qt3D::QComponent::copy(ref);
+void PhysicsBodyInfo::copy(const Qt3DCore::QNode *ref){
+    Qt3DCore::QComponent::copy(ref);
     const PhysicsBodyInfo * body_info = static_cast<const PhysicsBodyInfo *>(ref);
 
     m_fallInertia=body_info->m_fallInertia;
@@ -38,7 +38,7 @@ void PhysicsBodyInfo::copy(const Qt3D::QNode *ref){
 }
 
 PhysicsBodyInfo::~PhysicsBodyInfo(){
-    Qt3D::QNode::cleanup();
+    Qt3DCore::QNode::cleanup();
 }
 
 void PhysicsBodyInfo::setMass(qreal mass){
@@ -101,7 +101,7 @@ void PhysicsBodyInfo::setFriction(qreal friction){
     }
 }
 
-void PhysicsBodyInfo::setInputTransform(Qt3D::QTransform* inputTransform){
+void PhysicsBodyInfo::setInputTransform(Qt3DCore::QTransform* inputTransform){
     m_inputTransform=inputTransform;
     emit inputTransformChanged();
 }
@@ -123,15 +123,15 @@ int PhysicsBodyInfo::qmlComponentsCount(QQmlListProperty<PhysicsCollisionEvent> 
      return self->m_collisionsList.size();
 }
 
-bool PhysicsBodyInfo::collisionTest(Qt3D::QNodeId id){
+bool PhysicsBodyInfo::collisionTest(Qt3DCore::QNodeId id){
     return m_collisionsCache.contains(id);
 }
 
 
-void PhysicsBodyInfo::sceneChangeEvent(const Qt3D::QSceneChangePtr &change)
+void PhysicsBodyInfo::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &change)
 {
-    Qt3D::QScenePropertyChangePtr e = qSharedPointerCast< Qt3D::QScenePropertyChange>(change);
-    if (e->type() == Qt3D::NodeUpdated) {
+    Qt3DCore::QScenePropertyChangePtr e = qSharedPointerCast< Qt3DCore::QScenePropertyChange>(change);
+    if (e->type() == Qt3DCore::NodeUpdated) {
         /*if (e->propertyName() == QByteArrayLiteral("attachPhysicsTransfrom")) {
             bool val = e->value().toBool();
             if(val){
@@ -196,9 +196,6 @@ void PhysicsBodyInfo::sceneChangeEvent(const Qt3D::QSceneChangePtr &change)
         }
     }
 }
-
-
-
 
 
 

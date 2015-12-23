@@ -4,7 +4,7 @@ namespace Physics {
 
 
 
-PhysicsSoftBodyInfo::PhysicsSoftBodyInfo(Qt3D::QNode* parent):
+PhysicsSoftBodyInfo::PhysicsSoftBodyInfo(Qt3DCore::QNode* parent):
     PhysicsBodyInfo(parent),
     m_inputMesh(Q_NULLPTR),
     m_outputMesh(Q_NULLPTR)
@@ -16,8 +16,8 @@ PhysicsSoftBodyInfo::~PhysicsSoftBodyInfo(){
 
 }
 
-void PhysicsSoftBodyInfo::copy(const Qt3D::QNode *ref){
-    Qt3D::QComponent::copy(ref);
+void PhysicsSoftBodyInfo::copy(const Qt3DCore::QNode *ref){
+    Qt3DCore::QComponent::copy(ref);
     PhysicsBodyInfo::copy(ref);
     const PhysicsSoftBodyInfo * body_info = static_cast<const PhysicsSoftBodyInfo *>(ref);
 
@@ -26,7 +26,7 @@ void PhysicsSoftBodyInfo::copy(const Qt3D::QNode *ref){
 
 }
 
-void PhysicsSoftBodyInfo::setInputMesh(Qt3D::QGeometryRenderer* mesh){
+void PhysicsSoftBodyInfo::setInputMesh(Qt3DRender::QGeometryRenderer* mesh){
     if(m_inputMesh!=mesh){
         m_inputMesh=mesh;
         emit inputMeshChanged();

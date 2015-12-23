@@ -9,7 +9,8 @@ include("dependencies.pri")
 
 TARGET = QtPhysicsUnofficialBackend
 TEMPLATE = lib
-QT+= 3dcore 3drenderer 3dquick
+QT+= 3dcore 3dquick 3drender
+
 
 LIBS += -lQtPhysicsUnofficialFrontend
 

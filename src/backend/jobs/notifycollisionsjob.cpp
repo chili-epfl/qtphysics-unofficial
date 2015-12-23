@@ -50,7 +50,7 @@ void NotifyCollisionsJob::run(){
     }
 }
 
-void NotifyCollisionsJob::resetCollisions(Qt3D::QNodeId nodeId, QVector<PhysicsBodyInfoBackendNode*>& bodies_to_notify){
+void NotifyCollisionsJob::resetCollisions(Qt3DCore::QNodeId nodeId, QVector<PhysicsBodyInfoBackendNode*>& bodies_to_notify){
         if(nodeId.isNull()) return;
         PhysicsEntity* entity= static_cast<PhysicsEntity*>(m_manager->m_resources.operator [](nodeId));
         PhysicsBodyInfoBackendNode* body_info=Q_NULLPTR;
@@ -60,7 +60,7 @@ void NotifyCollisionsJob::resetCollisions(Qt3D::QNodeId nodeId, QVector<PhysicsB
             bodies_to_notify.append(body_info);
             body_info->resetCollisions();
         }
-        for(Qt3D::QNodeId childId : entity->childrenIds())
+        for(Qt3DCore::QNodeId childId : entity->childrenIds())
             resetCollisions(childId,bodies_to_notify);
 
 }

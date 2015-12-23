@@ -2,7 +2,6 @@
 #define PHYSICSCOLLISIONEVENT_H
 #include "frontend_global.h"
 
-#include <Qt3DCore>
 #include <QVector3D>
 #include <QDebug>
 namespace Physics {
@@ -11,7 +10,7 @@ namespace Physics {
 class FRONTENDSHARED_EXPORT PhysicsCollisionEvent: public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(Qt3D::QNodeId target READ target)
+    Q_PROPERTY(Qt3DCore::QNodeId target READ target)
     Q_PROPERTY(QVector3D contactPointOnBody READ contactPointOnBody)
     Q_PROPERTY(QVector3D contactPointOnTarget READ contactPointOnTarget)
     Q_PROPERTY(QVector3D normalOnTarget READ normalOnTarget)
@@ -20,7 +19,7 @@ class FRONTENDSHARED_EXPORT PhysicsCollisionEvent: public QObject
 
 public:
     explicit PhysicsCollisionEvent(QObject* parent=0);
-    Qt3D::QNodeId target(){ return m_target;}
+    Qt3DCore::QNodeId target(){ return m_target;}
     QVector3D contactPointOnBody(){return m_contactPointOnBody;}
     QVector3D contactPointOnTarget(){return m_contactPointOnTarget;}
     QVector3D contactPointOnBodyLocal(){return m_contactPointOnBodyLocal;}
@@ -29,7 +28,7 @@ public:
 
     bool isNew(){return m_isNew;}
 
-    void setTarget(Qt3D::QNodeId target);
+    void setTarget(Qt3DCore::QNodeId target);
     void setContactPointOnBody(QVector3D point);
     void setContactPointOnTarget(QVector3D point);
     void setContactPointOnBodyLocal(QVector3D point);
@@ -37,7 +36,7 @@ public:
     void setNormalOnTarget(QVector3D normal);
     void setIsNew(bool val);
 private:
-    Qt3D::QNodeId m_target;
+    Qt3DCore::QNodeId m_target;
     QVector3D m_contactPointOnBody;
     QVector3D m_contactPointOnTarget;
     QVector3D m_contactPointOnBodyLocal;

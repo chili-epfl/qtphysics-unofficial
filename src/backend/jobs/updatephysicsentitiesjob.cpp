@@ -13,14 +13,14 @@ namespace Physics {
 
 
 UpdatePhysicsEntitiesJob::UpdatePhysicsEntitiesJob(PhysicsManager* manager):
-    Qt3D::QAspectJob()
+    Qt3DCore::QAspectJob()
 {
     m_manager=manager;
 }
 
 void UpdatePhysicsEntitiesJob::run(){
     recursive_step(m_manager->rootEntityId(),QMatrix4x4(),false);
-    Q_FOREACH(Qt3D::QNodeId id,m_manager->garbage){
+    Q_FOREACH(Qt3DCore::QNodeId id,m_manager->garbage){
         if(m_manager->m_Id2RigidBodies.contains(id)){
             PhysicsAbstractRigidBody* body =m_manager->m_Id2RigidBodies[id];
             m_manager->m_Id2RigidBodies.remove(id);
@@ -32,7 +32,7 @@ void UpdatePhysicsEntitiesJob::run(){
     m_manager->garbage.clear();
 }
 
-void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 parent_matrix,bool forceUpdateMS){
+void UpdatePhysicsEntitiesJob::recursive_step(Qt3DCore::QNodeId node_id, QMatrix4x4 parent_matrix,bool forceUpdateMS){
     if(node_id.isNull()) return;
     PhysicsEntity* entity= static_cast<PhysicsEntity*>(m_manager->m_resources.operator [](node_id));
     QMatrix4x4 current_global_matrix=parent_matrix;
@@ -135,7 +135,7 @@ void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 
     }
 
     /*Next call*/
-    for(Qt3D::QNodeId childId : entity->childrenIds())
+    for(Qt3DCore::QNodeId childId : entity->childrenIds())
         recursive_step(childId, current_global_matrix,forceUpdateMS);
 }
 
@@ -180,7 +180,7 @@ PhysicsAbstractRigidBody* UpdatePhysicsEntitiesJob::createRigidBodyFromMesh(Phys
     }
     else{
         geometric_info["Type"]="Generic";
-        Qt3D::QNodeId geometryId;
+        Qt3DCore::QNodeId geometryId;
         if(!entity_geometry_renderer->m_geometry.isNull()){
             geometryId=entity_geometry_renderer->m_geometry;
         }
@@ -191,13 +191,13 @@ PhysicsAbstractRigidBody* UpdatePhysicsEntitiesJob::createRigidBodyFromMesh(Phys
         if(!geometry) return Q_NULLPTR;
         QVector<QVector3D> vertexPosition;
         QSet<quint16> index_Set;
-        Q_FOREACH(Qt3D::QNodeId attrId,geometry->attributes()){
+        Q_FOREACH(Qt3DCore::QNodeId attrId,geometry->attributes()){
             PhysicsAttribute* attribute=static_cast<PhysicsAttribute*>(m_manager->m_resources.operator [](attrId));
             if(!attribute) continue;
             if(attribute->objectName()=="vertexPosition"){
                 vertexPosition=attribute->asVector3D();             
             }
-            else if(attribute->attributeType()==Qt3D::QAttribute::IndexAttribute){
+            else if(attribute->attributeType()==Qt3DRender::QAttribute::IndexAttribute){
                 if(!attribute->bufferId().isNull() && m_manager->m_resources.contains(attribute->bufferId())){
                     QByteArray buffer;
                     PhysicsBuffer* buffer_node=static_cast<PhysicsBuffer*>(m_manager->m_resources.operator [](attribute->bufferId()));
@@ -213,7 +213,7 @@ PhysicsAbstractRigidBody* UpdatePhysicsEntitiesJob::createRigidBodyFromMesh(Phys
                     const quint16* fptr;
                     int stride;
                     switch (attribute->dataType()) {
-                    case Qt3D::QAttribute::UnsignedShort:
+                    case Qt3DRender::QAttribute::UnsignedShort:
                         stride = sizeof(quint16) * attribute->dataSize();
                         break;
                     default:

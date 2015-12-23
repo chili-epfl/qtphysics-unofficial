@@ -15,7 +15,7 @@ PhysicsCollisionEvent::PhysicsCollisionEvent(QObject* parent):
 {
 
 }
-void PhysicsCollisionEvent::setTarget(Qt3D::QNodeId target){
+void PhysicsCollisionEvent::setTarget(Qt3DCore::QNodeId target){
     m_target=target;
 }
 void PhysicsCollisionEvent::setContactPointOnBody(QVector3D point){
