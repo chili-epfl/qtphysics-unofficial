@@ -106,7 +106,7 @@ void PhysicsBodyInfo::setInputTransform(Qt3D::QTransform* inputTransform){
     emit inputTransformChanged();
 }
 
-QQmlListProperty<PhysicsCollisionEvent> PhysicsBodyInfo::collitionsList(){
+QQmlListProperty<PhysicsCollisionEvent> PhysicsBodyInfo::collisionsList(){
     return QQmlListProperty<PhysicsCollisionEvent>(this, 0,
                                                  PhysicsBodyInfo::qmlComponentsCount,
                                                  PhysicsBodyInfo::qmlComponentAt);
@@ -115,16 +115,16 @@ QQmlListProperty<PhysicsCollisionEvent> PhysicsBodyInfo::collitionsList(){
 
 PhysicsCollisionEvent* PhysicsBodyInfo::qmlComponentAt(QQmlListProperty<PhysicsCollisionEvent> *list, int index){
     PhysicsBodyInfo *self = static_cast<PhysicsBodyInfo *>(list->object);
-    return self->m_collitionsList.at(index).data();
+    return self->m_collisionsList.at(index).data();
 }
 
 int PhysicsBodyInfo::qmlComponentsCount(QQmlListProperty<PhysicsCollisionEvent> *list){
      PhysicsBodyInfo *self = static_cast<PhysicsBodyInfo *>(list->object);
-     return self->m_collitionsList.size();
+     return self->m_collisionsList.size();
 }
 
-bool PhysicsBodyInfo::collitionTest(Qt3D::QNodeId id){
-    return m_collitionsCache.contains(id);
+bool PhysicsBodyInfo::collisionTest(Qt3D::QNodeId id){
+    return m_collisionsCache.contains(id);
 }
 
 
@@ -167,31 +167,31 @@ void PhysicsBodyInfo::sceneChangeEvent(const Qt3D::QSceneChangePtr &change)
             emit outputTransformChanged();
         }
         if(e->propertyName() == QByteArrayLiteral("notifyCollision")){
-            PhysicsCollisionEventPtrList collitions_list=e->value().value<PhysicsCollisionEventPtrList>();
-            if(collitions_list.size()==0){
+            PhysicsCollisionEventPtrList collisions_list=e->value().value<PhysicsCollisionEventPtrList>();
+            if(collisions_list.size()==0){
                 if(m_hasCollided){
                     m_hasCollided=false;
                     emit hasCollidedChanged(m_hasCollided);
                 }
-                m_collitionsList.clear();
-                m_collitionsCache.clear();
-                emit collitionsListChanged();
+                m_collisionsList.clear();
+                m_collisionsCache.clear();
+                emit collisionsListChanged();
             }
             else{
-                m_collitionsList.clear();
-                m_collitionsCache.clear();
-                Q_FOREACH(PhysicsCollisionEventPtr event_ptr,collitions_list){
-                    m_collitionsList.append(event_ptr);
-                    m_collitionsCache.insert(event_ptr->target());
-                    if(m_collitionsList.last()->isNew()){
-                        emit collided(m_collitionsList.last().data());
+                m_collisionsList.clear();
+                m_collisionsCache.clear();
+                Q_FOREACH(PhysicsCollisionEventPtr event_ptr,collisions_list){
+                    m_collisionsList.append(event_ptr);
+                    m_collisionsCache.insert(event_ptr->target());
+                    if(m_collisionsList.last()->isNew()){
+                        emit collided(m_collisionsList.last().data());
                     }
                 }
                 if(!m_hasCollided){
                     m_hasCollided=true;
                     emit hasCollidedChanged(m_hasCollided);
                 }
-                emit collitionsListChanged();
+                emit collisionsListChanged();
             }
         }
     }

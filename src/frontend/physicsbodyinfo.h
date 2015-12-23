@@ -23,10 +23,10 @@ class FRONTENDSHARED_EXPORT PhysicsBodyInfo: public Qt3D::QComponent
     Q_PROPERTY(QVector3D fallInertia READ fallInertia WRITE setFallInertia NOTIFY fallInertiaChanged)
 
     Q_PROPERTY(bool hasCollided READ hasCollided NOTIFY hasCollidedChanged)
-    Q_PROPERTY(QQmlListProperty<Physics::PhysicsCollisionEvent> collitionsList READ collitionsList NOTIFY collitionsListChanged)
+    Q_PROPERTY(QQmlListProperty<Physics::PhysicsCollisionEvent> collisionsList READ collisionsList NOTIFY collisionsListChanged)
 
-    /*Shape details allows to override the details of the collition shape that otherwise would be
-    * derived by the mesh. It's also useful to create object with a specific collition shape but with an empty mesh*/
+    /*Shape details allows to override the details of the collision shape that otherwise would be
+    * derived by the mesh. It's also useful to create object with a specific collision shape but with an empty mesh*/
     Q_PROPERTY(QVariantMap shapeDetails READ shapeDetails WRITE setShapeDetails NOTIFY shapeDetailsChanged)
     Q_PROPERTY(Qt3D::QTransform* inputTransform READ inputTransform WRITE setInputTransform NOTIFY inputTransformChanged)
     Q_PROPERTY(Qt3D::QTransform* outputTransform READ outputTransform NOTIFY outputTransformChanged)
@@ -61,10 +61,10 @@ public:
     virtual void setShapeDetails(QVariantMap shapeDetails);
     virtual void setInputTransform(Qt3D::QTransform* inputTransform);
 
-    QQmlListProperty<PhysicsCollisionEvent> collitionsList();
+    QQmlListProperty<PhysicsCollisionEvent> collisionsList();
     bool hasCollided(){return m_hasCollided;}
 
-    bool collitionTest(Qt3D::QNodeId);
+    bool collisionTest(Qt3D::QNodeId);
 
 signals:
     void maskChanged(int mask);
@@ -82,7 +82,7 @@ signals:
 
     void collided(Physics::PhysicsCollisionEvent* event);
     void hasCollidedChanged(bool val);
-    void collitionsListChanged();
+    void collisionsListChanged();
 protected:
     void copy(const Qt3D::QNode *ref) Q_DECL_OVERRIDE;
 
@@ -103,8 +103,8 @@ protected:
     Qt3D::QTransform* m_outputTransform;
     Qt3D::QMatrixTransform* m_outputTransform_matrix;
 
-    PhysicsCollisionEventPtrList m_collitionsList;
-    QSet<Qt3D::QNodeId> m_collitionsCache;
+    PhysicsCollisionEventPtrList m_collisionsList;
+    QSet<Qt3D::QNodeId> m_collisionsCache;
     bool m_hasCollided;
 
     static PhysicsCollisionEvent *qmlComponentAt(QQmlListProperty<PhysicsCollisionEvent> *list, int index);

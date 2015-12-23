@@ -5,7 +5,7 @@
 #include "backendtypes/physicsbodyinfobackendnode.h"
 #include "backendtypes/physicstransform.h"
 #include "physics_entities/physicsabstractrigidbody.h"
-#include "physicscollition.h"
+#include "physicscollision.h"
 
 namespace Physics {
 
@@ -17,30 +17,30 @@ NotifyCollisionsJob::NotifyCollisionsJob(PhysicsManager* manager):
 }
 void NotifyCollisionsJob::run(){
     QVector<PhysicsBodyInfoBackendNode*> bodies_to_notify;
-    resetCollitions(m_manager->rootEntityId(),bodies_to_notify);
+    resetCollisions(m_manager->rootEntityId(),bodies_to_notify);
 
     Q_FOREACH(Physics::Collision c, m_manager->getCollisions()){
         PhysicsEntity* entity1=static_cast<PhysicsEntity*>(m_manager->m_resources[c.body1]);
         PhysicsEntity* entity2=static_cast<PhysicsEntity*>(m_manager->m_resources[c.body2]);
         if(!entity1->physicsBodyInfo().isNull()){
             PhysicsBodyInfoBackendNode* body_info=static_cast<PhysicsBodyInfoBackendNode*>(m_manager->m_resources[entity1->physicsBodyInfo()]);
-            if(body_info->collitions().contains(c)){
-                body_info->collitions().operator [](c)=1;
+            if(body_info->collisions().contains(c)){
+                body_info->collisions().operator [](c)=1;
             }
             else {
-                body_info->collitions().operator [](c)=2;
+                body_info->collisions().operator [](c)=2;
 
             }
         }
         if(!entity2->physicsBodyInfo().isNull()){
-            /*Swap the collition bodies*/
+            /*Swap the collision bodies*/
             c.swapBodies();
             PhysicsBodyInfoBackendNode* body_info=static_cast<PhysicsBodyInfoBackendNode*>(m_manager->m_resources[entity2->physicsBodyInfo()]);
-            if(body_info->collitions().contains(c)){
-                body_info->collitions().operator [](c)=1;
+            if(body_info->collisions().contains(c)){
+                body_info->collisions().operator [](c)=1;
             }
             else {
-                body_info->collitions().operator [](c)=2;
+                body_info->collisions().operator [](c)=2;
             }
         }
     }
@@ -50,7 +50,7 @@ void NotifyCollisionsJob::run(){
     }
 }
 
-void NotifyCollisionsJob::resetCollitions(Qt3D::QNodeId nodeId, QVector<PhysicsBodyInfoBackendNode*>& bodies_to_notify){
+void NotifyCollisionsJob::resetCollisions(Qt3D::QNodeId nodeId, QVector<PhysicsBodyInfoBackendNode*>& bodies_to_notify){
         if(nodeId.isNull()) return;
         PhysicsEntity* entity= static_cast<PhysicsEntity*>(m_manager->m_resources.operator [](nodeId));
         PhysicsBodyInfoBackendNode* body_info=Q_NULLPTR;
@@ -58,10 +58,10 @@ void NotifyCollisionsJob::resetCollitions(Qt3D::QNodeId nodeId, QVector<PhysicsB
             body_info=static_cast<PhysicsBodyInfoBackendNode*>(m_manager->m_resources.operator [](entity->physicsBodyInfo()));
         if(body_info){
             bodies_to_notify.append(body_info);
-            body_info->resetCollitions();
+            body_info->resetCollisions();
         }
         for(Qt3D::QNodeId childId : entity->childrenIds())
-            resetCollitions(childId,bodies_to_notify);
+            resetCollisions(childId,bodies_to_notify);
 
 }
 

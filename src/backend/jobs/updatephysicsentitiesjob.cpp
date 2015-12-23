@@ -47,7 +47,7 @@ void UpdatePhysicsEntitiesJob::recursive_step(Qt3D::QNodeId node_id, QMatrix4x4 
     bool isBodyNew=false;
     PhysicsAbstractRigidBody* rigid_body=retrievePhysicalBody(entity,entity_body_info,isBodyNew);
     if(rigid_body){
-        /*Update Collition Shape*/
+        /*Update collision Shape*/
         if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::ShapeDetailsChanged)){
             //TODO
         }
@@ -143,7 +143,7 @@ PhysicsAbstractRigidBody* UpdatePhysicsEntitiesJob::retrievePhysicalBody(Physics
     isBodyNew=false;
     if(m_manager->m_Id2RigidBodies.contains(entity->peerUuid()))
         return m_manager->m_Id2RigidBodies[entity->peerUuid()];
-   /*The entity has a component body info and either a abstract mesh or a the shape details to define the collition shape */
+   /*The entity has a component body info and either a abstract mesh or a the shape details to define the collision shape */
    if(entity_body_info!=Q_NULLPTR
                && (entity_body_info->shapeDetails().size()>0 || !entity->geometry_renderer().isNull())){
         PhysicsGeometryRenderer* entity_geometry_renderer=Q_NULLPTR;

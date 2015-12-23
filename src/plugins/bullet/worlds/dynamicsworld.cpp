@@ -14,7 +14,7 @@ DynamicsWorld::DynamicsWorld(QObject *parent):
 DynamicsWorld::~DynamicsWorld()
 {
 /*
-    for(AbstractRigidBody* c: m_collitionShapes.values())
+    for(AbstractRigidBody* c: m_collisionShapes.values())
         delete c;
 
     delete m_simThread;
@@ -118,7 +118,7 @@ void DynamicsWorld::addbtRigidBody(btRigidBody* b,int group,int mask){
 
 
 QVector<DynamicsWorld::Collision> DynamicsWorld::getCollisions(){
-    QVector<DynamicsWorld::Collision> collitions;
+    QVector<DynamicsWorld::Collision> collisions;
     int numManifolds = m_dynamicsWorld->getDispatcher()->getNumManifolds();
     for (int i=0;i<numManifolds;i++)
     {
@@ -126,9 +126,9 @@ QVector<DynamicsWorld::Collision> DynamicsWorld::getCollisions(){
         btCollisionObject* obA = const_cast<btCollisionObject*>(contactManifold->getBody0());
         btCollisionObject* obB = const_cast<btCollisionObject*>(contactManifold->getBody1());
 
-        Collision collition;
-        collition.body1=m_BulletBodies2PhysicsBodies[obA];
-        collition.body2=m_BulletBodies2PhysicsBodies[obB];
+        Collision collision;
+        collision.body1=m_BulletBodies2PhysicsBodies[obA];
+        collision.body2=m_BulletBodies2PhysicsBodies[obB];
 
         int numContacts = contactManifold->getNumContacts();
         for (int j=0;j<numContacts;j++)
@@ -136,11 +136,11 @@ QVector<DynamicsWorld::Collision> DynamicsWorld::getCollisions(){
             btManifoldPoint& pt = contactManifold->getContactPoint(j);
             if (pt.getDistance()<0.5f)
             {
-                collition.pointOnBody1= QVector3D(pt.getPositionWorldOnA().x(),pt.getPositionWorldOnA().y(),pt.getPositionWorldOnA().z());
-                collition.pointOnBody2=QVector3D(pt.getPositionWorldOnB().x(),pt.getPositionWorldOnB().y(),pt.getPositionWorldOnB().z());
-                collition.pointOnBody1Local= QVector3D(pt.m_localPointA.x(),pt.m_localPointA.y(),pt.m_localPointA.z());
-                collition.pointOnBody2Local=QVector3D(pt.m_localPointB.x(),pt.m_localPointB.y(),pt.m_localPointB.z());
-                collitions.append(collition);
+                collision.pointOnBody1= QVector3D(pt.getPositionWorldOnA().x(),pt.getPositionWorldOnA().y(),pt.getPositionWorldOnA().z());
+                collision.pointOnBody2=QVector3D(pt.getPositionWorldOnB().x(),pt.getPositionWorldOnB().y(),pt.getPositionWorldOnB().z());
+                collision.pointOnBody1Local= QVector3D(pt.m_localPointA.x(),pt.m_localPointA.y(),pt.m_localPointA.z());
+                collision.pointOnBody2Local=QVector3D(pt.m_localPointB.x(),pt.m_localPointB.y(),pt.m_localPointB.z());
+                collisions.append(collision);
                 break;
                 //const btVector3& ptA = pt.getPositionWorldOnA();
                 //const btVector3& ptB = pt.getPositionWorldOnB();
@@ -148,7 +148,7 @@ QVector<DynamicsWorld::Collision> DynamicsWorld::getCollisions(){
             }
         }
     }
-    return collitions;
+    return collisions;
 }
 
 

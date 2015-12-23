@@ -146,9 +146,9 @@ void PhysicsBodyInfoBackendNode::sceneChangeEvent(const Qt3D::QSceneChangePtr &e
     }
 }
 
-void PhysicsBodyInfoBackendNode::resetCollitions(){
-    Q_FOREACH(Collision c, m_collitions.keys()){
-        m_collitions[c]=0;
+void PhysicsBodyInfoBackendNode::resetCollisions(){
+    Q_FOREACH(Collision c, m_collisions.keys()){
+        m_collisions[c]=0;
     }
 }
 
@@ -166,44 +166,44 @@ void PhysicsBodyInfoBackendNode::notifyFrontEnd(QString operation){
         e->setValue(m_local_transform);
     }
     else if(operation=="notifyCollision"){
-        PhysicsCollisionEventPtrList collitions_list;
-        if(m_collitions.values().contains(0) || m_collitions.values().contains(2)){
+        PhysicsCollisionEventPtrList collisions_list;
+        if(m_collisions.values().contains(0) || m_collisions.values().contains(2)){
             e->setPropertyName("notifyCollision");
-            Q_FOREACH(Collision c, m_collitions.keys()){
+            Q_FOREACH(Collision c, m_collisions.keys()){
                 //qDebug()<<c.body1<<" "<<c.body2;
-                if(m_collitions[c]==0){
-                    m_collitions.remove(c);
+                if(m_collisions[c]==0){
+                    m_collisions.remove(c);
                     continue;
                 }
-                PhysicsCollisionEvent* collition_event=new PhysicsCollisionEvent();
-                if(m_collitions[c]==1){
-                    collition_event->setIsNew(false);
+                PhysicsCollisionEvent* collision_event=new PhysicsCollisionEvent();
+                if(m_collisions[c]==1){
+                    collision_event->setIsNew(false);
                 }
                 else{
-                    collition_event->setIsNew(true);
+                    collision_event->setIsNew(true);
                 }
 
                 //if(c.body1==peerUuid()){
-                    collition_event->setTarget(c.body2);
-                    collition_event->setContactPointOnBody(c.pointOnBody1);
-                    collition_event->setContactPointOnTarget(c.pointOnBody2);
-                    collition_event->setContactPointOnBodyLocal(c.pointOnBody1Local);
-                    collition_event->setContactPointOnTargetLocal(c.pointOnBody2Local);
-                    collition_event->setNormalOnTarget(QVector3D());
+                    collision_event->setTarget(c.body2);
+                    collision_event->setContactPointOnBody(c.pointOnBody1);
+                    collision_event->setContactPointOnTarget(c.pointOnBody2);
+                    collision_event->setContactPointOnBodyLocal(c.pointOnBody1Local);
+                    collision_event->setContactPointOnTargetLocal(c.pointOnBody2Local);
+                    collision_event->setNormalOnTarget(QVector3D());
                 /*}
                 else{
-                    collition_event->setTarget(c.body1);
-                    collition_event->setContactPointOnBody(c.pointOnBody2);
-                    collition_event->setContactPointOnTarget(c.pointOnBody1);
-                    collition_event->setNormalOnTarget(QVector3D());
+                    collision_event->setTarget(c.body1);
+                    collision_event->setContactPointOnBody(c.pointOnBody2);
+                    collision_event->setContactPointOnTarget(c.pointOnBody1);
+                    collision_event->setNormalOnTarget(QVector3D());
                 }*/
                 PhysicsCollisionEventPtr event_ptr;
-                event_ptr.reset(collition_event);
-                collitions_list.append(event_ptr);
+                event_ptr.reset(collision_event);
+                collisions_list.append(event_ptr);
 
             }
             //qDebug()<<"end";
-            e->setValue(QVariant::fromValue(collitions_list));
+            e->setValue(QVariant::fromValue(collisions_list));
         }
         else return;
     }

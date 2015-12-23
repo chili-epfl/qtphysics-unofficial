@@ -11,7 +11,7 @@
 #include "physics_entities/physicsfactoryinterface.h"
 #include <QString>
 #include <QVector3D>
-#include "physicscollition.h"
+#include "physicscollision.h"
 
 namespace Physics {
 

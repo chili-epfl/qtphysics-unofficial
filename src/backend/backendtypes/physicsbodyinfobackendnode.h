@@ -5,7 +5,7 @@
 
 #include <Qt3DCore>
 #include <Qt3DRenderer>
-#include "../physicscollition.h"
+#include "../physicscollision.h"
 
 namespace Physics {
 
@@ -77,8 +77,8 @@ public:
 
     virtual void notifyFrontEnd(QString operation);
 
-    virtual QHash<Physics::Collision,ushort>& collitions(){return m_collitions;}
-    virtual void resetCollitions();
+    virtual QHash<Physics::Collision,ushort>& collisions(){return m_collisions;}
+    virtual void resetCollisions();
 
 protected:
     virtual void sceneChangeEvent(const Qt3D::QSceneChangePtr &) Q_DECL_OVERRIDE;
@@ -103,7 +103,7 @@ protected:
 
     PhysicsManager* m_manager;
 
-    QHash<Physics::Collision,ushort> m_collitions;
+    QHash<Physics::Collision,ushort> m_collisions;
 
     QMatrix4x4 m_local_transform;
 

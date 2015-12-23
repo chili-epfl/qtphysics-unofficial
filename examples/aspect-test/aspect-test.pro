@@ -3,7 +3,8 @@ TEMPLATE = app
 QT += 3dcore 3drenderer 3dinput 3dquick qml quick
 CONFIG += c++11
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    physicssetter.cpp
 
 RESOURCES += qml.qrc
 
@@ -23,3 +24,7 @@ android{
 }
 
 LIBS += -lLinearMath -lBulletDynamics -lBulletCollision -lBulletSoftBody
+
+HEADERS += \
+    physicssetter.h
+LIBS += -lQtPhysicsUnofficialFrontend

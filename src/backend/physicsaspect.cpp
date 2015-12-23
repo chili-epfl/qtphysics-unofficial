@@ -53,25 +53,25 @@ QVector<Qt3D::QAspectJobPtr> PhysicsAspect::jobsToExecute(qint64 time){
     Q_UNUSED(time);
     QVector<Qt3D::QAspectJobPtr> jobs;
     if(m_manager->m_physics_factory!=Q_NULLPTR && m_manager->m_physics_world!=Q_NULLPTR){
-        Qt3D::QAspectJobPtr insert_physics_transform, update_physics_entities, simulate_step,update_transform,notify_collitions;
+        Qt3D::QAspectJobPtr insert_physics_transform, update_physics_entities, simulate_step,update_transform,notify_collisions;
         //insert_physics_transform.reset(new InsertPhysicsTransformJob(m_manager));
 
         update_physics_entities.reset(new UpdatePhysicsEntitiesJob(m_manager));
         simulate_step.reset(new SimulateStepJob(m_manager));
         update_transform.reset(new UpdateTransformsJob(m_manager));
-        notify_collitions.reset(new NotifyCollisionsJob(m_manager));
+        notify_collisions.reset(new NotifyCollisionsJob(m_manager));
 
         update_physics_entities->addDependency(insert_physics_transform);
         simulate_step->addDependency(update_physics_entities);
         update_transform->addDependency(simulate_step);
-        notify_collitions->addDependency(simulate_step);
+        notify_collisions->addDependency(simulate_step);
 
 
         //jobs.append(insert_physics_transform);
         jobs.append(update_physics_entities);
         jobs.append(simulate_step);
         jobs.append(update_transform);
-        jobs.append(notify_collitions);
+        jobs.append(notify_collisions);
 
         if(m_manager->m_physics_world->debug()){
 

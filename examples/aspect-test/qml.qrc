@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>AnimatedEntity.qml</file>
+        <file>Model1.dae</file>
     </qresource>
 </RCC>

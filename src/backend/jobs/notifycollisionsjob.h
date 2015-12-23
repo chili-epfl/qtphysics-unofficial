@@ -15,7 +15,7 @@ public:
 protected:
      void run() Q_DECL_OVERRIDE;
 private:
-    void resetCollitions(Qt3D::QNodeId nodeId,QVector<PhysicsBodyInfoBackendNode*>& bodies_to_notify);
+    void resetCollisions(Qt3D::QNodeId nodeId,QVector<PhysicsBodyInfoBackendNode*>& bodies_to_notify);
 
     PhysicsManager* m_manager;
 };

@@ -1,5 +1,5 @@
-#ifndef PHYSICSCOLLITION
-#define PHYSICSCOLLITION
+#ifndef PHYSICSCOLLISION
+#define PHYSICSCOLLISION
 #include "backend_global.h"
 #include <Qt3DCore/QNodeId>
 #include <QVector3D>
@@ -48,5 +48,5 @@ inline uint qHash(const Collision &key, uint seed)
 
 
 }
-#endif // PHYSICSCOLLITION
+#endif // PHYSICSCOLLISION
 
