@@ -15,8 +15,6 @@ PhysicsBodyInfo::PhysicsBodyInfo(Qt3DCore::QNode* parent):
 {
     m_inputTransform=Q_NULLPTR;
     m_outputTransform=new Qt3DCore::QTransform(this);
-    m_outputTransform_matrix=new Qt3DCore::QMatrixTransform(m_outputTransform);
-    m_outputTransform->addTransform(m_outputTransform_matrix);
     setShareable(false);
 }
 void PhysicsBodyInfo::copy(const Qt3DCore::QNode *ref){
@@ -34,7 +32,6 @@ void PhysicsBodyInfo::copy(const Qt3DCore::QNode *ref){
 
     m_inputTransform=body_info->m_inputTransform;
     m_outputTransform=body_info->m_outputTransform;
-    m_outputTransform_matrix=body_info->m_outputTransform_matrix;
 }
 
 PhysicsBodyInfo::~PhysicsBodyInfo(){
@@ -163,7 +160,7 @@ void PhysicsBodyInfo::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &change)
     }*/
         if(e->propertyName() == QByteArrayLiteral("updateTransform")){
             QMatrix4x4 mat= e->value().value<QMatrix4x4>();
-            m_outputTransform_matrix->setMatrix(mat);
+            m_outputTransform->setMatrix(mat);
             emit outputTransformChanged();
         }
         if(e->propertyName() == QByteArrayLiteral("notifyCollision")){

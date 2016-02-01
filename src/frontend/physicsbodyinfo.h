@@ -129,7 +129,6 @@ protected:
 #if (QT_VERSION > QT_VERSION_CHECK(5, 5, 0))
     Qt3DCore::QTransform* m_inputTransform;
     Qt3DCore::QTransform* m_outputTransform;
-    Qt3DRender::QMatrixTransform* m_outputTransform_matrix;
 #else
     Qt3D::QTransform* m_inputTransform;
     Qt3D::QTransform* m_outputTransform;

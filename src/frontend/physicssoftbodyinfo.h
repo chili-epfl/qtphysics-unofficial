@@ -28,8 +28,8 @@ protected:
     void copy(const Qt3DCore::QNode *ref) Q_DECL_OVERRIDE;
     QT3D_CLONEABLE(PhysicsSoftBodyInfo)
 
-    Qt3DCore::QGeometryRenderer* m_inputMesh;
-    Qt3DCore::QGeometryRenderer* m_outputMesh;
+    Qt3DRender::QGeometryRenderer* m_inputMesh;
+    Qt3DRender::QGeometryRenderer* m_outputMesh;
 
 };
 

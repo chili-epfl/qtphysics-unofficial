@@ -9,7 +9,7 @@
 #  define BACKENDSHARED_EXPORT Q_DECL_IMPORT
 #endif
 
-
+#include <Qt3DCore>
 #include <Qt3DRender>
 
 

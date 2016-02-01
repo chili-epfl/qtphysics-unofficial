@@ -23,12 +23,12 @@
 #include "jobs/notifycollisionsjob.h"
 
 
-
+using namespace Qt3DCore;
 QT_BEGIN_NAMESPACE
 namespace Physics {
 
 PhysicsAspect::PhysicsAspect(QObject* parent):
-    Qt3DCore::QAbstractAspect(AspectType::AspectPhysicsAndCollision,parent)
+    Qt3DCore::QAbstractAspect(parent)
 {
     m_manager=new PhysicsManager();
     registerBackendType<Qt3DCore::QEntity>(Qt3DCore::QBackendNodeFunctorPtr(new Physics::PhysicsEntityFunctor(m_manager)));
@@ -36,7 +36,7 @@ PhysicsAspect::PhysicsAspect(QObject* parent):
     registerBackendType<Qt3DRender::QGeometry>(Qt3DCore::QBackendNodeFunctorPtr(new Physics::PhysicsGeometryFunctor(m_manager)));
     registerBackendType<Qt3DRender::QAttribute>(Qt3DCore::QBackendNodeFunctorPtr(new Physics::PhysicsAttributeFunctor(m_manager)));
     registerBackendType<Qt3DRender::QBuffer>(Qt3DCore::QBackendNodeFunctorPtr(new Physics::PhysicsBufferFunctor(m_manager)));
-    registerBackendType<Qt3DRender::QTransform>(Qt3DCore::QBackendNodeFunctorPtr(new Physics::PhysicsTransformFunctor(m_manager)));
+    registerBackendType<Qt3DCore::QTransform>(Qt3DCore::QBackendNodeFunctorPtr(new Physics::PhysicsTransformFunctor(m_manager)));
     registerBackendType<Physics::PhysicsBodyInfo>(Qt3DCore::QBackendNodeFunctorPtr(new Physics::PhysicsBodyInfoBackendNodeFunctor(m_manager)));
     registerBackendType<Physics::PhysicsWorldInfo>(Qt3DCore::QBackendNodeFunctorPtr(new Physics::PhysicsWorldInfoBackendNodeFunctor(m_manager)));
     registerBackendType<Physics::PhysicsSoftBodyInfo>(Qt3DCore::QBackendNodeFunctorPtr(new Physics::PhysicsSoftBodyInfoBackendNodeFunctor(m_manager)));
@@ -80,25 +80,31 @@ QVector<Qt3DCore::QAspectJobPtr> PhysicsAspect::jobsToExecute(qint64 time){
 
 }
 
-void PhysicsAspect::sceneNodeAdded(Qt3DCore::QSceneChangePtr &e) {
-    Qt3DCore::QScenePropertyChangePtr propertyChange = e.staticCast<Qt3DCore::QScenePropertyChange>();
-    Qt3DCore::QNodePtr nodePtr = propertyChange->value().value<Qt3DCore::QNodePtr>();
-    Qt3DCore::QNode *n = nodePtr.data();
-    Qt3DCore::QNodeVisitor visitor;
-    visitor.traverse(n, this, &PhysicsAspect::visitNode, &PhysicsAspect::visitNode);
-}
-void PhysicsAspect::sceneNodeRemoved(Qt3DCore::QSceneChangePtr &e) {
-    Qt3DCore::QScenePropertyChangePtr propertyChange = e.staticCast<Qt3DCore::QScenePropertyChange>();
-    Qt3DCore::QNodePtr nodePtr = propertyChange->value().value<Qt3DCore::QNodePtr>();
-    Qt3DCore::QNode *n = nodePtr.data();
-    Qt3DCore::QAbstractAspect::clearBackendNode(n);
+void PhysicsAspect::onRootEntityChanged(QEntity *rootEntity)
+{
+    m_manager->setRootEntityId(rootEntity->id());
 }
 
-void PhysicsAspect::setRootEntity(Qt3DCore::QEntity *rootObject) {
-    Qt3DCore::QNodeVisitor visitor;
-    visitor.traverse(rootObject, this, &PhysicsAspect::visitNode, &PhysicsAspect::visitNode);
-    m_manager->setRootEntityId(rootObject->id());
-}
+//void PhysicsAspect::sceneNodeAdded(Qt3DCore::QSceneChangePtr &e) {
+//    Qt3DCore::QScenePropertyChangePtr propertyChange = e.staticCast<Qt3DCore::QScenePropertyChange>();
+//    Qt3DCore::QNodePtr nodePtr = propertyChange->value().value<Qt3DCore::QNodePtr>();
+//    Qt3DCore::QNode *n = nodePtr.data();
+//    Qt3D::QNodeVisitor visitor;
+//    visitor.traverse(n, this, &PhysicsAspect::visitNode, &PhysicsAspect::visitNode);
+//}
+//void PhysicsAspect::sceneNodeRemoved(Qt3DCore::QSceneChangePtr &e) {
+//    Qt3DCore::QScenePropertyChangePtr propertyChange = e.staticCast<Qt3DCore::QScenePropertyChange>();
+//    Qt3DCore::QNodePtr nodePtr = propertyChange->value().value<Qt3DCore::QNodePtr>();
+//    Qt3DCore::QNode *n = nodePtr.data();
+//    Qt3DCore::QAbstractAspect::clearBackendNode(n);
+//}
+
+//void PhysicsAspect::setRootEntity(Qt3DCore::QEntity *rootObject) {
+////    Qt3DCore::QAbstractAspect::setRootEntity(rootObject);
+////    Qt3DCore::QNodeVisitor visitor;
+////    visitor.traverse(rootObject, this, &PhysicsAspect::visitNode, &PhysicsAspect::visitNode);
+//    m_manager->setRootEntityId(rootObject->id());
+//}
 
 void PhysicsAspect::onInitialize(const QVariantMap &data) {
     Q_UNUSED(data);
@@ -110,7 +116,7 @@ void PhysicsAspect::onCleanup() {
 }
 
 void PhysicsAspect::visitNode(Qt3DCore::QNode *node){
-    Qt3DCore::QAbstractAspect::createBackendNode(node);
+ //   Qt3DCore::QAbstractAspect::createBackendNode(node);
 }
 
 }

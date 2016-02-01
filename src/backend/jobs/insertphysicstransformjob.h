@@ -8,7 +8,7 @@ namespace Physics {
 
 class PhysicsManager;
 
-class BACKENDSHARED_EXPORT InsertPhysicsTransformJob: public Qt3D::QAspectJob
+class BACKENDSHARED_EXPORT InsertPhysicsTransformJob: public Qt3DCore::QAspectJob
 {
 
 public:
@@ -16,7 +16,7 @@ public:
 protected:
      void run() Q_DECL_OVERRIDE;
 private:
-     void recursive_step(Qt3D::QNodeId id);
+     void recursive_step(Qt3DCore::QNodeId id);
 
      PhysicsManager* m_manager;
 };

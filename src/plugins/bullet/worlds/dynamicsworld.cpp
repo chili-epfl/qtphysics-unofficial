@@ -94,8 +94,8 @@ void DynamicsWorld::onBodyRequireUpdate(){
     QObject* sender=QObject::sender();
     if(sender->inherits("Physics::Bullet::AbstractRigidBody")){
         Physics::Bullet::AbstractRigidBody* sender_cast=static_cast<Physics::Bullet::AbstractRigidBody*>(sender);
-        removebtRigidBody(sender_cast->bulletBody());
-        addbtRigidBody(sender_cast->bulletBody(),sender_cast->group(),sender_cast->mask());
+        m_dynamicsWorld->removeRigidBody(sender_cast->bulletBody());
+        m_dynamicsWorld->addRigidBody(sender_cast->bulletBody(),sender_cast->group(),sender_cast->mask());
     }
 
 }

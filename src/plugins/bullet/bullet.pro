@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui 3dcore 3drender
 
 TARGET = bullet
 TEMPLATE = lib
