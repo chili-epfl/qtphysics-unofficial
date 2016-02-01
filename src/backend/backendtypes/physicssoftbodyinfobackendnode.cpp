@@ -7,6 +7,8 @@ namespace Physics {
 
 PhysicsSoftBodyInfoBackendNode::PhysicsSoftBodyInfoBackendNode():
     PhysicsBodyInfoBackendNode(),
+    m_dirtyFlags(false),
+    m_enabled(false),
     m_inputMesh()
 {
 
@@ -19,7 +21,7 @@ void PhysicsSoftBodyInfoBackendNode::updateFromPeer(Qt3DCore::QNode *peer){
     PhysicsBodyInfoBackendNode::updateFromPeer(peer);
     PhysicsSoftBodyInfo *soft_body_info = static_cast<PhysicsSoftBodyInfo*>(peer);
     setInputMesh(soft_body_info->inputMesh()->id());
-
+    m_enabled=soft_body_info->isEnabled();
 }
 
 void PhysicsSoftBodyInfoBackendNode::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &e){
@@ -27,7 +29,9 @@ void PhysicsSoftBodyInfoBackendNode::sceneChangeEvent(const Qt3DCore::QSceneChan
     switch (e->type()) {
     case Qt3DCore::NodeUpdated: {
         Qt3DCore::QScenePropertyChangePtr propertyChange = qSharedPointerCast<Qt3DCore::QScenePropertyChange>(e);
-        if (propertyChange->propertyName() == QByteArrayLiteral("inputMesh"))
+        if (propertyName == QByteArrayLiteral("enabled"))
+            m_enabled = propertyChange->value().value<bool>();
+        else if (propertyChange->propertyName() == QByteArrayLiteral("inputMesh"))
             setInputMesh(propertyChange->value().value<Qt3DRender::QGeometryRenderer*>()->id());
         break;
     }

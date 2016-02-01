@@ -7,6 +7,7 @@ namespace Physics {
 PhysicsBuffer::PhysicsBuffer():
     Qt3DCore::QBackendNode(),
     m_objectName(),
+    m_enabled(false),
     m_dirty(false),
     m_type(Qt3DRender::QBuffer::VertexBuffer),
     m_usage(Qt3DRender::QBuffer::StaticDraw)
@@ -31,6 +32,7 @@ void PhysicsBuffer::updateFromPeer(Qt3DCore::QNode *peer){
         m_data = buffer->data();
         m_functor = buffer->bufferFunctor();
         m_dirty = true;
+        m_enabled=buffer->isEnabled();
     }
 }
 
@@ -38,7 +40,11 @@ void PhysicsBuffer::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &e){
     if (e->type() == Qt3DCore::NodeUpdated) {
         Qt3DCore::QScenePropertyChangePtr propertyChange = qSharedPointerCast<Qt3DCore::QScenePropertyChange>(e);
         QByteArray propertyName = propertyChange->propertyName();
-        if (propertyName == QByteArrayLiteral("data")) {
+        if (propertyName == QByteArrayLiteral("enabled")){
+            m_enabled = propertyChange->value().value<bool>();
+            m_dirty = true;
+        }
+        else if (propertyName == QByteArrayLiteral("data")) {
             QByteArray newData = propertyChange->value().value<QByteArray>();
             m_dirty |= m_data != newData;
             m_data = newData;

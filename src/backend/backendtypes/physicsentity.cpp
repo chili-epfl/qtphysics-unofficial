@@ -9,6 +9,7 @@ namespace Physics {
 PhysicsEntity::PhysicsEntity():
     Qt3DCore::QBackendNode(),
     m_parentId(),
+    m_enabled(false),
     m_objectName(),
     m_transform(),
     m_geometry_renderer(),
@@ -45,6 +46,7 @@ void PhysicsEntity::updateFromPeer(Qt3DCore::QNode *peer){
     m_physicsBodyInfo=Qt3DCore::QNodeId();
     m_transform=Qt3DCore::QNodeId();
     m_physicsWorldInfo=Qt3DCore::QNodeId();
+    m_enabled=entity->isEnabled();
     for(Qt3DCore::QComponent* comp : entity->components()){
         addComponent(comp);
     }
@@ -60,6 +62,11 @@ void PhysicsEntity::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &e){
            Qt3DCore::QComponent *component = qobject_cast<Qt3DCore::QComponent *>(nodePtr.data());
            addComponent(component);
            break;
+       }
+       case Qt3DCore::NodeUpdated: {
+              if (propertyChange->propertyName() == QByteArrayLiteral("enabled"))
+                  m_enabled = propertyChange->value().value<bool>();
+              break;
        }
        case Qt3DCore::ComponentRemoved: {
            Qt3DCore::QNodeId nodeId = propertyChange->value().value<Qt3DCore::QNodeId>();
@@ -115,15 +122,15 @@ PhysicsEntity* PhysicsEntity::parent(){
         return static_cast<PhysicsEntity*>(m_manager->m_resources.operator [](m_parentId));
     return Q_NULLPTR;
 }
+
 void PhysicsEntity::addChildId(Qt3DCore::QNodeId childId){
        m_childrenId.insert(childId);
 }
+
 void PhysicsEntity::removeChildId(Qt3DCore::QNodeId childId){
     if(m_childrenId.contains(childId))
        m_childrenId.remove(childId);
 }
-
-
 
 PhysicsEntityFunctor::PhysicsEntityFunctor(PhysicsManager* manager)
 {

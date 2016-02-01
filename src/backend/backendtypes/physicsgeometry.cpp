@@ -28,6 +28,7 @@ PhysicsGeometry::~PhysicsGeometry(){
 void PhysicsGeometry::updateFromPeer(Qt3DCore::QNode *peer){
     Qt3DRender::QGeometry *geometry = static_cast<Qt3DRender::QGeometry *>(peer);
        if (geometry != Q_NULLPTR) {
+           m_enabled=geometry->isEnabled();
            m_attributes.reserve(geometry->attributes().size());
            Q_FOREACH (Qt3DRender::QAbstractAttribute *attribute, geometry->attributes())
                m_attributes.push_back(attribute->id());
@@ -56,7 +57,11 @@ void PhysicsGeometry::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &e){
         break;
     }
     case Qt3DCore::NodeUpdated:
-        if (propertyName == QByteArrayLiteral("verticesPerPatch")) {
+        if (propertyName == QByteArrayLiteral("enabled")){
+            m_enabled = propertyChange->value().value<bool>();
+            m_dirty = true;
+        }
+        else if (propertyName == QByteArrayLiteral("verticesPerPatch")) {
             m_verticesPerPatch = propertyChange->value().value<int>();
             break;
         }

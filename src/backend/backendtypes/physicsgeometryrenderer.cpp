@@ -66,8 +66,10 @@ void PhysicsGeometryRenderer::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &
                 m_geometry_functor= propertyChange->value().value<Qt3DRender::QGeometryFunctorPtr>();
                 m_dirty=true;
             }
-            else if (propertyChange->propertyName() == QByteArrayLiteral("enabled"))
-                m_enabled = propertyChange->value().toBool();
+            else if (propertyChange->propertyName() == QByteArrayLiteral("enabled")){
+                m_enabled = propertyChange->value().value<bool>();
+                m_dirty = true;
+            }
             break;
     }
     case Qt3DCore::NodeAdded: {

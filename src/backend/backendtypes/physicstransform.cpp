@@ -36,8 +36,10 @@ void PhysicsTransform::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &e){
                 m_transformMatrix = propertyChange->value().value<QMatrix4x4>();
                 m_dirty=true;
             }
-            else if (propertyChange->propertyName() == QByteArrayLiteral("enabled"))
-                m_enabled = propertyChange->value().toBool();
+            else if (propertyChange->propertyName() == QByteArrayLiteral("enabled")){
+                m_enabled = propertyChange->value().value<bool>();
+                m_dirty = true;
+            }
     }
 }
 

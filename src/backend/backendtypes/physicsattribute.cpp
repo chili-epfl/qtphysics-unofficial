@@ -16,6 +16,7 @@ PhysicsAttribute::PhysicsAttribute():
     m_byteStride(0),
     m_byteOffset(0),
     m_divisor(0),
+    m_enabled(false),
     m_attributeType(Qt3DRender::QAbstractAttribute::VertexAttribute)
 {
     m_manager=Q_NULLPTR;
@@ -43,6 +44,7 @@ void PhysicsAttribute::updateFromPeer(Qt3DCore::QNode *peer){
             m_objectName = attribute->name();
             if (attribute->buffer())
                 m_bufferId = attribute->buffer()->id();
+            m_enabled=attribute->isEnabled();
             m_dirty = true;
     }
 }
@@ -51,7 +53,11 @@ void PhysicsAttribute::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &e){
         QByteArray propertyName = propertyChange->propertyName();
         switch (e->type()) {
         case Qt3DCore::NodeUpdated: {
-            if (propertyName == QByteArrayLiteral("name")) {
+            if (propertyName == QByteArrayLiteral("enabled")){
+                m_enabled = propertyChange->value().value<bool>();
+                m_dirty = true;
+            }
+            else if (propertyName == QByteArrayLiteral("name")) {
                 m_objectName = propertyChange->value().value<QString>();
                 m_dirty = true;
             } else if (propertyName == QByteArrayLiteral("dataType")) {

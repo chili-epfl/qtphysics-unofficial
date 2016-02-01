@@ -35,6 +35,7 @@ public:
     Qt3DCore::QNodeId transform(){return m_transform;}
     Qt3DCore::QNodeId physicsBodyInfo(){return m_physicsBodyInfo;}
     Qt3DCore::QNodeId physicsWorldInfo(){return m_physicsWorldInfo;}
+    bool isEnabled(){return m_enabled;}
 
 protected:
     void sceneChangeEvent(const Qt3DCore::QSceneChangePtr &) Q_DECL_OVERRIDE;
@@ -42,6 +43,7 @@ private:
 
     Qt3DCore::QNodeId m_parentId;
     QSet<Qt3DCore::QNodeId > m_childrenId;
+    bool m_enabled;
 
     QString m_objectName;
 

@@ -25,6 +25,7 @@ protected:
     virtual void sceneChangeEvent(const Qt3DCore::QSceneChangePtr &) Q_DECL_OVERRIDE;
 
     bool m_dirtyMesh;
+    bool m_enabled;
 
     Qt3DCore::QNodeId m_inputMesh;
 

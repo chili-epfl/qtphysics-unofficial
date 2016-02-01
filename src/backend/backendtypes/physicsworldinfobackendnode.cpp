@@ -28,7 +28,7 @@ PhysicsWorldInfoBackendNode::~PhysicsWorldInfoBackendNode(){
 void PhysicsWorldInfoBackendNode::updateFromPeer(Qt3DCore::QNode *peer){
     PhysicsWorldInfo *world_info = static_cast<PhysicsWorldInfo*>(peer);
     m_objectName = peer->objectName();
-    m_enabled=world_info->isEnabled();
+    setEnabled(world_info->isEnabled());
     setGravity(world_info->gravity());
     m_debug=world_info->debug();
 }
@@ -48,7 +48,7 @@ void PhysicsWorldInfoBackendNode::sceneChangeEvent(const Qt3DCore::QSceneChangeP
             if (propertyChange->propertyName() == QByteArrayLiteral("gravity"))
                 setGravity(propertyChange->value().value<QVector3D>());
             else if (propertyChange->propertyName() == QByteArrayLiteral("enabled"))
-                m_enabled = propertyChange->value().toBool();
+                setEnabled(propertyChange->value().toBool());
             else if (propertyChange->propertyName() == QByteArrayLiteral("debug"))
                 m_debug = propertyChange->value().toBool();
             break;
@@ -74,6 +74,14 @@ void PhysicsWorldInfoBackendNode::notifyFrontEnd(QString operation, QVariantList
     }
     e->setTargetNode(peerUuid());
     notifyObservers(e);
+}
+
+void PhysicsWorldInfoBackendNode::setEnabled(bool val)
+{
+    if(m_enabled!=val){
+        m_enabled=val;
+        m_dirtyFlags |= (EnableChanged);
+    }
 }
 
 

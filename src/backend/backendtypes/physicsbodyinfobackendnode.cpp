@@ -28,7 +28,7 @@ PhysicsBodyInfoBackendNode::~PhysicsBodyInfoBackendNode(){
 void PhysicsBodyInfoBackendNode::updateFromPeer(Qt3DCore::QNode *peer){
     PhysicsBodyInfo *body_info = static_cast<PhysicsBodyInfo*>(peer);
     m_objectName = peer->objectName();
-    m_enabled=body_info->isEnabled();
+    setEnabled(body_info->isEnabled());
     setFallInertia(body_info->fallInertia());
     setFriction(body_info->friction());
     setGroup(body_info->group());
@@ -135,7 +135,7 @@ void PhysicsBodyInfoBackendNode::sceneChangeEvent(const Qt3DCore::QSceneChangePt
             else if (propertyChange->propertyName() == QByteArrayLiteral("shapeDetails"))
                 setShapeDetails(propertyChange->value().value<QVariantMap>());
             else if (propertyChange->propertyName() == QByteArrayLiteral("enabled"))
-                m_enabled = propertyChange->value().toBool();
+                setEnabled(propertyChange->value().toBool());
             else if (propertyChange->propertyName() == QByteArrayLiteral("inputMatrix"))
                 setInputTransform(propertyChange->value().value<Qt3DCore::QTransform*>()->id());
             break;
@@ -148,6 +148,14 @@ void PhysicsBodyInfoBackendNode::sceneChangeEvent(const Qt3DCore::QSceneChangePt
 void PhysicsBodyInfoBackendNode::resetCollisions(){
     Q_FOREACH(Collision c, m_collisions.keys()){
         m_collisions[c]=0;
+    }
+}
+
+void PhysicsBodyInfoBackendNode::setEnabled(bool val)
+{
+    if(m_enabled!=val){
+        m_enabled=val;
+        m_dirtyFlags |= (EnabledChanged);
     }
 }
 

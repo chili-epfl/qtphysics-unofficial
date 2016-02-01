@@ -20,6 +20,7 @@ public:
 
     bool isDirty(){return m_dirty;}
     void setDirty(bool dirty){ m_dirty=dirty;}
+    bool isEnabled(){return m_enabled;}
 
     void setManager(PhysicsManager *manager);
 

@@ -21,10 +21,10 @@ SOURCES += \
     $$PWD/backendtypes/physicsgeometry.cpp \
     $$PWD/backendtypes/physicsattribute.cpp \
     $$PWD/backendtypes/physicsbuffer.cpp \
-    $$PWD/jobs/notifycollisionsjob.cpp \
-    $$PWD/backendtypes/physicssoftbodyinfobackendnode.cpp \
-    $$PWD/physics_entities/physicsabstractsoftbody.cpp \
-    $$PWD/physics_entities/physicsabstractsoftrigiddynamicsworld.cpp
+    $$PWD/jobs/notifycollisionsjob.cpp
+#    $$PWD/backendtypes/physicssoftbodyinfobackendnode.cpp \
+#    $$PWD/physics_entities/physicsabstractsoftbody.cpp \
+#    $$PWD/physics_entities/physicsabstractsoftrigiddynamicsworld.cpp
 
 HEADERS +=\
     $$PWD/backendtypes/physicsbodyinfobackendnode.h \
@@ -45,9 +45,9 @@ HEADERS +=\
     $$PWD/backendtypes/physicsattribute.h \
     $$PWD/backendtypes/physicsbuffer.h \
     $$PWD/jobs/notifycollisionsjob.h \
-    $$PWD/backendtypes/physicssoftbodyinfobackendnode.h \
-    $$PWD/physics_entities/physicsabstractsoftbody.h \
-    $$PWD/physics_entities/physicsabstractsoftrigiddynamicsworld.h \
+#    $$PWD/backendtypes/physicssoftbodyinfobackendnode.h \
+#    $$PWD/physics_entities/physicsabstractsoftbody.h \
+#    $$PWD/physics_entities/physicsabstractsoftrigiddynamicsworld.h \
     $$PWD/physicscollision.h
 
 INCLUDEPATH += $$PWD

@@ -25,7 +25,9 @@ public:
             RollingFrictionChanged = 64,
             ShapeDetailsChanged = 128,
             InputTransformChanged = 256,
-            KinematicChanged = 512
+            KinematicChanged = 512,
+            EnabledChanged = 1024
+
     };
     Q_DECLARE_FLAGS(DirtyFlags, DirtyFlag)
 
@@ -77,6 +79,9 @@ public:
 
     virtual QHash<Physics::Collision,ushort>& collisions(){return m_collisions;}
     virtual void resetCollisions();
+
+    bool isEnabled(){return m_enabled;}
+    void setEnabled(bool val);
 
 protected:
     virtual void sceneChangeEvent(const Qt3DCore::QSceneChangePtr &) Q_DECL_OVERRIDE;

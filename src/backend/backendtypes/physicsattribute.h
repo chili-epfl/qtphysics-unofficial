@@ -28,6 +28,7 @@ public:
     inline uint byteStride() const { return m_byteStride; }
     inline uint byteOffset() const { return m_byteOffset; }
     inline uint divisor() const { return m_divisor; }
+    bool isEnabled(){return m_enabled;}
     inline Qt3DRender::QAbstractAttribute::AttributeType attributeType() const { return m_attributeType; }
     QVector<QVector3D> asVector3D() const;
 protected:
@@ -44,6 +45,7 @@ private:
     uint m_byteStride;
     uint m_byteOffset;
     uint m_divisor;
+    bool m_enabled;
     Qt3DRender::QAbstractAttribute::AttributeType m_attributeType;
 
     PhysicsManager* m_manager;

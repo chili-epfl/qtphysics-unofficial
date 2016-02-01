@@ -19,6 +19,17 @@ UpdatePhysicsEntitiesJob::UpdatePhysicsEntitiesJob(PhysicsManager* manager):
 }
 
 void UpdatePhysicsEntitiesJob::run(){
+    if(!m_manager->rootEntityId().isNull()){
+        Visit_Data tmp_visit_data;
+        tmp_visit_data.node_id=m_manager->rootEntityId();
+        tmp_visit_data.parent_matrix=QMatrix4x4();
+        tmp_visit_data.forceUpdateMS=false;
+        visit_queue.enqueue(tmp_visit_data);
+        while(!visit_queue.isEmpty()){
+            //update_step;
+
+        }
+    }
     recursive_step(m_manager->rootEntityId(),QMatrix4x4(),false);
     Q_FOREACH(Qt3DCore::QNodeId id,m_manager->garbage){
         if(m_manager->m_Id2RigidBodies.contains(id)){

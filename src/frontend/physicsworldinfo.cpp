@@ -24,7 +24,7 @@ void PhysicsWorldInfo::setGravity(QVector3D gravity){
 
 void PhysicsWorldInfo::copy(const Qt3DCore::QNode *ref){
     Qt3DCore::QComponent::copy(ref);
-    const PhysicsWorldInfo* world_info = static_cast<const PhysicsWorldInfo *>(ref);
+    const PhysicsWorldInfo* world_info = static_cast<const PhysicsWorldInfo*>(ref);
     m_gravity=world_info->gravity();
 
 }

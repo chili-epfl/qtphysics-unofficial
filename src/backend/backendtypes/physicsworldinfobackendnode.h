@@ -13,7 +13,8 @@ class QTPHYSICSUNOFFICIAL_EXPORT PhysicsWorldInfoBackendNode : public Qt3DCore::
 public:
     enum DirtyFlag {
             Clean = 0 ,
-            GravityChanged = 1
+            GravityChanged = 1,
+            EnableChanged = 2
         };
     Q_DECLARE_FLAGS(DirtyFlags, DirtyFlag)
 
@@ -34,6 +35,9 @@ public:
     bool debug(){return m_debug;}
 
     void notifyFrontEnd(QString operation, QVariantList args);
+
+    bool isEnabled(){return m_enabled;}
+    void setEnabled(bool val);
 
 protected:
     void sceneChangeEvent(const Qt3DCore::QSceneChangePtr &) Q_DECL_OVERRIDE;

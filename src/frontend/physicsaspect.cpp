@@ -38,7 +38,7 @@ PhysicsAspect::PhysicsAspect(QObject* parent):
     registerBackendType<Qt3DCore::QTransform>(Qt3DCore::QBackendNodeFunctorPtr(new Physics::PhysicsTransformFunctor(m_manager)));
     registerBackendType<Physics::PhysicsBodyInfo>(Qt3DCore::QBackendNodeFunctorPtr(new Physics::PhysicsBodyInfoBackendNodeFunctor(m_manager)));
     registerBackendType<Physics::PhysicsWorldInfo>(Qt3DCore::QBackendNodeFunctorPtr(new Physics::PhysicsWorldInfoBackendNodeFunctor(m_manager)));
-    registerBackendType<Physics::PhysicsSoftBodyInfo>(Qt3DCore::QBackendNodeFunctorPtr(new Physics::PhysicsSoftBodyInfoBackendNodeFunctor(m_manager)));
+    //registerBackendType<Physics::PhysicsSoftBodyInfo>(Qt3DCore::QBackendNodeFunctorPtr(new Physics::PhysicsSoftBodyInfoBackendNodeFunctor(m_manager)));
 
 }
 

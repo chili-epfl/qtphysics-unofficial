@@ -19,6 +19,7 @@ public:
     bool isDirty(){return m_dirty;}
     void setDirty(bool dirty){m_dirty=dirty;}
     void setManager(PhysicsManager *manager);
+    bool isEnabled(){return m_enabled;}
 
     inline Qt3DRender::QBuffer::BufferType type() const { return m_type; }
     inline Qt3DRender::QBuffer::UsageType usage() const { return m_usage; }
@@ -29,6 +30,7 @@ protected:
     void sceneChangeEvent(const Qt3DCore::QSceneChangePtr &) Q_DECL_OVERRIDE;
 private:
     QString m_objectName;
+    bool m_enabled;
 
     bool m_dirty;
 
