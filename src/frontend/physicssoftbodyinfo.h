@@ -7,7 +7,7 @@ namespace Physics {
 
 
 
-class FRONTENDSHARED_EXPORT PhysicsSoftBodyInfo: public PhysicsBodyInfo
+class QTPHYSICSUNOFFICIAL_EXPORT PhysicsSoftBodyInfo: public PhysicsBodyInfo
 {
     Q_OBJECT
     Q_PROPERTY(Qt3DRender::QGeometryRenderer* inputMesh READ inputMesh WRITE setInputMesh NOTIFY inputMeshChanged)

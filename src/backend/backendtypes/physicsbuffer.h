@@ -1,11 +1,11 @@
 #ifndef PHYSICSBUFFER_H
 #define PHYSICSBUFFER_H
 
-#include "backend_global.h"
+#include "qtphysicsunofficial_global.h"
 namespace Physics {
 
 class PhysicsManager;
-class BACKENDSHARED_EXPORT PhysicsBuffer : public Qt3DCore::QBackendNode
+class QTPHYSICSUNOFFICIAL_EXPORT PhysicsBuffer : public Qt3DCore::QBackendNode
 {
 public:
 
@@ -43,7 +43,7 @@ private:
 };
 
 
-class BACKENDSHARED_EXPORT PhysicsBufferFunctor : public Qt3DCore::QBackendNodeFunctor
+class QTPHYSICSUNOFFICIAL_EXPORT PhysicsBufferFunctor : public Qt3DCore::QBackendNodeFunctor
 {
 public:
     explicit PhysicsBufferFunctor(PhysicsManager* manager);

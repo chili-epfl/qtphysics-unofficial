@@ -7,7 +7,7 @@
 namespace Physics {
 
 
-class BACKENDSHARED_EXPORT PhysicsSoftBodyInfoBackendNode: public PhysicsBodyInfoBackendNode
+class QTPHYSICSUNOFFICIAL_EXPORT PhysicsSoftBodyInfoBackendNode: public PhysicsBodyInfoBackendNode
 {
 public:
 
@@ -32,7 +32,7 @@ protected:
 
 };
 
-class BACKENDSHARED_EXPORT PhysicsSoftBodyInfoBackendNodeFunctor : public Qt3DCore::QBackendNodeFunctor
+class QTPHYSICSUNOFFICIAL_EXPORT PhysicsSoftBodyInfoBackendNodeFunctor : public Qt3DCore::QBackendNodeFunctor
 {
 public:
     explicit PhysicsSoftBodyInfoBackendNodeFunctor(PhysicsManager* manager);

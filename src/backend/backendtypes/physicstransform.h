@@ -1,6 +1,6 @@
 #ifndef PHYSICSTRANSFORM_H
 #define PHYSICSTRANSFORM_H
-#include "backend_global.h"
+#include "qtphysicsunofficial_global.h"
 
 
 
@@ -9,7 +9,7 @@ namespace Physics {
 
 class PhysicsManager;
 
-class BACKENDSHARED_EXPORT PhysicsTransform : public Qt3DCore::QBackendNode
+class QTPHYSICSUNOFFICIAL_EXPORT PhysicsTransform : public Qt3DCore::QBackendNode
 {
 public:
     explicit PhysicsTransform();
@@ -39,7 +39,7 @@ private:
 };
 
 
-class BACKENDSHARED_EXPORT PhysicsTransformFunctor : public Qt3DCore::QBackendNodeFunctor
+class QTPHYSICSUNOFFICIAL_EXPORT PhysicsTransformFunctor : public Qt3DCore::QBackendNodeFunctor
 {
 public:
     explicit PhysicsTransformFunctor(PhysicsManager* manager);

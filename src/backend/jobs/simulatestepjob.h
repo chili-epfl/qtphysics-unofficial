@@ -1,13 +1,13 @@
 #ifndef SimulateStepJob_H
 #define SimulateStepJob_H
-#include "backend_global.h"
+#include "qtphysicsunofficial_global.h"
 
 
 namespace Physics {
 
 class PhysicsManager;
 
-class BACKENDSHARED_EXPORT SimulateStepJob:public Qt3DCore::QAspectJob
+class QTPHYSICSUNOFFICIAL_EXPORT SimulateStepJob:public Qt3DCore::QAspectJob
 {
 public:
     explicit SimulateStepJob(PhysicsManager* manager);

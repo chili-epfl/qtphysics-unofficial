@@ -1,4 +1,4 @@
-include("../../src/common.pri")
+include("../../plugins/bullet/dependencies.pri")
 
 SOURCES += main.cpp
 

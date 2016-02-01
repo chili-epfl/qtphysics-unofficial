@@ -1,7 +1,7 @@
 #ifndef PhysicsASPECT_H
 #define PhysicsASPECT_H
 
-#include "backend_global.h"
+#include "qtphysicsunofficial_global.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -10,7 +10,7 @@ namespace Physics {
 
 class PhysicsManager;
 
-class BACKENDSHARED_EXPORT PhysicsAspect: public Qt3DCore::QAbstractAspect
+class QTPHYSICSUNOFFICIAL_EXPORT PhysicsAspect: public Qt3DCore::QAbstractAspect
 {
 public:
     explicit PhysicsAspect(QObject* parent=0);

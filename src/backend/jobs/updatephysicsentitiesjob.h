@@ -1,6 +1,6 @@
 #ifndef UpdatePhysicsEntitiesJob_H
 #define UpdatePhysicsEntitiesJob_H
-#include "backend_global.h"
+#include "qtphysicsunofficial_global.h"
 
 
 namespace Physics {
@@ -13,7 +13,7 @@ class PhysicsEntity;
 
 /*This job simply create or update the rigid bodies in the simulation and the world set up.
  * No simulation is performed, no upèdate of the objects positions in the frontend*/
-class BACKENDSHARED_EXPORT UpdatePhysicsEntitiesJob : public Qt3DCore::QAspectJob
+class QTPHYSICSUNOFFICIAL_EXPORT UpdatePhysicsEntitiesJob : public Qt3DCore::QAspectJob
 {
 public:
     explicit UpdatePhysicsEntitiesJob(PhysicsManager* manager);

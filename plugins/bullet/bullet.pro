@@ -10,7 +10,6 @@ TARGET = bullet
 TEMPLATE = lib
 CONFIG += plugin
 
-include("../../common.pri")
 include("dependencies.pri")
 
 DESTDIR = $$[QT_INSTALL_PLUGINS]/physicsfactories
@@ -36,10 +35,14 @@ HEADERS += \
     bodies/rigidconvexhullbody.h \
     bodies/rigidspherebody.h \
     bodies/rigidstaticplanebody.h
+
+INCLUDEPATH += $$PWD/../../src/backend
+INCLUDEPATH += $$PWD/../../src/
+
 DISTFILES += bullet.json \
-
-
-LIBS += -lQtPhysicsUnofficialBackend
 
 INCLUDEPATH += $${BULLET_INCLUDE_PATH}
 LIBS += $${BULLET_LIBS_PATH}
+
+LIBS += -lQtPhysicsUnofficial
+LIBS += -L../../src/lib

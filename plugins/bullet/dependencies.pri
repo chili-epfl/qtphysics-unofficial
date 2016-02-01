@@ -1,5 +1,3 @@
-PROJECT_NAME=QtPhysicsUnofficial
-
 android{
     BULLET_INCLUDE_PATH +=  /home/chili/android-ndk-r10d/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/user/include/
     BULLET_INCLUDE_PATH +=  /home/chili/android-ndk-r10d/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/user/include/bullet
@@ -13,3 +11,4 @@ android{
 }
 
 BULLET_LIBS_PATH += -lLinearMath -lBulletDynamics -lBulletCollision -lBulletSoftBody
+

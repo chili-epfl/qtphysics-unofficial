@@ -3,7 +3,7 @@
 #include <QLibrary>
 #include <QDebug>
 #include <QQmlApplicationEngine>
-#include "physicssetter.h"
+//#include "physicssetter.h"
 
 #include <Qt3DCore/qaspectengine.h>
 int main(int argc, char **argv)
@@ -11,7 +11,7 @@ int main(int argc, char **argv)
 
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
-    qmlRegisterType<PhysicsSetter>("PhysicsSetter", 1, 0, "PhysicsSetter");
+    //qmlRegisterType<PhysicsSetter>("PhysicsSetter", 1, 0, "PhysicsSetter");
 
     QQuickView view;
 

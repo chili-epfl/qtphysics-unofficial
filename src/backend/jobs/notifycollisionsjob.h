@@ -1,13 +1,13 @@
 #ifndef NOTIFYCOLLISIONSJOB_H
 #define NOTIFYCOLLISIONSJOB_H
-#include "backend_global.h"
+#include "qtphysicsunofficial_global.h"
 
 
 namespace Physics {
 
 class PhysicsManager;
 class PhysicsBodyInfoBackendNode;
-class BACKENDSHARED_EXPORT NotifyCollisionsJob: public Qt3DCore::QAspectJob
+class QTPHYSICSUNOFFICIAL_EXPORT NotifyCollisionsJob: public Qt3DCore::QAspectJob
 {
 public:
     explicit NotifyCollisionsJob(PhysicsManager* manager);

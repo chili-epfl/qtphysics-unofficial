@@ -1,13 +1,14 @@
 #ifndef PhysicsWorldInfo_H
 #define PhysicsWorldInfo_H
-#include "frontend_global.h"
+#include "qtphysicsunofficial_global.h"
+
 
 #include <QVector3D>
 
 namespace Physics {
 
 
-class FRONTENDSHARED_EXPORT PhysicsWorldInfo:
+class QTPHYSICSUNOFFICIAL_EXPORT PhysicsWorldInfo:
         public Qt3DCore::QComponent
 {
     Q_OBJECT

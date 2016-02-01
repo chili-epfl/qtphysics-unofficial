@@ -9,7 +9,6 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
 
     }
-
     Rectangle {
         id: scene
         width: Math.min(parent.width, parent.height) - 100

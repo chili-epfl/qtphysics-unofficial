@@ -17,7 +17,6 @@
 #include <physicsworldinfo.h>
 
 #include "jobs/debugjob.h"
-#include "jobs/insertphysicstransformjob.h"
 #include "jobs/simulatestepjob.h"
 #include "jobs/updatetransformsjob.h"
 #include "jobs/notifycollisionsjob.h"

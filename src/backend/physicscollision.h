@@ -1,11 +1,11 @@
 #ifndef PHYSICSCOLLISION
 #define PHYSICSCOLLISION
-#include "backend_global.h"
+#include "qtphysicsunofficial_global.h"
 #include <QVector3D>
 
 namespace Physics {
 
-class BACKENDSHARED_EXPORT Collision{
+class QTPHYSICSUNOFFICIAL_EXPORT Collision{
 
 public:
 

@@ -1,6 +1,6 @@
 #ifndef PhysicsGeometryRenderer_H
 #define PhysicsGeometryRenderer_H
-#include "backend_global.h"
+#include "qtphysicsunofficial_global.h"
 
 
 #include "jobs/updatephysicsentitiesjob.h"
@@ -10,7 +10,7 @@
 namespace Physics {
 
 class PhysicsManager;
-class BACKENDSHARED_EXPORT PhysicsGeometryRenderer : public Qt3DCore::QBackendNode
+class QTPHYSICSUNOFFICIAL_EXPORT PhysicsGeometryRenderer : public Qt3DCore::QBackendNode
 {
 public:
     enum Mesh_Type{SPHERE, CUBOID, GENERAL};
@@ -52,7 +52,7 @@ friend class DebugJob;
 };
 
 
-class BACKENDSHARED_EXPORT PhysicsGeometryRendererFunctor : public Qt3DCore::QBackendNodeFunctor
+class QTPHYSICSUNOFFICIAL_EXPORT PhysicsGeometryRendererFunctor : public Qt3DCore::QBackendNodeFunctor
 {
 public:
     explicit PhysicsGeometryRendererFunctor(PhysicsManager* manager);

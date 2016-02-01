@@ -1,7 +1,7 @@
 #ifndef PHYSICSBODYINFOBACKENDNODE_H
 #define PHYSICSBODYINFOBACKENDNODE_H
 
-#include "backend_global.h"
+#include "qtphysicsunofficial_global.h"
 
 #include "../physicscollision.h"
 
@@ -11,7 +11,7 @@ class PhysicsManager;
 
 /*PhysicsBodyInfoBackendNode: the representation of the node PhysicsBodyInfo in the backend.
 PhysicsSoftBodyInfo is handled as a special case*/
-class BACKENDSHARED_EXPORT PhysicsBodyInfoBackendNode : public Qt3DCore::QBackendNode
+class QTPHYSICSUNOFFICIAL_EXPORT PhysicsBodyInfoBackendNode : public Qt3DCore::QBackendNode
 {
 public:
     enum DirtyFlag {
@@ -109,7 +109,7 @@ protected:
 Q_DECLARE_OPERATORS_FOR_FLAGS(PhysicsBodyInfoBackendNode::DirtyFlags)
 
 
-class BACKENDSHARED_EXPORT PhysicsBodyInfoBackendNodeFunctor : public Qt3DCore::QBackendNodeFunctor
+class QTPHYSICSUNOFFICIAL_EXPORT PhysicsBodyInfoBackendNodeFunctor : public Qt3DCore::QBackendNodeFunctor
 {
 public:
     explicit PhysicsBodyInfoBackendNodeFunctor(PhysicsManager* manager);

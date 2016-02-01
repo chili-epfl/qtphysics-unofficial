@@ -1,12 +1,12 @@
 #ifndef PHYSICSATTRIBUTE_H
 #define PHYSICSATTRIBUTE_H
 
-#include "backend_global.h"
+#include "qtphysicsunofficial_global.h"
 
 namespace Physics {
 
 class PhysicsManager;
-class BACKENDSHARED_EXPORT PhysicsAttribute : public Qt3DCore::QBackendNode
+class QTPHYSICSUNOFFICIAL_EXPORT PhysicsAttribute : public Qt3DCore::QBackendNode
 {
 public:
 
@@ -52,7 +52,7 @@ private:
 };
 
 
-class BACKENDSHARED_EXPORT PhysicsAttributeFunctor : public Qt3DCore::QBackendNodeFunctor
+class QTPHYSICSUNOFFICIAL_EXPORT PhysicsAttributeFunctor : public Qt3DCore::QBackendNodeFunctor
 {
 public:
     explicit PhysicsAttributeFunctor(PhysicsManager* manager);

@@ -1,12 +1,12 @@
 #ifndef PHYSICSABSTRACTRIGIDBODY_H
 #define PHYSICSABSTRACTRIGIDBODY_H
-#include "backend_global.h"
+#include "qtphysicsunofficial_global.h"
 
 #include <QObject>
 
 namespace Physics {
 
-class BACKENDSHARED_EXPORT PhysicsAbstractRigidBody : public QObject
+class QTPHYSICSUNOFFICIAL_EXPORT PhysicsAbstractRigidBody : public QObject
 {
     Q_OBJECT
 public:

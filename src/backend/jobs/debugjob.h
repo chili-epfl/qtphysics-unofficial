@@ -1,12 +1,12 @@
 #ifndef DEBUGJOB_H
 #define DEBUGJOB_H
-#include "backend_global.h"
+#include "qtphysicsunofficial_global.h"
 
 namespace Physics {
 
 class PhysicsManager;
 
-class BACKENDSHARED_EXPORT DebugJob: public Qt3DCore::QAspectJob
+class QTPHYSICSUNOFFICIAL_EXPORT DebugJob: public Qt3DCore::QAspectJob
 {
 
 public:

@@ -1,13 +1,13 @@
 #ifndef PHYSICSGEOMETRY_H
 #define PHYSICSGEOMETRY_H
-#include "backend_global.h"
+#include "qtphysicsunofficial_global.h"
 
 #include "jobs/debugjob.h"
 
 namespace Physics {
 
 class PhysicsManager;
-class BACKENDSHARED_EXPORT PhysicsGeometry : public Qt3DCore::QBackendNode
+class QTPHYSICSUNOFFICIAL_EXPORT PhysicsGeometry : public Qt3DCore::QBackendNode
 {
 public:
 
@@ -42,7 +42,7 @@ private:
 };
 
 
-class BACKENDSHARED_EXPORT PhysicsGeometryFunctor : public Qt3DCore::QBackendNodeFunctor
+class QTPHYSICSUNOFFICIAL_EXPORT PhysicsGeometryFunctor : public Qt3DCore::QBackendNodeFunctor
 {
 public:
     explicit PhysicsGeometryFunctor(PhysicsManager* manager);

@@ -1,7 +1,7 @@
 #ifndef PHYSICSMANAGER_H
 #define PHYSICSMANAGER_H
 
-#include "backend_global.h"
+#include "qtphysicsunofficial_global.h"
 #include <QHash>
 
 #include "physics_entities/physicsabstractrigidbody.h"
@@ -16,7 +16,7 @@ namespace Physics {
 
 const QString PHYSICS_FACTORIES_PATH = QStringLiteral("/physicsfactories");
 
-class BACKENDSHARED_EXPORT PhysicsManager
+class QTPHYSICSUNOFFICIAL_EXPORT PhysicsManager
 {
 
 public:

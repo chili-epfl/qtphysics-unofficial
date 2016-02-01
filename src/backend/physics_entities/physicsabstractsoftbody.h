@@ -1,12 +1,12 @@
 #ifndef PHYSICSABSTRACTSOFTBODY_H
 #define PHYSICSABSTRACTSOFTBODY_H
-#include "backend_global.h"
+#include "qtphysicsunofficial_global.h"
 
 #include <QObject>
 
 namespace Physics {
 
-class BACKENDSHARED_EXPORT PhysicsAbstractSoftBody : public QObject
+class QTPHYSICSUNOFFICIAL_EXPORT PhysicsAbstractSoftBody : public QObject
 {
     Q_OBJECT
 public:

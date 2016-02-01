@@ -1,12 +1,12 @@
 #ifndef PhysicsENTITY_H
 #define PhysicsENTITY_H
-#include "backend_global.h"
+#include "qtphysicsunofficial_global.h"
 
 
 namespace Physics {
 
 class PhysicsManager;
-class  BACKENDSHARED_EXPORT PhysicsEntity : public Qt3DCore::QBackendNode
+class  QTPHYSICSUNOFFICIAL_EXPORT PhysicsEntity : public Qt3DCore::QBackendNode
 {
 public:
     explicit PhysicsEntity();
@@ -56,7 +56,7 @@ private:
 };
 
 
-class BACKENDSHARED_EXPORT  PhysicsEntityFunctor : public Qt3DCore::QBackendNodeFunctor
+class QTPHYSICSUNOFFICIAL_EXPORT  PhysicsEntityFunctor : public Qt3DCore::QBackendNodeFunctor
 {
 public:
     explicit PhysicsEntityFunctor(PhysicsManager* manager);

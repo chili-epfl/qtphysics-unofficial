@@ -1,6 +1,6 @@
 #ifndef PHYSICSABSTRACTDYNAMICSWORLD_H
 #define PHYSICSABSTRACTDYNAMICSWORLD_H
-#include "backend_global.h"
+#include "qtphysicsunofficial_global.h"
 
 #include "physicsabstractrigidbody.h"
 #include <QObject>

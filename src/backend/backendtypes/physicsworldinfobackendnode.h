@@ -2,13 +2,13 @@
 #define PHYSICSWORLDINFOBACKENDNODE_H
 
 
-#include "backend_global.h"
+#include "qtphysicsunofficial_global.h"
 
 
 namespace Physics {
 
 class PhysicsManager;
-class BACKENDSHARED_EXPORT PhysicsWorldInfoBackendNode : public Qt3DCore::QBackendNode
+class QTPHYSICSUNOFFICIAL_EXPORT PhysicsWorldInfoBackendNode : public Qt3DCore::QBackendNode
 {
 public:
     enum DirtyFlag {
@@ -53,7 +53,7 @@ private:
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(PhysicsWorldInfoBackendNode::DirtyFlags)
 
-class BACKENDSHARED_EXPORT PhysicsWorldInfoBackendNodeFunctor : public Qt3DCore::QBackendNodeFunctor
+class QTPHYSICSUNOFFICIAL_EXPORT PhysicsWorldInfoBackendNodeFunctor : public Qt3DCore::QBackendNodeFunctor
 {
 public:
     explicit PhysicsWorldInfoBackendNodeFunctor(PhysicsManager* manager);

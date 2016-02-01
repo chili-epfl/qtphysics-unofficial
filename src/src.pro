@@ -1,17 +1,20 @@
-TEMPLATE = subdirs
-CONFIG += ordered
+TARGET = QtPhysicsUnofficial
+TEMPLATE = lib
+PROJECT_NAME=QtPhysicsUnofficial
 
+QT+= 3dcore 3dquick 3drender
 
-SUBDIRS += \
-    frontend \
-    backend \
-    imports  #\
+DESTDIR+= ./lib
 
-if(config_bullet){
-    SUBDIRS += \
-         plugins/bullet
-}
-else{
-     message("Bullet not found")
-}
-		
+CONFIG += c++11
+
+DEFINES += QTPHYSICSUNOFFICIAL_LIBRARY
+
+HEADERS += \
+    qtphysicsunofficial_global.h
+
+include(frontend/frontend.pri)
+include(backend/backend.pri)
+
+target.path = $$[QT_INSTALL_LIBS]
+INSTALLS +=target

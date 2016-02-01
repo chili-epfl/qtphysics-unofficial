@@ -1,13 +1,14 @@
 #ifndef PHYSICSCOLLISIONEVENT_H
 #define PHYSICSCOLLISIONEVENT_H
-#include "frontend_global.h"
+#include "qtphysicsunofficial_global.h"
+
 
 #include <QVector3D>
 #include <QDebug>
 namespace Physics {
 
 
-class FRONTENDSHARED_EXPORT PhysicsCollisionEvent: public QObject
+class QTPHYSICSUNOFFICIAL_EXPORT PhysicsCollisionEvent: public QObject
 {
     Q_OBJECT
     Q_PROPERTY(Qt3DCore::QNodeId target READ target)

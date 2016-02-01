@@ -11,7 +11,7 @@ class BulletFactory :public QObject,
         PhysicsFactoryInterface
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.Physics.Unofficial.PhysicsFactoryBullet" FILE "bullet.json")
+    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.Physics.Unofficial.PhysicsFactoryInterface" FILE "bullet.json")
     Q_INTERFACES(Physics::PhysicsFactoryInterface)
 public:
     BulletFactory(QObject *parent = 0);

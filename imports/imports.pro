@@ -1,24 +1,22 @@
 TEMPLATE = lib
 TARGET = physics
 
-include("dependencies.pri")
-
-QT += qml quick
-QT += 3dcore 3drender 3dquick
+QT += 3dcore 3drender 3dquick qml quick
 
 CONFIG += qt plugin c++11
 CONFIG -= android_install
 
 uri = QtPhysics.unofficial
 
-LIBS += -lQtPhysicsUnofficialFrontend -lQtPhysicsUnofficialBackend
+INCLUDEPATH += $$PWD/../src/frontend
+INCLUDEPATH += $$PWD/../src/
 
-# Input
 SOURCES += \
     physics-qml_plugin.cpp
 
 HEADERS += \
     physics-qml_plugin.h
+
 
 DISTFILES = qmldir
 
@@ -36,3 +34,5 @@ qmldir.path = $$installPath
 target.path = $$installPath
 INSTALLS += target qmldir
 
+LIBS += -lQtPhysicsUnofficial
+LIBS += -L../src/lib
