@@ -8,7 +8,10 @@ PhysicsTransform::PhysicsTransform():
     m_objectName(),
     m_dirty(false),
     m_enabled(false),
-    m_transformMatrix()
+    m_transformMatrix(),
+    m_rotation()
+  , m_scale(1.0f, 1.0f, 1.0f)
+  , m_translation()
 {
     m_manager=Q_NULLPTR;
 }
@@ -24,7 +27,10 @@ PhysicsTransform::~PhysicsTransform(){
 
 void PhysicsTransform::updateFromPeer(Qt3DCore::QNode *peer){
     Qt3DCore::QTransform *transform = static_cast<Qt3DCore::QTransform *>(peer);
-    m_transformMatrix = transform->matrix();
+    m_rotation = transform->rotation();
+    m_scale = transform->scale3D();
+    m_translation = transform->translation();
+    updateMatrix();
     m_enabled = transform->isEnabled();
     m_dirty=true;
 }
@@ -32,9 +38,15 @@ void PhysicsTransform::updateFromPeer(Qt3DCore::QNode *peer){
 void PhysicsTransform::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &e){
     if (e->type() == Qt3DCore::NodeUpdated) {
             const Qt3DCore::QScenePropertyChangePtr &propertyChange = qSharedPointerCast<Qt3DCore::QScenePropertyChange>(e);
-            if (propertyChange->propertyName() == QByteArrayLiteral("matrix")){
-                m_transformMatrix = propertyChange->value().value<QMatrix4x4>();
-                m_dirty=true;
+            if (propertyChange->propertyName() == QByteArrayLiteral("scale3D")) {
+                m_scale = propertyChange->value().value<QVector3D>();
+                updateMatrix();
+            } else if (propertyChange->propertyName() == QByteArrayLiteral("rotation")) {
+                m_rotation = propertyChange->value().value<QQuaternion>();
+                updateMatrix();
+            } else if (propertyChange->propertyName() == QByteArrayLiteral("translation")) {
+                m_translation = propertyChange->value().value<QVector3D>();
+                updateMatrix();
             }
             else if (propertyChange->propertyName() == QByteArrayLiteral("enabled")){
                 m_enabled = propertyChange->value().value<bool>();
@@ -43,6 +55,14 @@ void PhysicsTransform::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &e){
     }
 }
 
+void PhysicsTransform::updateMatrix(){
+    QMatrix4x4 m;
+    m.translate(m_translation);
+    m.rotate(m_rotation);
+    m.scale(m_scale);
+    m_transformMatrix = m;
+    m_dirty=true;
+}
 
 PhysicsTransformFunctor::PhysicsTransformFunctor(PhysicsManager* manager)
 {

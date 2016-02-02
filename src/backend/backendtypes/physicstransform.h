@@ -2,9 +2,6 @@
 #define PHYSICSTRANSFORM_H
 #include <qtphysicsunofficial_global.h>
 
-
-
-
 namespace Physics {
 
 class PhysicsManager;
@@ -34,9 +31,12 @@ private:
     bool m_dirty;
     bool m_enabled;
     QMatrix4x4 m_transformMatrix;
-
+    QQuaternion m_rotation;
+    QVector3D m_scale;
+    QVector3D m_translation;
     PhysicsManager* m_manager;
 
+    void updateMatrix();
 };
 
 
