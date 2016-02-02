@@ -14,7 +14,6 @@ public:
 protected:
      void run() Q_DECL_OVERRIDE;
 private:
-    void recursive_step(Qt3DCore::QNodeId node_id, QMatrix4x4 parent_matrix);
     PhysicsManager* m_manager;
 };
 }
