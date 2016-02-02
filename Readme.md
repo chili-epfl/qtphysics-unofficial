@@ -17,27 +17,20 @@ Two Qml componets are provided:
 Both components inherit from Qt3D:QComponent. The first one, PhysicsBodyInfo, allows to specify for an entity properties such as mass, restituition, friction etc;
 The entities belonging to the physic world are:
 * Object with an abstract mesh and a PhysicsBodyInfo
-* Object with a PhysicsBodyInfo that defines the collition shape with the property "ShapeDetails" ->  those are not rendered
-
-The property "ShapeDetails" allows to override the collition shape properties that otherwise would be inferred from the mesh of the entity. 
 
 PhysicsBodyInfo has two property:
 * InputTransform. This matrix is used to set the original position of the object or to force the motion state. When the matrix changes the motion state of the object is updated. NB. By "matrix changes" I  mean that a change is notified. For example, if you create button that set a traslation to dz:100, the matrix changes only if the prevoius value of dz was different. 
 * OutputTransorm: the matrix coming from the physics simulation
 
-A body can be declered as kinatic using the kinematic flag.
+A body can be declered as kinematic using the kinematic flag.
 PhysicsBodyInfo emit a signal collided(CollitionEvent*) when a collition happens.
-
 
 
 PhysicsWorldInfo defines general setting for the physic world, such as gravity.
 
 ##Physic aspect ##
 
-On the backend, the module implements a Qt3D aspect. When  an entity contains a PhysicsBodyInfo component, a QTransform is added to the frontend in order to move the entity according to its motion state from the simulation. More precisely, those entities have two QTransform components:
-
-* Default one, provided in the Qml and used to set the initial position or to input new position. This is generally disabled once the simulation starts.
-* The one added by the aspect, named "@MaDeByPhYsIcS@", that gets updated according to the motion state.
+On the backend, the module implements a Qt3D aspect. In the Bullet world, nested entities are actually single bodies with a compound shape. The relation parent-child is completly absent in the bullet world.
 
 The aspect executes sequentially those jobs:
 
@@ -55,7 +48,13 @@ bodies and worlds (PhysicsAbstractRigidBody and PhysicsAbstractDynamicsWorld).
 
 #Build it#
 
-In order to build the module, you need to have Qt >5.5 with Qt3D. Bullet should be available otherwise the plugin cannot be built.
+In order to build the module, you need to have Qt >5.6 with Qt3D and Bullet >2.73.
+Modify the dependency in the file dependecy.pri in /bullet in order to instruct the compiler about the position of the bullet folder.
+
+Remember to add the step install to your make chain. This will put headers and libs in the default Qt directory.
+Since this is not an official qt module, you have to add the includepath in your project .pro file.
+
+Bullet should be available otherwise the plugin cannot be built.
 
 ##Build and install Bullet for Desktop##
 
