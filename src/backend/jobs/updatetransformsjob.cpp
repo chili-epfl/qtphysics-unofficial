@@ -30,7 +30,7 @@ void UpdateTransformsJob::run(){
         current_node=nodes_to_visit.dequeue();
         current_world_transform=current_node.second;
         entity=static_cast<PhysicsEntity*>(m_manager->m_resources[current_node.first]);
-        if(!entity->transform().isNull() && !m_manager->m_resources.contains(entity->transform())){
+        if(!entity->transform().isNull() && m_manager->m_resources.contains(entity->transform())){
             transform=static_cast<PhysicsTransform*>(m_manager->m_resources[entity->transform()]);
             current_world_transform=current_world_transform*transform->transformMatrix();
         }
