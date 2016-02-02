@@ -19,8 +19,6 @@ public:
     QString objectName(){return m_objectName;}
 
     bool isEnabled(){return m_enabled;}
-    bool isDirty(){return m_dirty;}
-    void setDirty(bool dirty){m_dirty=dirty;}
     void setManager(PhysicsManager *manager);
     inline int verticesPerPatch() const { return m_verticesPerPatch; }
     inline QVector<Qt3DCore::QNodeId> attributes() const { return m_attributes; }
@@ -29,7 +27,6 @@ protected:
 private:
     QString m_objectName;
 
-    bool m_dirty;
     bool m_enabled;
 
     QVector<Qt3DCore::QNodeId> m_attributes;

@@ -14,7 +14,6 @@ public:
     enum DirtyFlag {
             Clean = 0 ,
             GravityChanged = 1,
-            EnableChanged = 2
         };
     Q_DECLARE_FLAGS(DirtyFlags, DirtyFlag)
 

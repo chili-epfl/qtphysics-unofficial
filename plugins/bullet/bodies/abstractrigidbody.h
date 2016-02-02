@@ -54,8 +54,7 @@ public slots:
     virtual void applyForce(QVector3D force,QVector3D relationPosition=QVector3D());
     virtual void applyImpulse(QVector3D force,QVector3D relationPosition=QVector3D());
     virtual void clearForces();
-signals:
-    void worldUpdateRequired();
+
 protected:
     virtual void initBody();
     virtual void initShape()=0;

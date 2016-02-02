@@ -1,8 +1,6 @@
 #ifndef PhysicsGeometryRenderer_H
 #define PhysicsGeometryRenderer_H
 #include <qtphysicsunofficial_global.h>
-
-
 #include <backend/jobs/updatephysicsentitiesjob.h>
 #include <backend/jobs/debugjob.h>
 
@@ -13,8 +11,6 @@ class PhysicsManager;
 class QTPHYSICSUNOFFICIAL_EXPORT PhysicsGeometryRenderer : public Qt3DCore::QBackendNode
 {
 public:
-    enum Mesh_Type{SPHERE, CUBOID, GENERAL};
-
     explicit PhysicsGeometryRenderer();
     ~PhysicsGeometryRenderer();
 
@@ -41,11 +37,15 @@ private:
     Qt3DRender::QGeometryFunctorPtr m_geometry_functor;
 
     PhysicsManager* m_manager;
-    Mesh_Type m_type;
 
-    /*Variables for specifics mesh types: not the right place...*/
-    qreal m_radius;
-    qreal m_x_dim,m_y_dim,m_z_dim;
+    int m_instanceCount;
+    int m_primitiveCount;
+    int m_baseVertex;
+    int m_baseInstance;
+    int m_restartIndex;
+    bool m_primitiveRestart;
+
+    Qt3DRender::QGeometryRenderer::PrimitiveType m_primitiveType;
 
 friend class UpdatePhysicsEntitiesJob;
 friend class DebugJob;

@@ -9,8 +9,8 @@ PhysicsBuffer::PhysicsBuffer():
     m_objectName(),
     m_enabled(false),
     m_dirty(false),
-    m_type(Qt3DRender::QBuffer::VertexBuffer),
-    m_usage(Qt3DRender::QBuffer::StaticDraw)
+    m_type(),
+    m_usage()
 {
     m_manager=Q_NULLPTR;
 }
@@ -42,7 +42,6 @@ void PhysicsBuffer::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &e){
         QByteArray propertyName = propertyChange->propertyName();
         if (propertyName == QByteArrayLiteral("enabled")){
             m_enabled = propertyChange->value().value<bool>();
-            m_dirty = true;
         }
         else if (propertyName == QByteArrayLiteral("data")) {
             QByteArray newData = propertyChange->value().value<QByteArray>();

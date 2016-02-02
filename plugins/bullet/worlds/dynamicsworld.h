@@ -40,7 +40,6 @@ public:
 
 private slots:
     void onBodyDestroyed(QObject* obj);
-    void onBodyRequireUpdate();
 private:
     void removebtRigidBody(btRigidBody* b);
     void addbtRigidBody(btRigidBody* b,int group,int mask);

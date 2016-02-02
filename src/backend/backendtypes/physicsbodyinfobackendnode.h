@@ -23,11 +23,8 @@ public:
             RestistutionChanged = 16,
             FrictionChanged = 32,
             RollingFrictionChanged = 64,
-            ShapeDetailsChanged = 128,
-            InputTransformChanged = 256,
-            KinematicChanged = 512,
-            EnabledChanged = 1024
-
+            InputTransformChanged = 128,
+            KinematicChanged = 256
     };
     Q_DECLARE_FLAGS(DirtyFlags, DirtyFlag)
 
@@ -66,9 +63,6 @@ public:
     virtual QVector3D fallInertia(){return m_fallInertia;}
     virtual void setFallInertia(QVector3D fallInertia);
 
-    virtual const QVariantMap& shapeDetails(){return m_shapeDetails;}
-    virtual void setShapeDetails(QVariantMap shapeDetails);
-
     virtual Qt3DCore::QNodeId inputTransform(){return m_inputTransform;}
     virtual void setInputTransform(Qt3DCore::QNodeId inputTranform);
 
@@ -94,14 +88,12 @@ protected:
     int m_mask;
     int m_group;
     bool m_kinematic;
-
     qreal m_mass;
     QVector3D m_fallInertia;
     qreal m_restitution;
     qreal m_friction;
     qreal m_rollingFriction;
 
-    QVariantMap m_shapeDetails;
     Qt3DCore::QNodeId m_inputTransform;
 
     PhysicsManager* m_manager;

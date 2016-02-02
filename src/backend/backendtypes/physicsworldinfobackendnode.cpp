@@ -80,7 +80,6 @@ void PhysicsWorldInfoBackendNode::setEnabled(bool val)
 {
     if(m_enabled!=val){
         m_enabled=val;
-        m_dirtyFlags |= (EnableChanged);
     }
 }
 

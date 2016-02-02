@@ -36,7 +36,6 @@ void PhysicsBodyInfoBackendNode::updateFromPeer(Qt3DCore::QNode *peer){
     setMass(body_info->mass());
     setRestitution(body_info->restitution());
     setRollingFriction(body_info->rollingFriction());
-    setShapeDetails(body_info->shapeDetails());
     if(body_info->inputTransform())
         setInputTransform(body_info->inputTransform()->id());
 
@@ -53,11 +52,6 @@ void PhysicsBodyInfoBackendNode::setFallInertia(QVector3D fallInertia){
         m_fallInertia=fallInertia;
         m_dirtyFlags.operator |=(FallInertiaChanged);
     }
-}
-
-void PhysicsBodyInfoBackendNode::setShapeDetails(QVariantMap shapeDetails){
-    m_shapeDetails=shapeDetails;
-    m_dirtyFlags.operator |=(ShapeDetailsChanged);
 }
 
 
@@ -131,8 +125,6 @@ void PhysicsBodyInfoBackendNode::sceneChangeEvent(const Qt3DCore::QSceneChangePt
                 setRestitution(propertyChange->value().toReal());
             else if (propertyChange->propertyName() == QByteArrayLiteral("rollingFriction"))
                 setRollingFriction(propertyChange->value().toReal());
-            else if (propertyChange->propertyName() == QByteArrayLiteral("shapeDetails"))
-                setShapeDetails(propertyChange->value().value<QVariantMap>());
             else if (propertyChange->propertyName() == QByteArrayLiteral("enabled"))
                 setEnabled(propertyChange->value().toBool());
             else if (propertyChange->propertyName() == QByteArrayLiteral("inputMatrix"))
@@ -154,7 +146,6 @@ void PhysicsBodyInfoBackendNode::setEnabled(bool val)
 {
     if(m_enabled!=val){
         m_enabled=val;
-        m_dirtyFlags |= (EnabledChanged);
     }
 }
 

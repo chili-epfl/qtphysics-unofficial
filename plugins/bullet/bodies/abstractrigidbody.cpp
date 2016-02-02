@@ -62,10 +62,8 @@ void AbstractRigidBody::setMassProps(){
     btVector3 inertia(m_fallInertia.x(),m_fallInertia.y(),m_fallInertia.z());
     if(m_fallInertia.x()==0 && m_fallInertia.y()==0 && m_fallInertia.z()==0)
         m_shape->calculateLocalInertia(m_mass,inertia);
-
     m_rigidBody->setMassProps(m_mass,inertia);
     m_rigidBody->activate();
-    emit worldUpdateRequired();
 }
 
 void AbstractRigidBody::setMask(int mask){

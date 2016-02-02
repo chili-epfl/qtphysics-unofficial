@@ -87,17 +87,7 @@ void DynamicsWorld::addRigidBody(PhysicsAbstractRigidBody* c){
        m_BulletBodies2PhysicsBodies[c_cast->bulletBody()]=c_cast;
        addbtRigidBody(c_cast->bulletBody(),c_cast->group(),c_cast->mask());
        connect(c,SIGNAL(destroyed(QObject*)),this,SLOT(onBodyDestroyed(QObject*)));
-       connect(c_cast,SIGNAL(worldUpdateRequired()),this,SLOT(onBodyRequireUpdate()));
    }
-}
-void DynamicsWorld::onBodyRequireUpdate(){
-    QObject* sender=QObject::sender();
-    if(sender->inherits("Physics::Bullet::AbstractRigidBody")){
-        Physics::Bullet::AbstractRigidBody* sender_cast=static_cast<Physics::Bullet::AbstractRigidBody*>(sender);
-        m_dynamicsWorld->removeRigidBody(sender_cast->bulletBody());
-        m_dynamicsWorld->addRigidBody(sender_cast->bulletBody(),sender_cast->group(),sender_cast->mask());
-    }
-
 }
 
 

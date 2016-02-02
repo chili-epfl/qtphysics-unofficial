@@ -6,9 +6,7 @@
 namespace Physics {
 
 PhysicsAttribute::PhysicsAttribute():
-    Qt3DCore::QBackendNode(),
-    m_objectName(),
-    m_dirty(false),
+    Qt3DCore::QBackendNode(),    
     m_bufferId(),
     m_dataType(Qt3DRender::QAbstractAttribute::Float),
     m_dataSize(1),
@@ -16,6 +14,8 @@ PhysicsAttribute::PhysicsAttribute():
     m_byteStride(0),
     m_byteOffset(0),
     m_divisor(0),
+    m_objectName(),
+    m_dirty(false),
     m_enabled(false),
     m_attributeType(Qt3DRender::QAbstractAttribute::VertexAttribute)
 {
@@ -55,7 +55,6 @@ void PhysicsAttribute::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &e){
         case Qt3DCore::NodeUpdated: {
             if (propertyName == QByteArrayLiteral("enabled")){
                 m_enabled = propertyChange->value().value<bool>();
-                m_dirty = true;
             }
             else if (propertyName == QByteArrayLiteral("name")) {
                 m_objectName = propertyChange->value().value<QString>();
@@ -80,21 +79,18 @@ void PhysicsAttribute::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &e){
                 m_dirty = true;
             } else if (propertyName == QByteArrayLiteral("attributeType")) {
                 m_attributeType = static_cast<Qt3DRender::QAbstractAttribute::AttributeType>(propertyChange->value().value<int>());
-                m_dirty = true;
             }
             break;
         }
         case Qt3DCore::NodeAdded: {
             if (propertyName == QByteArrayLiteral("buffer")) {
                 m_bufferId = propertyChange->value().value<Qt3DCore::QNodeId>();
-                m_dirty = true;
             }
             break;
         }
         case Qt3DCore::NodeRemoved: {
             if (propertyName == QByteArrayLiteral("buffer")) {
                 m_bufferId = Qt3DCore::QNodeId();
-                m_dirty = true;
             }
             break;
         }

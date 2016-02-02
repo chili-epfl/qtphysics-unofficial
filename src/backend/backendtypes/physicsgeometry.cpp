@@ -8,7 +8,6 @@ namespace Physics {
 PhysicsGeometry::PhysicsGeometry():
     Qt3DCore::QBackendNode(),
     m_objectName(),
-    m_dirty(false),
     m_enabled(false),
     m_attributes()
 {
@@ -33,7 +32,6 @@ void PhysicsGeometry::updateFromPeer(Qt3DCore::QNode *peer){
            Q_FOREACH (Qt3DRender::QAbstractAttribute *attribute, geometry->attributes())
                m_attributes.push_back(attribute->id());
            m_verticesPerPatch = geometry->verticesPerPatch();
-           m_dirty = true;
    }
 }
 
@@ -45,21 +43,18 @@ void PhysicsGeometry::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &e){
     case Qt3DCore::NodeAdded: {
         if (propertyName == QByteArrayLiteral("attribute")) {
             m_attributes.push_back(propertyChange->value().value<Qt3DCore::QNodeId>());
-            m_dirty = true;
         }
         break;
     }
     case Qt3DCore::NodeRemoved: {
         if (propertyName == QByteArrayLiteral("attribute")) {
             m_attributes.removeOne(propertyChange->value().value<Qt3DCore::QNodeId>());
-            m_dirty = true;
         }
         break;
     }
     case Qt3DCore::NodeUpdated:
         if (propertyName == QByteArrayLiteral("enabled")){
             m_enabled = propertyChange->value().value<bool>();
-            m_dirty = true;
         }
         else if (propertyName == QByteArrayLiteral("verticesPerPatch")) {
             m_verticesPerPatch = propertyChange->value().value<int>();

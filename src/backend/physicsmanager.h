@@ -3,7 +3,6 @@
 
 #include <qtphysicsunofficial_global.h>
 #include <QHash>
-
 #include <backend/physics_entities/physicsabstractrigidbody.h>
 #include <backend/physics_entities/physicsabstractdynamicsworld.h>
 #include <backend/physics_entities/physicsfactoryinterface.h>
@@ -31,8 +30,6 @@ public:
     QHash<Qt3DCore::QNodeId,PhysicsAbstractRigidBody*> m_Id2RigidBodies;
     QHash<PhysicsAbstractRigidBody*,Qt3DCore::QNodeId> m_RigidBodies2Id;
 
-    QSet<Qt3DCore::QNodeId> garbage;
-
     PhysicsAbstractDynamicsWorld* m_physics_world;
 
     PhysicsFactoryInterface* m_physics_factory;
@@ -47,8 +44,9 @@ private:
     void loadPhysicsFactories();
     Qt3DCore::QNodeId m_rootId;
 
-};
 
+
+};
 
 
 }

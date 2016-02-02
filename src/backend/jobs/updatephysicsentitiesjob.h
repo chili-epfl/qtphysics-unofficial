@@ -20,19 +20,27 @@ public:
 protected:
      void run() Q_DECL_OVERRIDE;
 private:
-     void recursive_step(Qt3DCore::QNodeId node_id, QMatrix4x4 parent_matrix,bool forceUpdateMS);
-     PhysicsAbstractRigidBody* retrievePhysicalBody(PhysicsEntity* entity,PhysicsBodyInfoBackendNode* entity_body_info,bool& isBodyNew);
+     void iterative_step(Qt3DCore::QNodeId node_id, QMatrix4x4 parent_matrix,bool forceUpdateMS);
+     bool isDefiningBody(PhysicsEntity* entity);
+     bool isRequiringShapeUpdate(PhysicsGeometryRenderer* entity_geometry_renderer);
+     void removeNotEnabledSubtrees(Qt3DCore::QNodeId rootId);
+
      PhysicsAbstractRigidBody* createRigidBodyFromMesh(PhysicsGeometryRenderer* entity_mesh);
-     PhysicsAbstractRigidBody* createRigidBodyFromShapeDetails(PhysicsBodyInfoBackendNode* entity_body_info);
+
      PhysicsManager* m_manager;
 
      struct Visit_Data{
          Qt3DCore::QNodeId node_id;
          QMatrix4x4 parent_matrix;
          bool forceUpdateMS;
+         void set(Qt3DCore::QNodeId id,QMatrix4x4 mat,bool fU){
+             node_id=id;
+             parent_matrix=mat;
+             forceUpdateMS=fU;
+         }
      };
 
-     QQueue<Visit_Data> visit_queue;
+     QQueue<Visit_Data> m_visit_queue;
 };
 
 }

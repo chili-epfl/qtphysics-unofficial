@@ -34,17 +34,18 @@ public:
 protected:
     void sceneChangeEvent(const Qt3DCore::QSceneChangePtr &) Q_DECL_OVERRIDE;
 private:
-    QString m_objectName;
-
-    bool m_dirty;
-
     Qt3DCore::QNodeId m_bufferId;
     Qt3DRender::QAbstractAttribute::DataType m_dataType;
+    /*These can make dirty true*/
     uint m_dataSize;
     uint m_count;
     uint m_byteStride;
     uint m_byteOffset;
     uint m_divisor;
+    QString m_objectName;
+    bool m_dirty;
+
+
     bool m_enabled;
     Qt3DRender::QAbstractAttribute::AttributeType m_attributeType;
 

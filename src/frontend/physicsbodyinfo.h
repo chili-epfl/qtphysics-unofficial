@@ -25,9 +25,6 @@ class QTPHYSICSUNOFFICIAL_EXPORT PhysicsBodyInfo:
     Q_PROPERTY(bool hasCollided READ hasCollided NOTIFY hasCollidedChanged)
     Q_PROPERTY(QQmlListProperty<Physics::PhysicsCollisionEvent> collisionsList READ collisionsList NOTIFY collisionsListChanged)
 
-    /*Shape details allows to override the details of the collision shape that otherwise would be
-    * derived by the mesh. It's also useful to create object with a specific collision shape but with an empty mesh*/
-    Q_PROPERTY(QVariantMap shapeDetails READ shapeDetails WRITE setShapeDetails NOTIFY shapeDetailsChanged)
     Q_PROPERTY(Qt3DCore::QTransform* inputTransform READ inputTransform WRITE setInputTransform NOTIFY inputTransformChanged)
     Q_PROPERTY(Qt3DCore::QTransform* outputTransform READ outputTransform NOTIFY outputTransformChanged)
 
@@ -49,7 +46,6 @@ public:
     virtual qreal friction(){return m_friction;}
     virtual qreal mass(){return m_mass;}
     virtual QVector3D fallInertia(){return m_fallInertia;}
-    virtual const QVariantMap& shapeDetails(){return m_shapeDetails;}
     virtual Qt3DCore::QTransform* inputTransform(){return m_inputTransform;}
     virtual Qt3DCore::QTransform* outputTransform(){return m_outputTransform;}
 
@@ -59,7 +55,6 @@ public:
     virtual void setFriction(qreal friction);
     virtual void setMass(qreal mass);
     virtual void setFallInertia(QVector3D fallInertia);
-    virtual void setShapeDetails(QVariantMap shapeDetails);
     virtual void setInputTransform(Qt3DCore::QTransform* inputTransform);
 
     QQmlListProperty<PhysicsCollisionEvent> collisionsList();
@@ -77,7 +72,6 @@ signals:
     void rollingFrictionChanged(qreal rollingFriction);
     void frictionChanged(qreal friction);
     void restitutionChanged(qreal restitution);
-    void shapeDetailsChanged();
     void inputTransformChanged();
     void outputTransformChanged();
 
@@ -98,7 +92,6 @@ protected:
     qreal m_restitution;
     qreal m_friction;
     qreal m_rollingFriction;
-    QVariantMap m_shapeDetails;
 
     Qt3DCore::QTransform* m_inputTransform;
     Qt3DCore::QTransform* m_outputTransform;

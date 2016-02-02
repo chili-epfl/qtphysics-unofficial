@@ -20,8 +20,9 @@ PhysicsEntity::PhysicsEntity():
 }
 
 void PhysicsEntity::setManager(PhysicsManager *manager){
-        m_manager=manager;
+    m_manager=manager;
 }
+
 
 
 PhysicsEntity::~PhysicsEntity(){
@@ -35,7 +36,13 @@ PhysicsEntity::~PhysicsEntity(){
     if(this->parent()){
         this->parent()->removeChildId(peerUuid());
     }
-    m_manager->garbage.insert(peerUuid());
+    if(m_manager->m_Id2RigidBodies.contains(peerUuid())){
+        PhysicsAbstractRigidBody* body =m_manager->m_Id2RigidBodies[peerUuid()];
+        m_manager->m_Id2RigidBodies.remove(peerUuid());
+        m_manager->m_RigidBodies2Id.remove(body);
+        m_manager->m_physics_world->removeRigidBody(body);
+        delete body;
+    }
 }
 
 void PhysicsEntity::updateFromPeer(Qt3DCore::QNode *peer){
@@ -64,8 +71,12 @@ void PhysicsEntity::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &e){
            break;
        }
        case Qt3DCore::NodeUpdated: {
-              if (propertyChange->propertyName() == QByteArrayLiteral("enabled"))
+              if (propertyChange->propertyName() == QByteArrayLiteral("enabled")){
                   m_enabled = propertyChange->value().value<bool>();
+              }
+              else if (propertyChange->propertyName() == QByteArrayLiteral("objectName")){
+                  m_objectName = propertyChange->value().value<QString>();
+              }
               break;
        }
        case Qt3DCore::ComponentRemoved: {
@@ -96,25 +107,33 @@ void PhysicsEntity::setParentEntity(Qt3DCore::QEntity *parent){
 }
 
 void PhysicsEntity::addComponent(Qt3DCore::QComponent *component){
-    if (qobject_cast<Qt3DCore::QTransform*>(component) != Q_NULLPTR)
+    if (qobject_cast<Qt3DCore::QTransform*>(component) != Q_NULLPTR){
         m_transform = component->id();
-    else if (qobject_cast<Qt3DRender::QGeometryRenderer*>(component) != Q_NULLPTR)
+    }
+    else if (qobject_cast<Qt3DRender::QGeometryRenderer*>(component) != Q_NULLPTR){
         m_geometry_renderer = component->id();
-    else if (qobject_cast<PhysicsBodyInfo*>(component) != Q_NULLPTR)
+    }
+    else if (qobject_cast<PhysicsBodyInfo*>(component) != Q_NULLPTR){
         m_physicsBodyInfo = component->id();
-    else if (qobject_cast<PhysicsWorldInfo*>(component) != Q_NULLPTR)
+    }
+    else if (qobject_cast<PhysicsWorldInfo*>(component) != Q_NULLPTR){
         m_physicsWorldInfo = component->id();
+    }
 }
 
 void PhysicsEntity::removeComponent(Qt3DCore::QNodeId componentId){
-    if (m_transform==componentId)
+    if (m_transform==componentId){
         m_transform = Qt3DCore::QNodeId();
-    else if (m_geometry_renderer==componentId)
+    }
+    else if (m_geometry_renderer==componentId){
         m_geometry_renderer = Qt3DCore::QNodeId();
-    else if (m_physicsBodyInfo==componentId)
+    }
+    else if (m_physicsBodyInfo==componentId){
         m_physicsBodyInfo = Qt3DCore::QNodeId();
-     else if(m_physicsWorldInfo==componentId)
+    }
+     else if(m_physicsWorldInfo==componentId){
         m_physicsWorldInfo=Qt3DCore::QNodeId();
+    }
 }
 
 PhysicsEntity* PhysicsEntity::parent(){

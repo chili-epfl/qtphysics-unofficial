@@ -10,11 +10,17 @@ PhysicsGeometryRenderer::PhysicsGeometryRenderer():
     m_dirty(false),
     m_enabled(false),
     m_geometry(),
-    m_geometry_functor()
-
+    m_geometry_functor(),
+    m_manager(Q_NULLPTR),
+    m_instanceCount(0)
+    , m_primitiveCount(0)
+    , m_baseVertex(0)
+    , m_baseInstance(0)
+    , m_restartIndex(-1)
+    , m_primitiveRestart(false)
+    , m_primitiveType(Qt3DRender::QGeometryRenderer::Triangles)
 {
-    m_manager=Q_NULLPTR;
-    m_type=GENERAL;
+
 }
 
 void PhysicsGeometryRenderer::setManager(PhysicsManager *manager){
@@ -28,21 +34,14 @@ PhysicsGeometryRenderer::~PhysicsGeometryRenderer(){
 
 void PhysicsGeometryRenderer::updateFromPeer(Qt3DCore::QNode *peer){
     Qt3DRender::QGeometryRenderer *geometry_renderer = static_cast<Qt3DRender::QGeometryRenderer*>(peer);
-    if(geometry_renderer->inherits("Qt3DRender::QCuboidMesh")){
-        m_type=CUBOID;
-        Qt3DRender::QCuboidMesh* _mesh =static_cast<Qt3DRender::QCuboidMesh*>(peer);
-        m_x_dim=_mesh->xExtent();
-        m_y_dim=_mesh->yExtent();
-        m_z_dim=_mesh->zExtent();
-    }
-    else if (geometry_renderer->inherits("Qt3DRender::QSphereMesh")){
-        m_type=SPHERE;
-        Qt3DRender::QSphereMesh* _mesh =static_cast<Qt3DRender::QSphereMesh*>(peer);
-        m_radius=_mesh->radius();
-    }
-    else {
-        m_type=GENERAL;
-    }
+    m_instanceCount = geometry_renderer->instanceCount();
+    m_primitiveCount = geometry_renderer->primitiveCount();
+    m_baseVertex = geometry_renderer->baseVertex();
+    m_baseInstance = geometry_renderer->baseInstance();
+    m_restartIndex = geometry_renderer->restartIndex();
+    m_primitiveRestart = geometry_renderer->primitiveRestart();
+    m_primitiveType = geometry_renderer->primitiveType();
+
     m_objectName = peer->objectName();
     m_dirty=true;
     m_enabled=geometry_renderer->isEnabled();
@@ -62,12 +61,30 @@ void PhysicsGeometryRenderer::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &
     switch (e->type()) {
         case Qt3DCore::NodeUpdated: {
             Qt3DCore::QScenePropertyChangePtr propertyChange = qSharedPointerCast<Qt3DCore::QScenePropertyChange>(e);
-            if (propertyChange->propertyName() == QByteArrayLiteral("geometryFunctor")){ // Mesh with source
+            QByteArray propertyName = propertyChange->propertyName();
+            if (propertyName == QByteArrayLiteral("geometryFunctor")){ // Mesh with source
                 m_geometry_functor= propertyChange->value().value<Qt3DRender::QGeometryFunctorPtr>();
                 m_dirty=true;
             }
-            else if (propertyChange->propertyName() == QByteArrayLiteral("enabled")){
+            else if (propertyName == QByteArrayLiteral("enabled")){
                 m_enabled = propertyChange->value().value<bool>();
+            }else if (propertyChange->propertyName() == QByteArrayLiteral("instanceCount")) {
+                m_instanceCount = propertyChange->value().value<int>();
+                m_dirty = true;
+            } else if (propertyName == QByteArrayLiteral("primitiveCount")) {
+                m_primitiveCount = propertyChange->value().value<int>();
+                m_dirty = true;
+            } else if (propertyName == QByteArrayLiteral("baseVertex")) {
+                m_baseVertex = propertyChange->value().value<int>();
+                m_dirty = true;
+            } else if (propertyName == QByteArrayLiteral("baseInstance")) {
+                m_baseInstance = propertyChange->value().value<int>();
+                m_dirty = true;
+            } else if (propertyName == QByteArrayLiteral("restartIndex")) {
+                m_restartIndex = propertyChange->value().value<int>();
+                m_dirty = true;
+            } else if (propertyName == QByteArrayLiteral("primitiveRestart")) {
+                m_primitiveRestart = propertyChange->value().value<bool>();
                 m_dirty = true;
             }
             break;
@@ -76,7 +93,6 @@ void PhysicsGeometryRenderer::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &
         Qt3DCore::QScenePropertyChangePtr propertyChange = qSharedPointerCast<Qt3DCore::QScenePropertyChange>(e);
         if (propertyChange->propertyName() == QByteArrayLiteral("geometry")) {
             m_geometry = propertyChange->value().value<Qt3DCore::QNodeId>();
-            m_dirty = true;
         }
         break;
     }
@@ -84,7 +100,6 @@ void PhysicsGeometryRenderer::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &
         Qt3DCore::QScenePropertyChangePtr propertyChange = qSharedPointerCast<Qt3DCore::QScenePropertyChange>(e);
         if (propertyChange->propertyName() == QByteArrayLiteral("geometry")) {
             m_geometry = Qt3DCore::QNodeId();
-            m_dirty = true;
         }
         break;
     }

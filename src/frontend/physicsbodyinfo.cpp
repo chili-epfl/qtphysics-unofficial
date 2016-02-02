@@ -44,12 +44,6 @@ void PhysicsBodyInfo::setMass(qreal mass){
         emit massChanged(m_mass);
     }
 }
-void PhysicsBodyInfo::setShapeDetails(QVariantMap shapeDetails){
-
-   m_shapeDetails=shapeDetails;
-   emit shapeDetailsChanged();
-
-}
 
 void PhysicsBodyInfo::setFallInertia(QVector3D fallInertia){
     if( m_fallInertia!=fallInertia){
