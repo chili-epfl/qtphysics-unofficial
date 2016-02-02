@@ -38,6 +38,7 @@ HEADERS += \
 
 INCLUDEPATH += $$PWD/../../src/backend
 INCLUDEPATH += $$PWD/../../src/
+INCLUDEPATH += $$PWD
 
 DISTFILES += bullet.json \
 

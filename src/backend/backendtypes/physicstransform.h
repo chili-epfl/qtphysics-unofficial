@@ -1,6 +1,6 @@
 #ifndef PHYSICSTRANSFORM_H
 #define PHYSICSTRANSFORM_H
-#include "qtphysicsunofficial_global.h"
+#include <qtphysicsunofficial_global.h>
 
 
 

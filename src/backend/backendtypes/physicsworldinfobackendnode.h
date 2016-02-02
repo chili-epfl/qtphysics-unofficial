@@ -2,7 +2,7 @@
 #define PHYSICSWORLDINFOBACKENDNODE_H
 
 
-#include "qtphysicsunofficial_global.h"
+#include <qtphysicsunofficial_global.h>
 
 
 namespace Physics {

@@ -1,6 +1,6 @@
 #ifndef SimulateStepJob_H
 #define SimulateStepJob_H
-#include "qtphysicsunofficial_global.h"
+#include <qtphysicsunofficial_global.h>
 
 
 namespace Physics {

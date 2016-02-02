@@ -1,7 +1,7 @@
 #ifndef RigidSphereBody_H
 #define RigidSphereBody_H
 
-#include "abstractrigidbody.h"
+#include <bodies/abstractrigidbody.h>
 
 namespace Physics {
 

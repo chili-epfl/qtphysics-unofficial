@@ -1,4 +1,4 @@
-#include "rigidconvexhullbody.h"
+#include <bodies/rigidconvexhullbody.h>
 #include <bullet/BulletCollision/CollisionShapes/btShapeHull.h>
 namespace Physics {
 

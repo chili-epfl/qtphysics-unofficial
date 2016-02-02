@@ -1,10 +1,10 @@
-#include "updatetransformsjob.h"
-#include "../physicsmanager.h"
-#include "backendtypes/physicsentity.h"
-#include "backendtypes/physicsbodyinfobackendnode.h"
-#include "backendtypes/physicstransform.h"
+#include <backend/jobs/updatetransformsjob.h>
+#include <backend/physicsmanager.h>
+#include <backend/backendtypes/physicsentity.h>
+#include <backend/backendtypes/physicsbodyinfobackendnode.h>
+#include <backend/backendtypes/physicstransform.h>
 
-#include  "physics_entities/physicsabstractrigidbody.h"
+#include  <backend/physics_entities/physicsabstractrigidbody.h>
 namespace Physics {
 
 UpdateTransformsJob::UpdateTransformsJob(PhysicsManager* manager):

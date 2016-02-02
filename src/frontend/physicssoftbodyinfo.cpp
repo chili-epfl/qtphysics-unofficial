@@ -1,4 +1,4 @@
-#include "physicssoftbodyinfo.h"
+#include <frontend/physicssoftbodyinfo.h>
 
 namespace Physics {
 

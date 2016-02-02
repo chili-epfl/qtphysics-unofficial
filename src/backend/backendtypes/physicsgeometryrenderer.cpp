@@ -1,6 +1,6 @@
-#include "physicsgeometryrenderer.h"
+#include <backend/backendtypes/physicsgeometryrenderer.h>
 
-#include "../physicsmanager.h"
+#include <backend/physicsmanager.h>
 
 namespace Physics {
 

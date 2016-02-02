@@ -1,6 +1,6 @@
 #ifndef DEBUGJOB_H
 #define DEBUGJOB_H
-#include "qtphysicsunofficial_global.h"
+#include <qtphysicsunofficial_global.h>
 
 namespace Physics {
 

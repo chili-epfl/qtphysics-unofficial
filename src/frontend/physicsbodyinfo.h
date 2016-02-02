@@ -1,9 +1,9 @@
 #ifndef PHYSICSBODYINFO_H
 #define PHYSICSBODYINFO_H
-#include "qtphysicsunofficial_global.h"
+#include <qtphysicsunofficial_global.h>
 
 #include <QVector3D>
-#include "physicscollisionevent.h"
+#include <frontend/physicscollisionevent.h>
 #include <QQmlListProperty>
 namespace Physics {
 

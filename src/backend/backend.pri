@@ -50,13 +50,15 @@ HEADERS +=\
 #    $$PWD/physics_entities/physicsabstractsoftrigiddynamicsworld.h \
     $$PWD/physicscollision.h
 
-INCLUDEPATH += $$PWD
-
-backendHeadersDataFiles.path = $$[QT_INSTALL_HEADERS]/$$PROJECT_NAME
-backendHeadersDataFiles.files = $$PWD/*.h
-backendHeadersDataFiles.files += $$PWD/jobs/*.h
-backendHeadersDataFiles.files += $$PWD/backendtypes/*.h
-INSTALLS += backendHeadersDataFiles
+backend1HeadersDataFiles.path = $$[QT_INSTALL_HEADERS]/$$PROJECT_NAME/backend
+backend1HeadersDataFiles.files = $$PWD/*.h
+backend2HeadersDataFiles.path = $$[QT_INSTALL_HEADERS]/$$PROJECT_NAME/backend/jobs
+backend2HeadersDataFiles.files += $$PWD/jobs/*.h
+backend3HeadersDataFiles.path = $$[QT_INSTALL_HEADERS]/$$PROJECT_NAME/backend/backendtypes
+backend3HeadersDataFiles.files += $$PWD/backendtypes/*.h
+backend4HeadersDataFiles.path = $$[QT_INSTALL_HEADERS]/$$PROJECT_NAME/backend/physics_entities
+backend4HeadersDataFiles.files += $$PWD/physics_entities/*.h
+INSTALLS += backend1HeadersDataFiles backend2HeadersDataFiles backend3HeadersDataFiles backend4HeadersDataFiles
 
 #libraryFiles.path = $$[QT_INSTALL_LIBS]
 #Debug:libraryFiles.files = $$OUT_PWD/debug/*.so $$OUT_PWD/debug/*.prl $$OUT_PWD/debug/*.so

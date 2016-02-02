@@ -1,7 +1,7 @@
 #ifndef PHYSICSSOFTBODYINFO_H
 #define PHYSICSSOFTBODYINFO_H
 
-#include "physicsbodyinfo.h"
+#include <frontend/physicsbodyinfo.h>
 
 namespace Physics {
 

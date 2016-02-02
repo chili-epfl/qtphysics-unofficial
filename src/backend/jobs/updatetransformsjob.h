@@ -1,6 +1,6 @@
 #ifndef UPDATETRANSFORMSJOB_H
 #define UPDATETRANSFORMSJOB_H
-#include "qtphysicsunofficial_global.h"
+#include <qtphysicsunofficial_global.h>
 
 
 namespace Physics {

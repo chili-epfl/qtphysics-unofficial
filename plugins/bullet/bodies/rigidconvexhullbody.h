@@ -1,6 +1,6 @@
 #ifndef RigidConvexHullBody_H
 #define RigidConvexHullBody_H
-#include "abstractrigidbody.h"
+#include <bodies/abstractrigidbody.h>
 namespace Physics {
 
 namespace Bullet {

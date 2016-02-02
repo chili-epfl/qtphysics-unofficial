@@ -1,8 +1,8 @@
-#include "physicsentity.h"
-#include "physicsbodyinfo.h"
-#include "physicsworldinfo.h"
+#include <backend/backendtypes/physicsentity.h>
+#include <frontend/physicsbodyinfo.h>
+#include <frontend/physicsworldinfo.h>
 
-#include "../physicsmanager.h"
+#include <backend/physicsmanager.h>
 
 namespace Physics {
 

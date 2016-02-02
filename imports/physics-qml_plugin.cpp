@@ -1,7 +1,7 @@
 #include "physics-qml_plugin.h"
 
-#include <physicsbodyinfo.h>
-#include <physicsworldinfo.h>
+#include <frontend/physicsbodyinfo.h>
+#include <frontend/physicsworldinfo.h>
 #include <qqml.h>
 
 void Qml_PhysicsPlugin::registerTypes(const char *uri)

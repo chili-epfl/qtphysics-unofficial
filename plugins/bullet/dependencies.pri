@@ -10,5 +10,5 @@ android{
     BULLET_LIBS_PATH += -L/home/chili/Downloads/bullet3-2.83.5/build-linux/install/lib
 }
 
-BULLET_LIBS_PATH += -lLinearMath -lBulletDynamics -lBulletCollision -lBulletSoftBody
+BULLET_LIBS_PATH += -lLinearMath -lBulletDynamics -lBulletCollision
 

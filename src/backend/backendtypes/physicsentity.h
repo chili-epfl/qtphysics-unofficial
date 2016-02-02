@@ -1,6 +1,6 @@
 #ifndef PhysicsENTITY_H
 #define PhysicsENTITY_H
-#include "qtphysicsunofficial_global.h"
+#include <qtphysicsunofficial_global.h>
 
 
 namespace Physics {

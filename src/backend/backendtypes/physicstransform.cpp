@@ -1,5 +1,5 @@
-#include "physicstransform.h"
-#include "../physicsmanager.h"
+#include <backend/backendtypes/physicstransform.h>
+#include <backend/physicsmanager.h>
 
 namespace Physics {
 

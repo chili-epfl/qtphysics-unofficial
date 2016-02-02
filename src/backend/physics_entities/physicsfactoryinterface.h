@@ -1,10 +1,8 @@
 #ifndef PHYSICSFACTORYINTERFACE_H
 #define PHYSICSFACTORYINTERFACE_H
-#include "qtphysicsunofficial_global.h"
-#include "physicsabstractdynamicsworld.h"
-#include "physicsabstractsoftrigiddynamicsworld.h"
-#include "physicsabstractrigidbody.h"
-#include "physicsabstractsoftbody.h"
+#include <qtphysicsunofficial_global.h>
+#include <backend/physics_entities/physicsabstractdynamicsworld.h>
+#include <backend/physics_entities/physicsabstractrigidbody.h>
 #include <QObject>
 
 namespace Physics {
@@ -13,11 +11,10 @@ namespace Physics {
 class QTPHYSICSUNOFFICIAL_EXPORT PhysicsFactoryInterface
 {
 public:
-    virtual PhysicsAbstractSoftBody* create_soft_body(QVariantMap geometric_info)=0;
     virtual PhysicsAbstractRigidBody* create_rigid_body(QVariantMap geometric_info)=0;
 
     virtual PhysicsAbstractDynamicsWorld* create_dynamics_world()=0;
-    virtual PhysicsAbstractSoftRigidDynamicsWorld* create_soft_rigid_dynamics_world()=0;
+
 
 };
 }

@@ -1,10 +1,10 @@
-#include "bulletfactory.h"
+#include <bulletfactory.h>
 
-#include "worlds/dynamicsworld.h"
-#include "bodies/rigidboxbody.h"
-#include "bodies/rigidconvexhullbody.h"
-#include "bodies/rigidstaticplanebody.h"
-#include "bodies/rigidspherebody.h"
+#include <worlds/dynamicsworld.h>
+#include <bodies/rigidboxbody.h>
+#include <bodies/rigidconvexhullbody.h>
+#include <bodies/rigidstaticplanebody.h>
+#include <bodies/rigidspherebody.h>
 
 namespace Physics {
 
@@ -66,12 +66,6 @@ PhysicsAbstractDynamicsWorld* BulletFactory::create_dynamics_world(){
     return new DynamicsWorld();
 }
 
-PhysicsAbstractSoftBody* BulletFactory::create_soft_body(QVariantMap geometric_info){
-    return Q_NULLPTR;
-}
-PhysicsAbstractSoftRigidDynamicsWorld* BulletFactory::create_soft_rigid_dynamics_world(){
-    return Q_NULLPTR;
-}
 
 
 

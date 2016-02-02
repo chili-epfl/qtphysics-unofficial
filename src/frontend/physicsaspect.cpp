@@ -1,25 +1,23 @@
-#include "physicsaspect.h"
-#include "physicsmanager.h"
+#include <frontend/physicsaspect.h>
+#include <backend/physicsmanager.h>
 
-#include "backendtypes/physicsentity.h"
-#include "backendtypes/physicsgeometryrenderer.h"
-#include "backendtypes/physicsgeometry.h"
-#include "backendtypes/physicsattribute.h"
-#include "backendtypes/physicstransform.h"
-#include "backendtypes/physicsbodyinfobackendnode.h"
-#include "backendtypes/physicssoftbodyinfobackendnode.h"
-#include "backendtypes/physicsworldinfobackendnode.h"
-#include "backendtypes/physicsbuffer.h"
+#include <backend/backendtypes/physicsentity.h>
+#include <backend/backendtypes/physicsgeometryrenderer.h>
+#include <backend/backendtypes/physicsgeometry.h>
+#include <backend/backendtypes/physicsattribute.h>
+#include <backend/backendtypes/physicstransform.h>
+#include <backend/backendtypes/physicsbodyinfobackendnode.h>
+#include <backend/backendtypes/physicsworldinfobackendnode.h>
+#include <backend/backendtypes/physicsbuffer.h>
 
-#include <physicsbodyinfo.h>
-#include <physicssoftbodyinfo.h>
+#include <frontend/physicsbodyinfo.h>
 
-#include <physicsworldinfo.h>
+#include <frontend/physicsworldinfo.h>
 
-#include "jobs/debugjob.h"
-#include "jobs/simulatestepjob.h"
-#include "jobs/updatetransformsjob.h"
-#include "jobs/notifycollisionsjob.h"
+#include <backend/jobs/debugjob.h>
+#include <backend/jobs/simulatestepjob.h>
+#include <backend/jobs/updatetransformsjob.h>
+#include <backend/jobs/notifycollisionsjob.h>
 
 
 using namespace Qt3DCore;

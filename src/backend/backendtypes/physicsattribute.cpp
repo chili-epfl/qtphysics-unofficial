@@ -1,7 +1,7 @@
-#include "physicsattribute.h"
+#include <backend/backendtypes/physicsattribute.h>
 
-#include "../physicsmanager.h"
-#include "physicsbuffer.h"
+#include <backend/physicsmanager.h>
+#include <backend/backendtypes/physicsbuffer.h>
 
 namespace Physics {
 

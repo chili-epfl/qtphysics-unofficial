@@ -3,7 +3,7 @@
 
 #include <physics_entities/physicsabstractdynamicsworld.h>
 
-#include "../bodies/abstractrigidbody.h"
+#include <bodies/abstractrigidbody.h>
 
 #include <QVector3D>
 #include <btBulletDynamicsCommon.h>

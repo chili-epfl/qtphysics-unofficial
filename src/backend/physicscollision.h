@@ -1,6 +1,6 @@
 #ifndef PHYSICSCOLLISION
 #define PHYSICSCOLLISION
-#include "qtphysicsunofficial_global.h"
+#include <qtphysicsunofficial_global.h>
 #include <QVector3D>
 
 namespace Physics {

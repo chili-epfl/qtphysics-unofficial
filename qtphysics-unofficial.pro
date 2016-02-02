@@ -4,8 +4,6 @@ qtCompileTest(bullet)
 TEMPLATE = subdirs
 CONFIG += ordered
 
-BULLET_LIBS_PATH += -lLinearMath -lBulletDynamics -lBulletCollision -lBulletSoftBody
-
 
 qtHaveModule(3dcore){
     SUBDIRS += \

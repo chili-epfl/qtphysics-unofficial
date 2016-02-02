@@ -1,8 +1,8 @@
 #ifndef PHYSICSABSTRACTDYNAMICSWORLD_H
 #define PHYSICSABSTRACTDYNAMICSWORLD_H
-#include "qtphysicsunofficial_global.h"
+#include <qtphysicsunofficial_global.h>
 
-#include "physicsabstractrigidbody.h"
+#include <backend/physics_entities/physicsabstractrigidbody.h>
 #include <QObject>
 #include <QVector3D>
 namespace Physics {

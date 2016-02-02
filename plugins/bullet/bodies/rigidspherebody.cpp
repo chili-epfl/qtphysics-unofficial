@@ -1,4 +1,4 @@
-#include "rigidspherebody.h"
+#include <bodies/rigidspherebody.h>
 
 #include <bullet/BulletCollision/CollisionShapes/btSphereShape.h>
 

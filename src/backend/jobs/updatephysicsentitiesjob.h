@@ -1,6 +1,6 @@
 #ifndef UpdatePhysicsEntitiesJob_H
 #define UpdatePhysicsEntitiesJob_H
-#include "qtphysicsunofficial_global.h"
+#include <qtphysicsunofficial_global.h>
 #include <QQueue>
 
 namespace Physics {

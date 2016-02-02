@@ -1,4 +1,4 @@
-#include "physicsabstractrigidbody.h"
+#include <backend/physics_entities/physicsabstractrigidbody.h>
 namespace Physics {
 
 

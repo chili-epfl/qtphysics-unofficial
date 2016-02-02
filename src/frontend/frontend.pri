@@ -8,20 +8,19 @@ SOURCES += \
     $$PWD/physicsbodyinfo.cpp \
     $$PWD/physicsworldinfo.cpp \
     $$PWD/physicscollisionevent.cpp \
-    $$PWD/physicssoftbodyinfo.cpp \
+#    $$PWD/physicssoftbodyinfo.cpp \
     $$PWD/physicsaspect.cpp
 
 HEADERS +=\
         $$PWD/physicsbodyinfo.h \
         $$PWD/physicsworldinfo.h \
         $$PWD/physicscollisionevent.h \
-        $$PWD/physicssoftbodyinfo.h \
+#        $$PWD/physicssoftbodyinfo.h \
         $$PWD/physicsaspect.h
 
-INCLUDEPATH += $$PWD
 
 
-frontHeadersDataFiles.path = $$[QT_INSTALL_HEADERS]/$$PROJECT_NAME
+frontHeadersDataFiles.path = $$[QT_INSTALL_HEADERS]/$$PROJECT_NAME/frontend
 frontHeadersDataFiles.files = $$PWD/*.h
 
 INSTALLS += frontHeadersDataFiles

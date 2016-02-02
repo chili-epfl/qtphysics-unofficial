@@ -1,4 +1,4 @@
-#include "physicsbodyinfo.h"
+#include <frontend/physicsbodyinfo.h>
 #include <QVariantList>
 namespace Physics {
 

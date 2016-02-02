@@ -1,7 +1,7 @@
 #ifndef RigidStaticPlaneBody_H
 #define RigidStaticPlaneBody_H
 
-#include "abstractrigidbody.h"
+#include <bodies/abstractrigidbody.h>
 #include <QVector3D>
 
 namespace Physics {

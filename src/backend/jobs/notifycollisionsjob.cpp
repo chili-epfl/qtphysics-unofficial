@@ -1,11 +1,11 @@
-#include "notifycollisionsjob.h"
+#include <backend/jobs/notifycollisionsjob.h>
 
-#include "../physicsmanager.h"
-#include "backendtypes/physicsentity.h"
-#include "backendtypes/physicsbodyinfobackendnode.h"
-#include "backendtypes/physicstransform.h"
-#include "physics_entities/physicsabstractrigidbody.h"
-#include "physicscollision.h"
+#include <backend/physicsmanager.h>
+#include <backend/backendtypes/physicsentity.h>
+#include <backend/backendtypes/physicsbodyinfobackendnode.h>
+#include <backend/backendtypes/physicstransform.h>
+#include <backend/physics_entities/physicsabstractrigidbody.h>
+#include <backend/physicscollision.h>
 
 namespace Physics {
 

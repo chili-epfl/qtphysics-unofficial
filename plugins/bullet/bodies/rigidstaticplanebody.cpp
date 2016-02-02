@@ -1,4 +1,4 @@
-#include "rigidstaticplanebody.h"
+#include <bodies/rigidstaticplanebody.h>
 
 namespace Physics {
 

@@ -1,9 +1,9 @@
 #ifndef PHYSICSBODYINFOBACKENDNODE_H
 #define PHYSICSBODYINFOBACKENDNODE_H
 
-#include "qtphysicsunofficial_global.h"
+#include <qtphysicsunofficial_global.h>
 
-#include "../physicscollision.h"
+#include <backend/physicscollision.h>
 
 namespace Physics {
 

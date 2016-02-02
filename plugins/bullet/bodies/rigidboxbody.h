@@ -1,7 +1,7 @@
 #ifndef RigidBoxBody_H
 #define RigidBoxBody_H
 
-#include "abstractrigidbody.h"
+#include <bodies/abstractrigidbody.h>
 #include <QVector3D>
 
 namespace Physics {

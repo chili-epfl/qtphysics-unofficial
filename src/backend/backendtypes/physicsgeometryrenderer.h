@@ -1,10 +1,10 @@
 #ifndef PhysicsGeometryRenderer_H
 #define PhysicsGeometryRenderer_H
-#include "qtphysicsunofficial_global.h"
+#include <qtphysicsunofficial_global.h>
 
 
-#include "jobs/updatephysicsentitiesjob.h"
-#include "jobs/debugjob.h"
+#include <backend/jobs/updatephysicsentitiesjob.h>
+#include <backend/jobs/debugjob.h>
 
 
 namespace Physics {

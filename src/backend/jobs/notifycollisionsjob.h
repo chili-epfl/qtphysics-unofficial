@@ -1,6 +1,6 @@
 #ifndef NOTIFYCOLLISIONSJOB_H
 #define NOTIFYCOLLISIONSJOB_H
-#include "qtphysicsunofficial_global.h"
+#include <qtphysicsunofficial_global.h>
 
 
 namespace Physics {

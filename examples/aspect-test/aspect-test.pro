@@ -23,7 +23,7 @@ android{
     LIBS += -L/home/chili/Downloads/bullet3-2.83.5/build-linux/install/lib
 }
 
-LIBS += -lLinearMath -lBulletDynamics -lBulletCollision -lBulletSoftBody
+LIBS += -lLinearMath -lBulletDynamics -lBulletCollision
 
 #HEADERS += \
 #    physicssetter.h

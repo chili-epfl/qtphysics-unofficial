@@ -1,8 +1,8 @@
 #ifndef PHYSICSGEOMETRY_H
 #define PHYSICSGEOMETRY_H
-#include "qtphysicsunofficial_global.h"
+#include <qtphysicsunofficial_global.h>
 
-#include "jobs/debugjob.h"
+#include <backend/jobs/debugjob.h>
 
 namespace Physics {
 

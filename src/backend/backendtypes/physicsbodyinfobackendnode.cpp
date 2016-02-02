@@ -1,10 +1,9 @@
-#include "physicsbodyinfobackendnode.h"
+#include <backend/backendtypes/physicsbodyinfobackendnode.h>
 
 
-#include <physicsbodyinfo.h>
-#include <physicssoftbodyinfo.h>
+#include <frontend/physicsbodyinfo.h>
 
-#include "../physicsmanager.h"
+#include <backend/physicsmanager.h>
 
 namespace Physics {
 

@@ -1,4 +1,4 @@
-#include "rigidboxbody.h"
+#include <bodies/rigidboxbody.h>
 #include <bullet/BulletCollision/CollisionShapes/btBoxShape.h>
 
 namespace Physics {

@@ -1,7 +1,7 @@
 #ifndef PHYSICSATTRIBUTE_H
 #define PHYSICSATTRIBUTE_H
 
-#include "qtphysicsunofficial_global.h"
+#include <qtphysicsunofficial_global.h>
 
 namespace Physics {
 

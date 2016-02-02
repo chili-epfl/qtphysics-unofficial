@@ -1,4 +1,4 @@
-#include "dynamicsworld.h"
+#include <worlds/dynamicsworld.h>
 namespace Physics {
 
 namespace Bullet{

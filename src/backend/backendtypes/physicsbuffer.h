@@ -1,7 +1,7 @@
 #ifndef PHYSICSBUFFER_H
 #define PHYSICSBUFFER_H
 
-#include "qtphysicsunofficial_global.h"
+#include <qtphysicsunofficial_global.h>
 namespace Physics {
 
 class PhysicsManager;

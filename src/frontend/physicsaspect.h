@@ -1,7 +1,7 @@
 #ifndef PhysicsASPECT_H
 #define PhysicsASPECT_H
 
-#include "qtphysicsunofficial_global.h"
+#include <qtphysicsunofficial_global.h>
 
 
 QT_BEGIN_NAMESPACE

@@ -1,14 +1,14 @@
-#include "updatephysicsentitiesjob.h"
-#include "backendtypes/physicsentity.h"
-#include "backendtypes/physicsgeometryrenderer.h"
-#include "backendtypes/physicsbodyinfobackendnode.h"
-#include "backendtypes/physicsworldinfobackendnode.h"
-#include "backendtypes/physicstransform.h"
-#include "backendtypes/physicsgeometry.h"
-#include "backendtypes/physicsattribute.h"
-#include "backendtypes/physicsbuffer.h"
+#include <backend/jobs/updatephysicsentitiesjob.h>
+#include <backend/backendtypes/physicsentity.h>
+#include <backend/backendtypes/physicsgeometryrenderer.h>
+#include <backend/backendtypes/physicsbodyinfobackendnode.h>
+#include <backend/backendtypes/physicsworldinfobackendnode.h>
+#include <backend/backendtypes/physicstransform.h>
+#include <backend/backendtypes/physicsgeometry.h>
+#include <backend/backendtypes/physicsattribute.h>
+#include <backend/backendtypes/physicsbuffer.h>
 
-#include "physicsmanager.h"
+#include <backend/physicsmanager.h>
 namespace Physics {
 
 
@@ -27,7 +27,7 @@ void UpdatePhysicsEntitiesJob::run(){
         visit_queue.enqueue(tmp_visit_data);
         while(!visit_queue.isEmpty()){
             //update_step;
-
+            visit_queue.dequeue();
         }
     }
     recursive_step(m_manager->rootEntityId(),QMatrix4x4(),false);

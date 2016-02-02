@@ -1,8 +1,8 @@
-#include "physicsworldinfobackendnode.h"
+#include <backend/backendtypes/physicsworldinfobackendnode.h>
 
 
-#include <physicsworldinfo.h>
-#include "../physicsmanager.h"
+#include <frontend/physicsworldinfo.h>
+#include <backend/physicsmanager.h>
 
 namespace Physics {
 

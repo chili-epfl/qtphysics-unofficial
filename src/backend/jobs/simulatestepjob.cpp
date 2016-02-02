@@ -1,5 +1,5 @@
-#include "simulatestepjob.h"
-#include "../physicsmanager.h"
+#include <backend/jobs/simulatestepjob.h>
+#include <backend/physicsmanager.h>
 
 namespace Physics {
 

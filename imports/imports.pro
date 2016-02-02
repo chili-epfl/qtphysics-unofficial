@@ -8,7 +8,6 @@ CONFIG -= android_install
 
 uri = QtPhysics.unofficial
 
-INCLUDEPATH += $$PWD/../src/frontend
 INCLUDEPATH += $$PWD/../src/
 
 SOURCES += \

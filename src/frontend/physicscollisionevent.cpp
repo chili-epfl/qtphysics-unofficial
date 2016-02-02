@@ -1,4 +1,4 @@
-#include "physicscollisionevent.h"
+#include <frontend/physicscollisionevent.h>
 
 
 namespace Physics {

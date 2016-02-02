@@ -1,16 +1,15 @@
 #ifndef PHYSICSMANAGER_H
 #define PHYSICSMANAGER_H
 
-#include "qtphysicsunofficial_global.h"
+#include <qtphysicsunofficial_global.h>
 #include <QHash>
 
-#include "physics_entities/physicsabstractrigidbody.h"
-#include "physics_entities/physicsabstractsoftbody.h"
-#include "physics_entities/physicsabstractdynamicsworld.h"
-#include "physics_entities/physicsfactoryinterface.h"
+#include <backend/physics_entities/physicsabstractrigidbody.h>
+#include <backend/physics_entities/physicsabstractdynamicsworld.h>
+#include <backend/physics_entities/physicsfactoryinterface.h>
 #include <QString>
 #include <QVector3D>
-#include "physicscollision.h"
+#include <backend/physicscollision.h>
 
 namespace Physics {
 
@@ -31,9 +30,6 @@ public:
 
     QHash<Qt3DCore::QNodeId,PhysicsAbstractRigidBody*> m_Id2RigidBodies;
     QHash<PhysicsAbstractRigidBody*,Qt3DCore::QNodeId> m_RigidBodies2Id;
-
-    QHash<Qt3DCore::QNodeId,PhysicsAbstractSoftBody*> m_Id2SoftBodies;
-    QHash<PhysicsAbstractSoftBody*,Qt3DCore::QNodeId> m_SoftBodies2Id;
 
     QSet<Qt3DCore::QNodeId> garbage;
 

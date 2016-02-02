@@ -1,6 +1,6 @@
 #ifndef PhysicsWorldInfo_H
 #define PhysicsWorldInfo_H
-#include "qtphysicsunofficial_global.h"
+#include <qtphysicsunofficial_global.h>
 
 
 #include <QVector3D>

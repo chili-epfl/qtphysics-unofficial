@@ -1,4 +1,4 @@
-#include "physicsabstractdynamicsworld.h"
+#include <backend/physics_entities/physicsabstractdynamicsworld.h>
 
 namespace Physics {
 

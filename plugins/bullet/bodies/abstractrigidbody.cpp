@@ -1,5 +1,6 @@
-#include "abstractrigidbody.h"
-#include "motionstate.h"
+#include <bodies/abstractrigidbody.h>
+#include <bodies/motionstate.h>
+
 namespace Physics {
 
 namespace Bullet {

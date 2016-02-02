@@ -1,10 +1,10 @@
-#include "debugjob.h"
-#include "../physicsmanager.h"
-#include "../backendtypes/physicsentity.h"
-#include "../backendtypes/physicsgeometryrenderer.h"
-#include "../backendtypes/physicsgeometry.h"
-#include "../backendtypes/physicsattribute.h"
-#include "../backendtypes/physicsbuffer.h"
+#include <backend/jobs/debugjob.h>
+#include <backend/physicsmanager.h>
+#include <backend/backendtypes/physicsentity.h>
+#include <backend/backendtypes/physicsgeometryrenderer.h>
+#include <backend/backendtypes/physicsgeometry.h>
+#include <backend/backendtypes/physicsattribute.h>
+#include <backend/backendtypes/physicsbuffer.h>
 
 #include <QDebug>
 namespace Physics {

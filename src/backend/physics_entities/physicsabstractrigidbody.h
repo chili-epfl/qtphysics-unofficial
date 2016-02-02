@@ -1,6 +1,6 @@
 #ifndef PHYSICSABSTRACTRIGIDBODY_H
 #define PHYSICSABSTRACTRIGIDBODY_H
-#include "qtphysicsunofficial_global.h"
+#include <qtphysicsunofficial_global.h>
 
 #include <QObject>
 
