@@ -8,7 +8,7 @@ SOURCES += \
     $$PWD/backendtypes/physicsbodyinfobackendnode.cpp \
     $$PWD/backendtypes/physicsentity.cpp \
     $$PWD/backendtypes/physicstransform.cpp \
-    $$PWD/jobs/debugjob.cpp \
+    #$$PWD/jobs/debugjob.cpp \
     #jobs/insertphysicstransformjob.cpp \
     $$PWD/physicsmanager.cpp \
     $$PWD/backendtypes/physicsworldinfobackendnode.cpp \
@@ -30,7 +30,7 @@ HEADERS +=\
     $$PWD/backendtypes/physicsbodyinfobackendnode.h \
     $$PWD/backendtypes/physicsentity.h \
     $$PWD/backendtypes/physicstransform.h \
-    $$PWD/jobs/debugjob.h \
+    #$$PWD/jobs/debugjob.h \
     #jobs/insertphysicstransformjob.h \
     $$PWD/physicsmanager.h \
     $$PWD/physics_entities/physicsabstractrigidbody.h \

@@ -2,8 +2,6 @@
 #define PHYSICSABSTRACTRIGIDBODY_H
 #include <qtphysicsunofficial_global.h>
 
-#include <QObject>
-
 namespace Physics {
 
 class QTPHYSICSUNOFFICIAL_EXPORT PhysicsAbstractRigidBody : public QObject

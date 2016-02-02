@@ -15,6 +15,7 @@ HEADERS += \
 
 include(frontend/frontend.pri)
 include(backend/backend.pri)
+
 INCLUDEPATH += $$PWD
 
 headersDataFiles.path = $$[QT_INSTALL_HEADERS]/$$PROJECT_NAME

@@ -3,7 +3,6 @@
 #include <qtphysicsunofficial_global.h>
 #include <backend/physics_entities/physicsabstractdynamicsworld.h>
 #include <backend/physics_entities/physicsabstractrigidbody.h>
-#include <QObject>
 
 namespace Physics {
 

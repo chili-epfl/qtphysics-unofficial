@@ -164,10 +164,10 @@ void PhysicsBodyInfoBackendNode::notifyFrontEnd(QString operation){
     }
     else if(operation=="notifyCollision"){
         PhysicsCollisionEventPtrList collisions_list;
+
         if(m_collisions.values().contains(0) || m_collisions.values().contains(2)){
             e->setPropertyName("notifyCollision");
             Q_FOREACH(Collision c, m_collisions.keys()){
-                //qDebug()<<c.body1<<" "<<c.body2;
                 if(m_collisions[c]==0){
                     m_collisions.remove(c);
                     continue;

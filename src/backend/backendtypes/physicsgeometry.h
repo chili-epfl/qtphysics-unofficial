@@ -2,8 +2,6 @@
 #define PHYSICSGEOMETRY_H
 #include <qtphysicsunofficial_global.h>
 
-#include <backend/jobs/debugjob.h>
-
 namespace Physics {
 
 class PhysicsManager;
@@ -33,9 +31,6 @@ private:
     int m_verticesPerPatch;
 
     PhysicsManager* m_manager;
-
-    friend class DebugJob;
-
 
 };
 

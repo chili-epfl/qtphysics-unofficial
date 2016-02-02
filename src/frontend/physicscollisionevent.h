@@ -2,9 +2,6 @@
 #define PHYSICSCOLLISIONEVENT_H
 #include <qtphysicsunofficial_global.h>
 
-
-#include <QVector3D>
-#include <QDebug>
 namespace Physics {
 
 

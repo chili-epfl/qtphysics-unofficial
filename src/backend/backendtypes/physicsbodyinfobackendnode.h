@@ -2,7 +2,6 @@
 #define PHYSICSBODYINFOBACKENDNODE_H
 
 #include <qtphysicsunofficial_global.h>
-
 #include <backend/physicscollision.h>
 
 namespace Physics {

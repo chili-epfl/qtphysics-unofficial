@@ -1,7 +1,5 @@
 #ifndef PHYSICSWORLDINFOBACKENDNODE_H
 #define PHYSICSWORLDINFOBACKENDNODE_H
-
-
 #include <qtphysicsunofficial_global.h>
 
 

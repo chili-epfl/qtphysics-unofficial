@@ -2,7 +2,6 @@
 #define PhysicsGeometryRenderer_H
 #include <qtphysicsunofficial_global.h>
 #include <backend/jobs/updatephysicsentitiesjob.h>
-#include <backend/jobs/debugjob.h>
 
 
 namespace Physics {
@@ -48,7 +47,6 @@ private:
     Qt3DRender::QGeometryRenderer::PrimitiveType m_primitiveType;
 
 friend class UpdatePhysicsEntitiesJob;
-friend class DebugJob;
 
 };
 

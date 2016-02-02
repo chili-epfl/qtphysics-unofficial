@@ -36,7 +36,6 @@ void NotifyCollisionsJob::run(){
         }
         else {
             body_info->collisions().operator [](c)=2;
-
         }
         /*Swap the collision bodies*/
         c.swapBodies();
@@ -48,6 +47,7 @@ void NotifyCollisionsJob::run(){
             body_info->collisions().operator [](c)=2;
         }
     }
+
     Q_FOREACH(Qt3DCore::QNodeId nodeId, m_manager->m_Id2RigidBodies.keys()){
         entity= static_cast<PhysicsEntity*>(m_manager->m_resources.operator [](nodeId));
         body_info=static_cast<PhysicsBodyInfoBackendNode*>(m_manager->m_resources.operator [](entity->physicsBodyInfo()));

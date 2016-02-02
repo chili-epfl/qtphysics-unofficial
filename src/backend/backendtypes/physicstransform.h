@@ -50,7 +50,6 @@ public:
 private:
     PhysicsManager* m_manager;
 
-
 };
 
 }

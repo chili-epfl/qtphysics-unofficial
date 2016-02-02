@@ -3,8 +3,6 @@
 #include <qtphysicsunofficial_global.h>
 
 #include <backend/physics_entities/physicsabstractrigidbody.h>
-#include <QObject>
-#include <QVector3D>
 namespace Physics {
 
 class PhysicsAbstractDynamicsWorld : public QObject

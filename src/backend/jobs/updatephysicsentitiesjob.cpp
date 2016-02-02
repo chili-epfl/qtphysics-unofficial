@@ -158,7 +158,7 @@ void UpdatePhysicsEntitiesJob::iterative_step(Qt3DCore::QNodeId node_id, QMatrix
             forceUpdateMS=true;
             inputTransform->setDirty(false);
         }
-        /*Otherwise use the matrix form the simulation*/
+        /*Otherwise use the matrix from the simulation*/
         else{
             current_global_matrix=current_global_matrix*entity_body_info->localTransform();
         }
@@ -339,7 +339,8 @@ PhysicsAbstractRigidBody* UpdatePhysicsEntitiesJob::createRigidBodyFromMesh(Phys
     vertexPosition.clear();
     vertexPosition.reserve(index_Set.size());
     Q_FOREACH(quint16 index,index_Set.values()){
-        vertexPosition.append(v[index]);
+        if(index<v.size())
+            vertexPosition.append(v[index]);
     }
     geometric_info["Points"]=QVariant::fromValue(vertexPosition);
     return m_manager->m_physics_factory->create_rigid_body(geometric_info);
