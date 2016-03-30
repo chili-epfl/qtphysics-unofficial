@@ -82,6 +82,8 @@ void PhysicsAspect::onRootEntityChanged(QEntity *rootEntity)
     m_manager->setRootEntityId(rootEntity->id());
 }
 
+
+
 //void PhysicsAspect::sceneNodeAdded(Qt3DCore::QSceneChangePtr &e) {
 //    Qt3DCore::QScenePropertyChangePtr propertyChange = e.staticCast<Qt3DCore::QScenePropertyChange>();
 //    Qt3DCore::QNodePtr nodePtr = propertyChange->value().value<Qt3DCore::QNodePtr>();
@@ -102,12 +104,14 @@ void PhysicsAspect::onRootEntityChanged(QEntity *rootEntity)
 ////    visitor.traverse(rootObject, this, &PhysicsAspect::visitNode, &PhysicsAspect::visitNode);
 //    m_manager->setRootEntityId(rootObject->id());
 //}
-
+#if (QT_VERSION == QT_VERSION_CHECK(5, 6, 0))
 void PhysicsAspect::onInitialize(const QVariantMap &data) {
     Q_UNUSED(data);
-
 }
-
+#elif (QT_VERSION == QT_VERSION_CHECK(5, 7, 0))
+void PhysicsAspect::onInitialize() {
+}
+#endif
 void PhysicsAspect::onCleanup() {
     delete m_manager;
 }
