@@ -24,7 +24,7 @@ public:
     };
     Q_DECLARE_FLAGS(ChangeFlags, ChangeFlag)
     explicit AbstractRigidBody(QObject* parent=0);
-
+    ~AbstractRigidBody();
     virtual int mask(){return m_mask;}
     virtual int group(){return m_group;}
     virtual bool kinematic(){return m_kinematic;}

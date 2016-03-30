@@ -17,9 +17,13 @@ PhysicsManager::PhysicsManager():
 
 PhysicsManager::~PhysicsManager()
 {
-    QHash<Qt3DCore::QNodeId, Qt3DCore::QBackendNode*>::iterator i;
-    for (i = m_resources.begin(); i != m_resources.end(); ++i)
-        delete i.value();
+
+    Q_FOREACH(Qt3DCore::QBackendNode* node, m_resources.values())
+        delete node;
+
+    m_Id2RigidBodies.clear();
+    m_RigidBodies2Id.clear();
+    delete m_physics_world;
 }
 
 

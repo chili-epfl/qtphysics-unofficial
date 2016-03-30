@@ -13,18 +13,17 @@ DynamicsWorld::DynamicsWorld(QObject *parent):
 
 DynamicsWorld::~DynamicsWorld()
 {
-/*
-    for(AbstractRigidBody* c: m_collisionShapes.values())
+
+    for(AbstractRigidBody* c: m_PhysicsBodies2BulletBodies.keys()){
+        removeRigidBody(c);
         delete c;
-
-    delete m_simThread;
-
+    }
     delete m_dynamicsWorld;
     delete m_solver;
     delete m_collisionConfiguration;
     delete m_dispatcher;
     delete m_broadphase;
-*/
+
 }
 
 void DynamicsWorld::init(){
@@ -100,7 +99,6 @@ void DynamicsWorld::onBodyDestroyed(QObject* obj){
 
 void DynamicsWorld::removebtRigidBody(btRigidBody* b){
     m_dynamicsWorld->removeRigidBody(b);
-    delete b;
 }
 void DynamicsWorld::addbtRigidBody(btRigidBody* b,int group,int mask){
     m_dynamicsWorld->addRigidBody(b,group,mask);

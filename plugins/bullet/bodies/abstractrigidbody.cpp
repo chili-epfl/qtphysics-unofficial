@@ -22,6 +22,13 @@ AbstractRigidBody::AbstractRigidBody(QObject* parent):
     m_rigidBody=Q_NULLPTR;
 }
 
+AbstractRigidBody::~AbstractRigidBody()
+{
+    delete m_rigidBody;
+    delete m_motionState;
+    delete m_shape;
+}
+
 void AbstractRigidBody::initBody(){
 
     btVector3 inertia(m_fallInertia.x(),m_fallInertia.y(),m_fallInertia.z());
