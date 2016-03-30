@@ -51,12 +51,12 @@ Entity {
         }
     ]
 
-    TorusMesh {
+    SphereMesh {
         id: torusMesh
         radius: 2
         //minorRadius: 1
-        rings: 50
-        slices: 50
+        //rings: 50
+        //slices: 50
         //radius:4
         //length: 10
     }
@@ -83,6 +83,7 @@ Entity {
         Entity {
             id: torusEntity
             objectName: "torus"
+
 
 //            property MouseInput mouseInput : MouseInput {
 //                        controller: mouseController
@@ -180,22 +181,28 @@ Entity {
     but defined by the shape details*/
     Entity{
         objectName: "Floor"
+        PlaneMesh{
+            id: planeMesh
+            height: 10
+            width: 10
+        }
         Transform{
             id:transformFloor
             matrix: {
                         var m = Qt.matrix4x4();
-                        //m.rotate(userAngle, Qt.vector3d(0, 1, 0))
+                        //m.rotate(25, Qt.vector3d(0, 0, 1))
                         m.translate(Qt.vector3d(0, -10, 0));
                         return m;
                     }
+            onMatrixChanged:console.log(matrix)
         }
         PhysicsBodyInfo{
             id:floorBodyInfo
             restitution: 1
             inputTransform: transformFloor
-            shapeDetails:{"Type":"StaticPlane","PlaneConstant":0,"PlaneNormal": Qt.vector3d(0, 1, 0) }
+            //shapeDetails:{"Type":"StaticPlane","PlaneConstant":0,"PlaneNormal": Qt.vector3d(0, 1, 0) }
         }
-        components: [transformFloor,floorBodyInfo]
+        components: [planeMesh,transformFloor,floorBodyInfo]
     }
 
 
