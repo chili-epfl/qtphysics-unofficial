@@ -75,7 +75,7 @@ signals:
     void inputTransformChanged();
     void outputTransformChanged();
 
-    void collided(Physics::PhysicsCollisionEvent* event);
+    void collided(Physics::PhysicsCollisionEventPtr event);
     void hasCollidedChanged(bool val);
     void collisionsListChanged();
 protected:

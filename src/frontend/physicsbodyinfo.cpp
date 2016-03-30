@@ -97,6 +97,7 @@ void PhysicsBodyInfo::setInputTransform(Qt3DCore::QTransform* inputTransform){
     emit inputTransformChanged();
 }
 
+
 QQmlListProperty<PhysicsCollisionEvent> PhysicsBodyInfo::collisionsList(){
     return QQmlListProperty<PhysicsCollisionEvent>(this, 0,
                                                  PhysicsBodyInfo::qmlComponentsCount,
@@ -175,7 +176,7 @@ void PhysicsBodyInfo::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &change)
                     m_collisionsList.append(event_ptr);
                     m_collisionsCache.insert(event_ptr->target());
                     if(m_collisionsList.last()->isNew()){
-                        emit collided(m_collisionsList.last().data());
+                        emit collided(m_collisionsList.last());
                     }
                 }
                 if(!m_hasCollided){
