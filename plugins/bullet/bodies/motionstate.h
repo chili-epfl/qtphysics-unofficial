@@ -19,7 +19,7 @@ public:
     explicit MotionState(const QMatrix4x4 startTrans, const QMatrix4x4 centerOfMassOffset,QObject* parent=0);
     virtual void getWorldTransform(btTransform& centerOfMassWorldTrans ) const;
     virtual void setWorldTransform(const btTransform& centerOfMassWorldTrans);
-    void setWorldTransform(QMatrix4x4 mat);
+    void setWorldTransform(QMatrix4x4 mat, qreal scaleFactor=1.0);
     QMatrix4x4 getWorldTransformAsQMatrix4x4();
 public slots:
 };

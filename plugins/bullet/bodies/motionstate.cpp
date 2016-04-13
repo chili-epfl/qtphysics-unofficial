@@ -41,11 +41,11 @@ void MotionState::getWorldTransform(btTransform &centerOfMassWorldTrans) const{
 }
 
 
-void MotionState::setWorldTransform(QMatrix4x4 m){
+void MotionState::setWorldTransform(QMatrix4x4 m,qreal scaleFactor){
     btMatrix3x3 w_rotation(m.operator ()(0,0),m.operator ()(0,1),m.operator ()(0,2),
                            m.operator ()(1,0),m.operator ()(1,1),m.operator ()(1,2),
                            m.operator ()(2,0),m.operator ()(2,1),m.operator ()(2,2));
-    btVector3 w_translation(m.operator ()(0,3),m.operator ()(1,3),m.operator ()(2,3));
+    btVector3 w_translation(m.operator ()(0,3)*scaleFactor,m.operator ()(1,3)*scaleFactor,m.operator ()(2,3)*scaleFactor);
     btDefaultMotionState::setWorldTransform(btTransform(w_rotation,w_translation));
 }
 

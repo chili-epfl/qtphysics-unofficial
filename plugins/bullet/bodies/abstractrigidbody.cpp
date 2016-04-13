@@ -104,8 +104,8 @@ QMatrix4x4 AbstractRigidBody::worldTransformation(){
        return static_cast<MotionState*>(m_motionState)->getWorldTransformAsQMatrix4x4();
 }
 
-void AbstractRigidBody::setWorldTransformation(QMatrix4x4 m){
-    static_cast<MotionState*>(m_motionState)->setWorldTransform(m);
+void AbstractRigidBody::setWorldTransformation(QMatrix4x4 m, qreal scaleFactor){
+    static_cast<MotionState*>(m_motionState)->setWorldTransform(m,scaleFactor);
     m_rigidBody->setMotionState(m_motionState);
 }
 

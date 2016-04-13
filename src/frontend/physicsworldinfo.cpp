@@ -6,7 +6,8 @@ namespace Physics {
 
 PhysicsWorldInfo::PhysicsWorldInfo(QNode* parent):
     Qt3DCore::QComponent(parent),
-    m_gravity(0, -10, 0)
+    m_gravity(0, -10, 0),
+    m_scaleFactor(1)
 {
 
 }
@@ -18,7 +19,15 @@ PhysicsWorldInfo::~PhysicsWorldInfo(){
 void PhysicsWorldInfo::setGravity(QVector3D gravity){
     if(m_gravity!=gravity){
         m_gravity=gravity;
-        emit gravityChanged(m_gravity);
+        emit gravityChanged();
+    }
+}
+
+void PhysicsWorldInfo::setScaleFactor(qreal val)
+{
+    if(val!=m_scaleFactor){
+        m_scaleFactor=val;
+        emit scaleFactorChanged();
     }
 }
 

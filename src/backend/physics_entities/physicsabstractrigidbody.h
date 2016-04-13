@@ -30,7 +30,7 @@ public:
     virtual void setRestitution(qreal restitution)=0;
     virtual void setRollingFriction(qreal rollingFriction)=0;
     virtual void setFriction(qreal friction)=0;
-    virtual void setWorldTransformation(QMatrix4x4 m)=0;
+    virtual void setWorldTransformation(QMatrix4x4 m,qreal scaleFactor=1.0)=0;
 
 
 protected:

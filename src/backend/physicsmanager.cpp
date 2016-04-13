@@ -43,15 +43,16 @@ void PhysicsManager::loadPhysicsFactories(){
 QVector<Collision> PhysicsManager::getCollisions(){
     QVector<Collision> collisions;
     QVector<PhysicsAbstractDynamicsWorld::Collision> collisions_from_world=m_physics_world->getCollisions();
+    qreal inv_scaleFactor=1.0/m_physics_world->scaleFactor();
     Q_FOREACH(PhysicsAbstractDynamicsWorld::Collision c,collisions_from_world){
         Collision collision;
         collision.body1=m_RigidBodies2Id[c.body1];
         collision.body2=m_RigidBodies2Id[c.body2];
         collision.normalBody2=c.normalBody2;
-        collision.pointOnBody1=c.pointOnBody1;
-        collision.pointOnBody2=c.pointOnBody2;
-        collision.pointOnBody1Local=c.pointOnBody1Local;
-        collision.pointOnBody2Local=c.pointOnBody2Local;
+        collision.pointOnBody1=c.pointOnBody1*inv_scaleFactor;
+        collision.pointOnBody2=c.pointOnBody2*inv_scaleFactor;
+        collision.pointOnBody1Local=c.pointOnBody1Local*inv_scaleFactor;
+        collision.pointOnBody2Local=c.pointOnBody2Local*inv_scaleFactor;
         collisions.append(collision);
     }
     return collisions;

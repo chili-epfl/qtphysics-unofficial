@@ -21,11 +21,13 @@ void UpdateTransformsJob::run(){
     QPair<Qt3DCore::QNodeId,QMatrix4x4> current_node(m_manager->rootEntityId(),QMatrix4x4());
     nodes_to_visit.enqueue(current_node);
     PhysicsEntity* entity;
-    QMatrix4x4 current_world_transform;
+    QMatrix4x4 current_world_transform,global_transform;
+    QVector4D translation;
     PhysicsTransform* transform;
     PhysicsBodyInfoBackendNode* body_info;
     PhysicsAbstractRigidBody* rigid_body;
     QPair<Qt3DCore::QNodeId,QMatrix4x4> childNode;
+    qreal inv_scaleFactor=1.0/m_manager->m_physics_world->scaleFactor();
     while(!nodes_to_visit.isEmpty()){
         current_node=nodes_to_visit.dequeue();
         current_world_transform=current_node.second;
@@ -37,10 +39,17 @@ void UpdateTransformsJob::run(){
         if(m_manager->m_Id2RigidBodies.contains(current_node.first)){
                 body_info=static_cast<PhysicsBodyInfoBackendNode*>(m_manager->m_resources[entity->physicsBodyInfo()]);
                 rigid_body=static_cast<PhysicsAbstractRigidBody*>(m_manager->m_Id2RigidBodies[current_node.first]);
-                current_world_transform=rigid_body->worldTransformation();
+
+                global_transform=rigid_body->worldTransformation();
+                translation=global_transform.column(3);
+                translation=translation*inv_scaleFactor;
+                translation.setW(1);
+                global_transform.setColumn(3,translation);
+
+                current_world_transform=global_transform;
                 /*If the object is not statics (or kinematic) then update the position*/
                 //if(rigid_body->mass()!=0){
-                body_info->setLocalTransform(current_node.second.inverted()*rigid_body->worldTransformation());
+                body_info->setLocalTransform(current_node.second.inverted()*global_transform);
                 body_info->notifyFrontEnd("updateTransform");
                 //}
         }

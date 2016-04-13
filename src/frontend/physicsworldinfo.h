@@ -13,6 +13,7 @@ class QTPHYSICSUNOFFICIAL_EXPORT PhysicsWorldInfo:
 {
     Q_OBJECT
     Q_PROPERTY(QVector3D gravity READ gravity WRITE setGravity NOTIFY gravityChanged)
+    Q_PROPERTY(qreal scaleFactor READ scaleFactor WRITE setScaleFactor NOTIFY scaleFactorChanged)
     Q_PROPERTY(bool debug READ debug WRITE setDebug NOTIFY debugChanged)
 public:
     explicit PhysicsWorldInfo(QNode* parent=0);
@@ -23,14 +24,20 @@ public:
     QVector3D gravity() const {return m_gravity;}
     void setGravity(QVector3D gravity);
 
+    qreal scaleFactor() const{return m_scaleFactor;}
+    void setScaleFactor(qreal val);
+
+
     bool debug(){return m_debug;}
     void setDebug(bool debug){if(debug!=m_debug){m_debug=debug;emit debugChanged(m_debug);}}
 signals:
-    void gravityChanged(QVector3D gravity);
+    void gravityChanged();
     void debugChanged(bool debug);
+    void scaleFactorChanged();
 private:
     QVector3D m_gravity;
     bool m_debug;
+    qreal m_scaleFactor;
     QT3D_CLONEABLE(PhysicsWorldInfo)
 
 };

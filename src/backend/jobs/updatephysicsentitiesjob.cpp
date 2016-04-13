@@ -94,42 +94,42 @@ void UpdatePhysicsEntitiesJob::iterative_step(Qt3DCore::QNodeId node_id, QMatrix
         /*Update Body properties*/
         bool bodyNeedsReadd=isBodyNew;
         PhysicsBodyInfoBackendNode* entity_body_info=static_cast<PhysicsBodyInfoBackendNode*>(m_manager->m_resources.operator [](entity->physicsBodyInfo()));
-        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::MaskChanged)){
+        if(isBodyNew || entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::MaskChanged)){
             rigid_body->setMask(entity_body_info->mask());
             entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::MaskChanged;
             bodyNeedsReadd=true;
         }
-        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::GroupChanged)){
+        if(isBodyNew || entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::GroupChanged)){
             rigid_body->setGroup(entity_body_info->group());
             entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::GroupChanged;
             bodyNeedsReadd=true;
         }
-        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::MassChanged)){
+        if(isBodyNew || entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::MassChanged)){
             rigid_body->setMass(entity_body_info->mass());
             entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::MassChanged;
             bodyNeedsReadd=true;
         }
-        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::KinematicChanged)){
+        if(isBodyNew || entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::KinematicChanged)){
             rigid_body->setKinematic(entity_body_info->kinematic());
             entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::KinematicChanged;
             bodyNeedsReadd=true;
         }
-        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::FallInertiaChanged)){
+        if(isBodyNew || entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::FallInertiaChanged)){
             rigid_body->setFallInertia(entity_body_info->fallInertia());
             entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::FallInertiaChanged;
             bodyNeedsReadd=true;
         }
-        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::RestistutionChanged)){
+        if(isBodyNew || entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::RestistutionChanged)){
             rigid_body->setRestitution(entity_body_info->restitution());
             entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::RestistutionChanged;
             bodyNeedsReadd=true;
         }
-        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::FrictionChanged)){
+        if(isBodyNew || entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::FrictionChanged)){
             rigid_body->setFriction(entity_body_info->friction());
             entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::FrictionChanged;
             bodyNeedsReadd=true;
         }
-        if(entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::RollingFrictionChanged)){
+        if(isBodyNew || entity_body_info->dirtyFlags().testFlag(PhysicsBodyInfoBackendNode::DirtyFlag::RollingFrictionChanged)){
             rigid_body->setRollingFriction(entity_body_info->rollingFriction());
             entity_body_info->dirtyFlags() &= ~PhysicsBodyInfoBackendNode::DirtyFlag::RollingFrictionChanged;
             bodyNeedsReadd=true;
@@ -163,7 +163,7 @@ void UpdatePhysicsEntitiesJob::iterative_step(Qt3DCore::QNodeId node_id, QMatrix
             current_global_matrix=current_global_matrix*entity_body_info->localTransform();
         }
         if(forceUpdateMS){
-            rigid_body->setWorldTransformation(current_global_matrix);
+            rigid_body->setWorldTransformation(current_global_matrix,m_manager->m_physics_world->scaleFactor());
         }
     }
     else {
@@ -190,9 +190,18 @@ void UpdatePhysicsEntitiesJob::iterative_step(Qt3DCore::QNodeId node_id, QMatrix
     if(!entity->physicsWorldInfo().isNull() && m_manager->m_resources.contains(entity->physicsWorldInfo())){
         PhysicsWorldInfoBackendNode* entity_physics_world_info=static_cast<PhysicsWorldInfoBackendNode*>(m_manager->m_resources.operator [](entity->physicsWorldInfo()));
         if(entity_physics_world_info->dirtyFlags().testFlag(PhysicsWorldInfoBackendNode::DirtyFlag::GravityChanged)){
-            m_manager->m_physics_world->setGravity(entity_physics_world_info->gravity());
+            m_manager->m_physics_world->setGravity(entity_physics_world_info->gravity()*m_manager->m_physics_world->scaleFactor());
             entity_physics_world_info->dirtyFlags() &= ~PhysicsWorldInfoBackendNode::DirtyFlag::GravityChanged;
             m_manager->m_physics_world->setDebug(entity_physics_world_info->debug());
+        }
+        if(entity_physics_world_info->dirtyFlags().testFlag(PhysicsWorldInfoBackendNode::DirtyFlag::ScaleFactorChanged)){
+            //This requires that all the objects are removed
+            m_manager->m_physics_world->setScaleFactor(entity_physics_world_info->scaleFactor());
+            m_manager->m_physics_world->setGravity(entity_physics_world_info->gravity()*m_manager->m_physics_world->scaleFactor());
+            m_manager->m_Id2RigidBodies.clear();
+            m_manager->m_RigidBodies2Id.clear();
+            entity_physics_world_info->dirtyFlags() &= ~PhysicsWorldInfoBackendNode::DirtyFlag::ScaleFactorChanged;
+            return;
         }
     }
     /*Next call*/
@@ -340,7 +349,7 @@ PhysicsAbstractRigidBody* UpdatePhysicsEntitiesJob::createRigidBodyFromMesh(Phys
     vertexPosition.reserve(index_Set.size());
     Q_FOREACH(quint16 index,index_Set.values()){
         if(index<v.size())
-            vertexPosition.append(v[index]);
+            vertexPosition.append(v[index]*m_manager->m_physics_world->scaleFactor());
     }
     geometric_info["Points"]=QVariant::fromValue(vertexPosition);
     return m_manager->m_physics_factory->create_rigid_body(geometric_info);

@@ -29,6 +29,9 @@ public:
     QVector3D gravity(){return m_gravity;}
     void setGravity(QVector3D gravity);
 
+    qreal scaleFactor(){return m_scaleFactor;}
+    void setScaleFactor(qreal val);
+
     void removeRigidBody(PhysicsAbstractRigidBody* b);
     void addRigidBody(PhysicsAbstractRigidBody*b);
 
@@ -47,6 +50,7 @@ private:
     void init();
 
     qreal m_simulationRate;
+    qreal m_scaleFactor;
     QVector3D m_gravity;
 
     QHash<AbstractRigidBody*,btCollisionObject*> m_PhysicsBodies2BulletBodies;

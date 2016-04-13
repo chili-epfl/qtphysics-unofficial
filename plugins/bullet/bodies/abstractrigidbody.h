@@ -34,7 +34,7 @@ public:
     virtual void setKinematic(bool kinematic);
 
     virtual QMatrix4x4 worldTransformation();
-    virtual void setWorldTransformation(QMatrix4x4 m);
+    virtual void setWorldTransformation(QMatrix4x4 m,qreal scaleFactor=1.0);
 
     virtual qreal restitution(){return m_restitution;}
     virtual qreal rollingFriction(){return m_rollingFriction;}

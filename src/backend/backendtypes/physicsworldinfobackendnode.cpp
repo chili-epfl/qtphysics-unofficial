@@ -13,6 +13,7 @@ PhysicsWorldInfoBackendNode::PhysicsWorldInfoBackendNode():
     m_enabled(false),
     m_debug(false)
 {
+    m_scaleFactor=1.0;
     m_manager=Q_NULLPTR;
 }
 
@@ -30,6 +31,7 @@ void PhysicsWorldInfoBackendNode::updateFromPeer(Qt3DCore::QNode *peer){
     m_objectName = peer->objectName();
     setEnabled(world_info->isEnabled());
     setGravity(world_info->gravity());
+    setScaleFactor(world_info->scaleFactor());
     m_debug=world_info->debug();
 }
 
@@ -37,6 +39,14 @@ void PhysicsWorldInfoBackendNode::setGravity(QVector3D gravity){
     if(m_gravity!=gravity){
         m_gravity=gravity;
         m_dirtyFlags.operator |=(GravityChanged);
+    }
+}
+
+void PhysicsWorldInfoBackendNode::setScaleFactor(qreal val)
+{
+    if(m_scaleFactor!=val){
+        m_scaleFactor=val;
+        m_dirtyFlags.operator |=(ScaleFactorChanged);
     }
 }
 
@@ -51,6 +61,8 @@ void PhysicsWorldInfoBackendNode::sceneChangeEvent(const Qt3DCore::QSceneChangeP
                 setEnabled(propertyChange->value().toBool());
             else if (propertyChange->propertyName() == QByteArrayLiteral("debug"))
                 m_debug = propertyChange->value().toBool();
+            else if (propertyChange->propertyName() == QByteArrayLiteral("scaleFactor"))
+                setScaleFactor( propertyChange->value().toReal());
             break;
         }
         default:

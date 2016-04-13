@@ -66,9 +66,6 @@ PhysicsAbstractDynamicsWorld* BulletFactory::create_dynamics_world(){
     return new DynamicsWorld();
 }
 
-
-
-
 }
 
 }

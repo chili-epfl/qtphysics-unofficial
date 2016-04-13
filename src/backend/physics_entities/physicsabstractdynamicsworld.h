@@ -33,6 +33,9 @@ public:
     virtual QVector3D gravity()=0;
     virtual void setGravity(QVector3D gravity)=0;
 
+    virtual qreal scaleFactor()=0;
+    virtual void setScaleFactor(qreal val)=0;
+
     virtual void setDebug(bool debug)=0;
     virtual bool debug()=0;
 

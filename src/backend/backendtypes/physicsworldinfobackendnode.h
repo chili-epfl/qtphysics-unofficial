@@ -12,6 +12,7 @@ public:
     enum DirtyFlag {
             Clean = 0 ,
             GravityChanged = 1,
+            ScaleFactorChanged=2
         };
     Q_DECLARE_FLAGS(DirtyFlags, DirtyFlag)
 
@@ -28,8 +29,11 @@ public:
 
     void setGravity(QVector3D gravity);
 
+    void setScaleFactor(qreal val);
+
     QVector3D gravity(){return m_gravity;}
     bool debug(){return m_debug;}
+    qreal scaleFactor(){return m_scaleFactor;}
 
     void notifyFrontEnd(QString operation, QVariantList args);
 
@@ -46,6 +50,7 @@ private:
     bool m_enabled;
 
     QVector3D m_gravity;
+    qreal m_scaleFactor;
     bool m_debug;
 
     PhysicsManager* m_manager;

@@ -7,7 +7,8 @@ DynamicsWorld::DynamicsWorld(QObject *parent):
     PhysicsAbstractDynamicsWorld(parent)
 {
     m_simulationRate=60.0;
-    m_gravity=QVector3D(0,-10,0);
+    m_scaleFactor=1.0;
+    m_gravity=QVector3D(0,0,0);
     init();
 }
 
@@ -58,6 +59,18 @@ void DynamicsWorld::setGravity(QVector3D gravity){
     if(m_gravity!=gravity){
         m_gravity=gravity;
         m_dynamicsWorld->setGravity(btVector3(m_gravity.x(),m_gravity.y(),m_gravity.z()));
+    }
+}
+
+void DynamicsWorld::setScaleFactor(qreal val)
+{
+    if(m_scaleFactor!=val){
+         m_scaleFactor=val;
+         //remove all the objects. Next iteration will create them back
+         for(AbstractRigidBody* c: m_PhysicsBodies2BulletBodies.keys()){
+             removeRigidBody(c);
+             delete c;
+         }
     }
 }
 void DynamicsWorld::setDebug(bool debug){
