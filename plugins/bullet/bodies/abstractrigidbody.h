@@ -41,12 +41,14 @@ public:
     virtual qreal friction(){return m_friction;}
     virtual qreal mass(){return m_mass;}
     virtual QVector3D fallInertia(){return m_fallInertia;}
+    virtual qreal collisionMargin(){return m_collisionMargin;}
 
     virtual void setRestitution(qreal restitution);
     virtual void setRollingFriction(qreal rollingFriction);
     virtual void setFriction(qreal friction);
     virtual void setMass(qreal mass);
     virtual void setFallInertia(QVector3D fallInertia);
+    virtual void setCollisionMargin(qreal margin);
 
     btRigidBody* bulletBody(){return m_rigidBody;}
 public slots:
@@ -69,7 +71,7 @@ protected:
     qreal m_restitution;
     qreal m_friction;
     qreal m_rollingFriction;
-
+    qreal m_collisionMargin;
     btCollisionShape* m_shape ;
     btMotionState* m_motionState;
 

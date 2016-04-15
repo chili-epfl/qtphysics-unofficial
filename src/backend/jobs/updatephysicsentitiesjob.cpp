@@ -79,6 +79,7 @@ void UpdatePhysicsEntitiesJob::iterative_step(Qt3DCore::QNodeId node_id, QMatrix
             rigid_body=m_manager->m_Id2RigidBodies[entity->peerUuid()];
         else{
             rigid_body=createRigidBodyFromMesh(entity_geometry_renderer);
+            rigid_body->setCollisionMargin(rigid_body->collisionMargin()*m_manager->m_physics_world->scaleFactor());
             isBodyNew=true;
         }
         /*Update collision Shape*/
@@ -89,6 +90,7 @@ void UpdatePhysicsEntitiesJob::iterative_step(Qt3DCore::QNodeId node_id, QMatrix
             m_manager->m_physics_world->removeRigidBody(rigid_body);
             delete rigid_body;
             rigid_body=createRigidBodyFromMesh(entity_geometry_renderer);
+            rigid_body->setCollisionMargin(rigid_body->collisionMargin()*m_manager->m_physics_world->scaleFactor());
             isBodyNew=true;
         }
         /*Update Body properties*/
@@ -138,6 +140,7 @@ void UpdatePhysicsEntitiesJob::iterative_step(Qt3DCore::QNodeId node_id, QMatrix
             if(m_manager->m_Id2RigidBodies.contains(node_id)){
                 m_manager->m_physics_world->removeRigidBody(rigid_body);
                 m_manager->m_physics_world->addRigidBody(rigid_body);
+
             }
             else{
                 //New body

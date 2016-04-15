@@ -14,6 +14,7 @@ public:
     ~RigidConvexHullBody();
     void addPoint(QVector3D p);
     void updatePoints(qreal* points,int n_points);
+    void setCollisionMargin(qreal margin);
 protected:
     void initShape(qreal* points,int n_points);
     void initShape()Q_DECL_OVERRIDE;

@@ -1,5 +1,7 @@
 #include <bodies/rigidconvexhullbody.h>
 #include <bullet/BulletCollision/CollisionShapes/btShapeHull.h>
+#include <LinearMath/btGeometryUtil.h>
+
 namespace Physics {
 
 namespace Bullet {
@@ -32,15 +34,39 @@ void RigidConvexHullBody::initShape(qreal* points,int n_points){
         btVector3 point(points[i],points[i+1],points[i+2]);
         ((btConvexHullShape*)m_shape)->addPoint(point);
     }
+
     btShapeHull* hull = new btShapeHull((btConvexHullShape*)m_shape);
     btScalar margin = m_shape->getMargin();
     hull->buildHull(margin);
-    btConvexHullShape* old_shape=(btConvexHullShape*)m_shape;
-    m_shape = new btConvexHullShape();
+
+    btAlignedObjectArray<btVector3> planes,vertices;
     for(int i=0;i<hull->numVertices();i++){
-        ((btConvexHullShape*)m_shape)->addPoint(hull->getVertexPointer()[i]);
+        vertices.push_back(hull->getVertexPointer()[i]);
     }
-    delete old_shape;
+    btGeometryUtil::getPlaneEquationsFromVertices(vertices, planes);
+
+    int sz = planes.size();
+    bool tooSmall = false;
+    for (int i=0 ; i<sz ; ++i) {
+       if ((planes[i][3] += m_shape->getMargin()) >= 0) {
+          tooSmall = true;
+          break;
+       }
+    }
+
+    if (!tooSmall) {
+       qWarning("Convex hull too small to apply margin");
+       vertices.clear();
+       btGeometryUtil::getVerticesFromPlaneEquations(planes, vertices);
+    }
+
+    sz = vertices.size();
+    for (int i=0 ; i<sz ; ++i) {
+       ((btConvexHullShape*)m_shape)->addPoint(vertices[i]);
+    }
+    delete hull;
+}
+void RigidConvexHullBody::setCollisionMargin(qreal margin){
 
 }
 

@@ -24,6 +24,7 @@ public:
     virtual qreal rollingFriction()=0;
     virtual qreal friction()=0;
     virtual QMatrix4x4 worldTransformation()=0;
+    virtual qreal collisionMargin()=0;
 
     virtual void setMass(qreal mass)=0;
     virtual void setFallInertia(QVector3D fallInertia)=0;
@@ -31,6 +32,7 @@ public:
     virtual void setRollingFriction(qreal rollingFriction)=0;
     virtual void setFriction(qreal friction)=0;
     virtual void setWorldTransformation(QMatrix4x4 m,qreal scaleFactor=1.0)=0;
+    virtual void setCollisionMargin(qreal margin)=0;
 
 
 protected:

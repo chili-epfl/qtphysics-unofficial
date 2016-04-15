@@ -20,6 +20,7 @@ AbstractRigidBody::AbstractRigidBody(QObject* parent):
     m_shape=Q_NULLPTR;
     m_motionState=Q_NULLPTR;
     m_rigidBody=Q_NULLPTR;
+    m_collisionMargin=-1.0;
 }
 
 AbstractRigidBody::~AbstractRigidBody()
@@ -49,6 +50,8 @@ void AbstractRigidBody::initBody(){
 
     //setKinematic(m_kinematic);
 
+    m_collisionMargin=m_shape->getMargin();
+
     delete m_rigidBodyCI;
 }
 
@@ -63,6 +66,15 @@ void AbstractRigidBody::setFallInertia(QVector3D fallInertia){
        m_fallInertia=fallInertia;
        setMassProps();
     }
+}
+
+void AbstractRigidBody::setCollisionMargin(qreal margin)
+{
+    if(m_collisionMargin!=margin && margin>0){
+        m_collisionMargin=margin;
+        m_shape->setMargin(m_collisionMargin);
+    }
+
 }
 
 void AbstractRigidBody::setMassProps(){
