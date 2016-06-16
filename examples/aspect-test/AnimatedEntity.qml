@@ -48,8 +48,11 @@ Entity {
         PhysicsWorldInfo{
           gravity: Qt.vector3d(0,-10,0)
           debug:true
+          scaleFactor: 0.1
         }
     ]
+
+
 
     SphereMesh {
         id: torusMesh
@@ -63,6 +66,8 @@ Entity {
 
     Transform {
         id: torusTransform
+        translation:Qt.vector3d(0,-5,0)
+
         /*Rotate{
             axis: Qt.vector3d(1,0,0)
             angle: 2
@@ -74,9 +79,16 @@ Entity {
 
     PhysicsBodyInfo{
         id:torusBodyinfo
-        mass:1
+        mass:1000
+        kinematic: true
         restitution: 1
         inputTransform: torusTransform
+
+    }
+    Transform{
+
+
+
 
     }
 
@@ -101,42 +113,26 @@ Entity {
             components: [ torusMesh, torusBodyinfo, torusBodyinfo.outputTransform ]
         }
 
-//    Transform {
-//        id: torusTransform2
-////       Translate{
-////           id:translation
-////           //dx:20
-////           dy:80
-////           dz:-1
-////       }
-//    }
-//    QQ2.NumberAnimation {
-//            target: translation
-//            property: "dy"
-//            duration: 10000
-//            from: 80
-//            to: -60
-//            loops: QQ2.Animation.Infinite
-//            running: true
-//        }
-//    TorusMesh {
-//        id: torusMesh2
-//        radius: 15
-//        minorRadius: 10
-//        rings: 100
-//        slices: 25
-//    }
+    Transform {
+        id: torusTransform2
+        translation:Qt.vector3d(0,10,0)
+    }
 
-//    PhysicsBodyInfo{
-//        id:torusBodyinfo2
-//        mass:1
-//        restitution: 1
-//        kinematic: true
-//        inputTransform: torusTransform2
-//        onCollided: {console.log(event.target)}
-//        onCollisionsListChanged:console.log(collisionsList.length)
-//        onHasCollidedChanged: console.log(hasCollided);
-//    }
+    TorusMesh {
+        id: torusMesh2
+        radius: 1
+        minorRadius: 1
+        rings: 100
+        slices: 25
+    }
+
+    PhysicsBodyInfo{
+        id:torusBodyinfo2
+        mass:1
+        restitution: 1
+        inputTransform: torusTransform2
+
+    }
 
 //    SphereMesh {
 //        id: sphereMesh
@@ -171,11 +167,11 @@ Entity {
 ////        id: sphereEntity
 ////        components: [ sceneloader, sphereTransform ]
 ////    }
-//    Entity{
-//        id: torusEntity2
-//        objectName: "torus2"
-//        components: [ torusMesh2, torusBodyinfo2, torusBodyinfo2.outputTransform ]
-//    }
+    Entity{
+        id: torusEntity2
+        objectName: "torus2"
+        components: [ torusMesh2, torusBodyinfo2, torusBodyinfo2.outputTransform ]
+    }
 
     /*Floor is an entity non renderable
     but defined by the shape details*/

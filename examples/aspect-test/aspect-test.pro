@@ -2,6 +2,7 @@ TEMPLATE = app
 
 QT += 3dcore 3drender 3dinput 3dquick qml quick
 CONFIG += c++11
+CONFIG -= android_install
 
 SOURCES += main.cpp
 #    physicssetter.cpp

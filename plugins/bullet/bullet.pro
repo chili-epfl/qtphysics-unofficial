@@ -9,6 +9,7 @@ QT       += core gui 3dcore 3drender
 TARGET = bullet
 TEMPLATE = lib
 CONFIG += plugin
+CONFIG -= android_install
 
 include("dependencies.pri")
 
