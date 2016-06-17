@@ -11,8 +11,7 @@ class QTPHYSICSUNOFFICIAL_EXPORT PhysicsBodyInfo:
         public Qt3DCore::QComponent
 {
     Q_OBJECT
-    Q_PROPERTY(bool shareable READ shareable)
-    Q_PROPERTY(int mask READ mask WRITE setMask NOTIFY maskChanged)
+    Q_PROPERTY(bool isShareable READ isShareable NOTIFY shareableChanged)    Q_PROPERTY(int mask READ mask WRITE setMask NOTIFY maskChanged)
     Q_PROPERTY(int group READ group WRITE setGroup NOTIFY groupChanged)
     Q_PROPERTY(bool kinematic READ kinematic WRITE setKinematic NOTIFY kinematicChanged)
 
@@ -30,8 +29,9 @@ class QTPHYSICSUNOFFICIAL_EXPORT PhysicsBodyInfo:
 
 public:
     explicit PhysicsBodyInfo(Qt3DCore::QNode* parent=0);
-    ~PhysicsBodyInfo();
+    //~PhysicsBodyInfo();
     void sceneChangeEvent(const Qt3DCore::QSceneChangePtr &change) Q_DECL_OVERRIDE;
+    inline bool isShareable(){return true;}
 
     virtual int mask(){return m_mask;}
     virtual int group(){return m_group;}
@@ -66,7 +66,7 @@ signals:
     void maskChanged(int mask);
     void groupChanged(int group);
     void kinematicChanged(bool kinematic);
-
+    void shareableChanged();
     void fallInertiaChanged(QVector3D fallInertia);
     void massChanged(qreal mass);
     void rollingFrictionChanged(qreal rollingFriction);
@@ -79,9 +79,9 @@ signals:
     void hasCollidedChanged(bool val);
     void collisionsListChanged();
 protected:
-    void copy(const Qt3DCore::QNode *ref) Q_DECL_OVERRIDE;
+    //void copy(const Qt3DCore::QNode *ref) Q_DECL_OVERRIDE;
 
-    QT3D_CLONEABLE(PhysicsBodyInfo)
+    //QT3D_CLONEABLE(PhysicsBodyInfo)
 
     int m_mask;
     int m_group;
@@ -104,7 +104,20 @@ protected:
 
     static PhysicsCollisionEvent *qmlComponentAt(QQmlListProperty<PhysicsCollisionEvent> *list, int index);
     static int qmlComponentsCount(QQmlListProperty<PhysicsCollisionEvent> *list);
+private:
+    Qt3DCore::QNodeCreatedChangeBasePtr createNodeCreationChange() const Q_DECL_OVERRIDE;
+};
 
+struct PhysicsBodyInfoData{
+    int mask;
+    int group;
+    bool kinematic;
+    qreal mass;
+    QVector3D fallInertia;
+    qreal restitution;
+    qreal friction;
+    qreal rollingFriction;
+    Qt3DCore::QNodeId inputTransformID;
 };
 
 }

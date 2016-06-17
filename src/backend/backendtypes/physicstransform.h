@@ -11,7 +11,6 @@ class QTPHYSICSUNOFFICIAL_EXPORT PhysicsTransform : public Qt3DCore::QBackendNod
 public:
     explicit PhysicsTransform();
     ~PhysicsTransform();
-    void updateFromPeer(Qt3DCore::QNode *peer) Q_DECL_OVERRIDE;
 
     QString objectName(){return m_objectName;}
 
@@ -26,6 +25,8 @@ public:
 protected:
     void sceneChangeEvent(const Qt3DCore::QSceneChangePtr &) Q_DECL_OVERRIDE;
 private:
+    void initializeFromPeer(const Qt3DCore::QNodeCreatedChangeBasePtr &change) Q_DECL_FINAL;
+
     QString m_objectName;
 
     bool m_dirty;
@@ -40,13 +41,13 @@ private:
 };
 
 
-class QTPHYSICSUNOFFICIAL_EXPORT PhysicsTransformFunctor : public Qt3DCore::QBackendNodeFunctor
+class QTPHYSICSUNOFFICIAL_EXPORT PhysicsTransformFunctor : public Qt3DCore::QBackendNodeMapper
 {
 public:
     explicit PhysicsTransformFunctor(PhysicsManager* manager);
-    Qt3DCore::QBackendNode *create(Qt3DCore::QNode *frontend, const Qt3DCore::QBackendNodeFactory *factory) const Q_DECL_OVERRIDE;
-    Qt3DCore::QBackendNode *get(const Qt3DCore::QNodeId &id) const Q_DECL_OVERRIDE;
-    void destroy(const Qt3DCore::QNodeId &id) const Q_DECL_OVERRIDE;
+    Qt3DCore::QBackendNode *create(const Qt3DCore::QNodeCreatedChangeBasePtr &change) const Q_DECL_OVERRIDE;
+    Qt3DCore::QBackendNode *get(Qt3DCore::QNodeId id) const Q_DECL_OVERRIDE;
+    void destroy(Qt3DCore::QNodeId id) const Q_DECL_OVERRIDE;
 private:
     PhysicsManager* m_manager;
 

@@ -12,8 +12,6 @@ public:
     explicit PhysicsBuffer();
     ~PhysicsBuffer();
 
-    void updateFromPeer(Qt3DCore::QNode *peer) Q_DECL_OVERRIDE;
-
     QString objectName(){return m_objectName;}
 
     bool isDirty(){return m_dirty;}
@@ -24,11 +22,13 @@ public:
     inline Qt3DRender::QBuffer::BufferType type() const { return m_type; }
     inline Qt3DRender::QBuffer::UsageType usage() const { return m_usage; }
     inline QByteArray data() const { return m_data; }
-    inline Qt3DRender::QBufferFunctorPtr bufferFunctor() const { return m_functor; }
+    inline Qt3DRender::QBufferDataGeneratorPtr bufferFunctor() const { return m_functor; }
 
 protected:
     void sceneChangeEvent(const Qt3DCore::QSceneChangePtr &) Q_DECL_OVERRIDE;
 private:
+    void initializeFromPeer(const Qt3DCore::QNodeCreatedChangeBasePtr &change) Q_DECL_FINAL;
+
     QString m_objectName;
     bool m_enabled;
 
@@ -37,21 +37,21 @@ private:
     Qt3DRender::QBuffer::BufferType m_type;
     Qt3DRender::QBuffer::UsageType m_usage;
     QByteArray m_data;
-    Qt3DRender::QBufferFunctorPtr m_functor;
-
+    Qt3DRender::QBufferDataGeneratorPtr m_functor;
+    bool m_syncData;
     PhysicsManager* m_manager;
 
 
 };
 
 
-class QTPHYSICSUNOFFICIAL_EXPORT PhysicsBufferFunctor : public Qt3DCore::QBackendNodeFunctor
+class QTPHYSICSUNOFFICIAL_EXPORT PhysicsBufferFunctor : public Qt3DCore::QBackendNodeMapper
 {
 public:
     explicit PhysicsBufferFunctor(PhysicsManager* manager);
-    Qt3DCore::QBackendNode *create(Qt3DCore::QNode *frontend, const Qt3DCore::QBackendNodeFactory *factory) const Q_DECL_OVERRIDE;
-    Qt3DCore::QBackendNode *get(const Qt3DCore::QNodeId &id) const Q_DECL_OVERRIDE;
-    void destroy(const Qt3DCore::QNodeId &id) const Q_DECL_OVERRIDE;
+    Qt3DCore::QBackendNode *create(const Qt3DCore::QNodeCreatedChangeBasePtr &change) const Q_DECL_OVERRIDE;
+    Qt3DCore::QBackendNode *get(Qt3DCore::QNodeId id) const Q_DECL_OVERRIDE;
+    void destroy(Qt3DCore::QNodeId id) const Q_DECL_OVERRIDE;
 private:
     PhysicsManager* m_manager;
 

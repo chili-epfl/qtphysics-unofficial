@@ -21,14 +21,14 @@ public:
 
 private:
  //   void setRootEntity(Qt3DCore::QEntity *rootObject) Q_DECL_OVERRIDE;
-    void onRootEntityChanged(Qt3DCore::QEntity *rootEntity) Q_DECL_OVERRIDE;
+    void onEngineStartup() Q_DECL_OVERRIDE;
+    //void onRootEntityChanged(Qt3DCore::QEntity *rootEntity) Q_DECL_OVERRIDE;
     #if (QT_VERSION == QT_VERSION_CHECK(5, 6, 0))
     void onInitialize(const QVariantMap &data) Q_DECL_OVERRIDE;
     #elif (QT_VERSION == QT_VERSION_CHECK(5, 7, 0))
-    void onInitialize() Q_DECL_OVERRIDE;
+    void onRegistered() Q_DECL_OVERRIDE;
     #endif
-    void onCleanup() Q_DECL_OVERRIDE;
-    void visitNode(Qt3DCore::QNode *node);
+    void onUnregistered() Q_DECL_OVERRIDE;
 
     PhysicsManager* m_manager;
 

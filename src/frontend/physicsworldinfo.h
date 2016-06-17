@@ -17,9 +17,9 @@ class QTPHYSICSUNOFFICIAL_EXPORT PhysicsWorldInfo:
     Q_PROPERTY(bool debug READ debug WRITE setDebug NOTIFY debugChanged)
 public:
     explicit PhysicsWorldInfo(QNode* parent=0);
-    ~PhysicsWorldInfo();
+    //~PhysicsWorldInfo();
     void sceneChangeEvent(const Qt3DCore::QSceneChangePtr &change) Q_DECL_OVERRIDE;
-    void copy(const QNode *ref) Q_DECL_OVERRIDE;
+    //void copy(const QNode *ref) Q_DECL_OVERRIDE;
 
     QVector3D gravity() const {return m_gravity;}
     void setGravity(QVector3D gravity);
@@ -38,9 +38,13 @@ private:
     QVector3D m_gravity;
     bool m_debug;
     qreal m_scaleFactor;
-    QT3D_CLONEABLE(PhysicsWorldInfo)
 
+    Qt3DCore::QNodeCreatedChangeBasePtr createNodeCreationChange() const Q_DECL_OVERRIDE;
 };
 
+struct PhysicsWorldInfoData{
+    QVector3D gravity;
+    qreal scaleFactor;
+};
 }
 #endif // PhysicsWorldInfo_H

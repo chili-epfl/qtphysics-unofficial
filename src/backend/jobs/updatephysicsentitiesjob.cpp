@@ -75,8 +75,8 @@ void UpdatePhysicsEntitiesJob::iterative_step(Qt3DCore::QNodeId node_id, QMatrix
         bool isBodyNew=false;
         PhysicsAbstractRigidBody* rigid_body;
         PhysicsGeometryRenderer* entity_geometry_renderer=static_cast<PhysicsGeometryRenderer*>(m_manager->m_resources.operator [](entity->geometry_renderer()));
-        if(m_manager->m_Id2RigidBodies.contains(entity->peerUuid()))
-            rigid_body=m_manager->m_Id2RigidBodies[entity->peerUuid()];
+        if(m_manager->m_Id2RigidBodies.contains(entity->peerId()))
+            rigid_body=m_manager->m_Id2RigidBodies[entity->peerId()];
         else{
             rigid_body=createRigidBodyFromMesh(entity_geometry_renderer);
             rigid_body->setCollisionMargin(rigid_body->collisionMargin()*m_manager->m_physics_world->scaleFactor());
@@ -165,6 +165,7 @@ void UpdatePhysicsEntitiesJob::iterative_step(Qt3DCore::QNodeId node_id, QMatrix
         else{
             current_global_matrix=current_global_matrix*entity_body_info->localTransform();
         }
+
         if(forceUpdateMS){
             rigid_body->setWorldTransformation(current_global_matrix,m_manager->m_physics_world->scaleFactor());
         }
@@ -221,7 +222,7 @@ bool UpdatePhysicsEntitiesJob::isRequiringShapeUpdate(PhysicsGeometryRenderer* e
         geometryId=entity_geometry_renderer->m_geometry;
     }
     else{
-        geometryId=entity_geometry_renderer->m_geometry_functor.data()->operator ()()->id();
+        geometryId=entity_geometry_renderer->m_geometryFactory.data()->operator ()()->id();
     }
     PhysicsGeometry* geometry=static_cast<PhysicsGeometry*>(m_manager->m_resources.operator [](geometryId));
     Q_FOREACH(Qt3DCore::QNodeId attrId,geometry->attributes()){
@@ -255,14 +256,14 @@ bool UpdatePhysicsEntitiesJob::isDefiningBody(PhysicsEntity* entity){
     if(!entity_geometry_renderer->isEnabled()) return false;
     if(entity_geometry_renderer->m_primitiveType!=Qt3DRender::QGeometryRenderer::Triangles) return false;
     //if(entity_geometry_renderer->m_primitiveCount<=0) return false;
-    if(entity_geometry_renderer->m_geometry.isNull() && entity_geometry_renderer->m_geometry_functor.isNull())
+    if(entity_geometry_renderer->m_geometry.isNull() && entity_geometry_renderer->m_geometryFactory.isNull())
         return false;
     Qt3DCore::QNodeId geometryId;
     if(!entity_geometry_renderer->m_geometry.isNull()){
         geometryId=entity_geometry_renderer->m_geometry;
     }
     else{
-        geometryId=entity_geometry_renderer->m_geometry_functor.data()->operator ()()->id();
+        geometryId=entity_geometry_renderer->m_geometryFactory.data()->operator ()()->id();
     }
     if(geometryId.isNull() || !m_manager->m_resources.contains(geometryId)) return false;
     PhysicsGeometry* geometry=static_cast<PhysicsGeometry*>(m_manager->m_resources.operator [](geometryId));
@@ -297,7 +298,7 @@ PhysicsAbstractRigidBody* UpdatePhysicsEntitiesJob::createRigidBodyFromMesh(Phys
         geometryId=entity_geometry_renderer->m_geometry;
     }
     else{
-        geometryId=entity_geometry_renderer->m_geometry_functor.data()->operator ()()->id();
+        geometryId=entity_geometry_renderer->m_geometryFactory.data()->operator ()()->id();
     }
     PhysicsGeometry* geometry=static_cast<PhysicsGeometry*>(m_manager->m_resources.operator [](geometryId));
     QVector<QVector3D> vertexPosition;

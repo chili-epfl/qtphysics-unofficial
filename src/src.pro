@@ -17,7 +17,10 @@ HEADERS += \
 include(frontend/frontend.pri)
 include(backend/backend.pri)
 
-INCLUDEPATH += $$PWD
+INCLUDEPATH += $$PWD $$[QT_INSTALL_HEADERS]/../../Src/qt3d/include/Qt3DCore/5.7.0/ $$[QT_INSTALL_HEADERS]/../../Src/qtbase/include/QtCore/5.7.0/QtCore/
+INCLUDEPATH += $$[QT_INSTALL_HEADERS]/../../Src/qt3d/include/Qt3DCore/5.7.0/Qt3DCore
+INCLUDEPATH += $$[QT_INSTALL_HEADERS]/../../Src/qt3d/include/Qt3DRender/5.7.0/ $$[QT_INSTALL_HEADERS]/../../Src/qtbase/include/Qt3DRender/5.7.0/Qt3DRender/
+INCLUDEPATH += $$[QT_INSTALL_HEADERS]/../../Src/qt3d/include/Qt3DRender/5.7.0/Qt3DRender
 
 headersDataFiles.path = $$[QT_INSTALL_HEADERS]/$$PROJECT_NAME
 headersDataFiles.files = $$PWD/*.h

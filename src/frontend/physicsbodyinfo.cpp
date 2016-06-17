@@ -17,26 +17,26 @@ PhysicsBodyInfo::PhysicsBodyInfo(Qt3DCore::QNode* parent):
     m_outputTransform=new Qt3DCore::QTransform(this);
     setShareable(false);
 }
-void PhysicsBodyInfo::copy(const Qt3DCore::QNode *ref){
-    Qt3DCore::QComponent::copy(ref);
-    const PhysicsBodyInfo * body_info = static_cast<const PhysicsBodyInfo *>(ref);
+//void PhysicsBodyInfo::copy(const Qt3DCore::QNode *ref){
+//    Qt3DCore::QComponent::copy(ref);
+//    const PhysicsBodyInfo * body_info = static_cast<const PhysicsBodyInfo *>(ref);
 
-    m_fallInertia=body_info->m_fallInertia;
-    m_restitution=body_info->m_restitution;
-    m_friction=body_info->m_restitution;
-    m_rollingFriction=body_info->m_rollingFriction;
-    m_mass=body_info->m_mass;
-    m_mask=body_info->m_mask;
-    m_group=body_info->m_group;
-    m_kinematic=body_info->m_kinematic;
+//    m_fallInertia=body_info->m_fallInertia;
+//    m_restitution=body_info->m_restitution;
+//    m_friction=body_info->m_restitution;
+//    m_rollingFriction=body_info->m_rollingFriction;
+//    m_mass=body_info->m_mass;
+//    m_mask=body_info->m_mask;
+//    m_group=body_info->m_group;
+//    m_kinematic=body_info->m_kinematic;
 
-    m_inputTransform=body_info->m_inputTransform;
-    m_outputTransform=body_info->m_outputTransform;
-}
+//    m_inputTransform=body_info->m_inputTransform;
+//    m_outputTransform=body_info->m_outputTransform;
+//}
 
-PhysicsBodyInfo::~PhysicsBodyInfo(){
-    Qt3DCore::QNode::cleanup();
-}
+//PhysicsBodyInfo::~PhysicsBodyInfo(){
+//    Qt3DCore::QComponent:
+//}
 
 void PhysicsBodyInfo::setMass(qreal mass){
     if(mass >=0 && m_mass!=mass){
@@ -115,6 +115,22 @@ int PhysicsBodyInfo::qmlComponentsCount(QQmlListProperty<PhysicsCollisionEvent> 
      return self->m_collisionsList.size();
 }
 
+Qt3DCore::QNodeCreatedChangeBasePtr PhysicsBodyInfo::createNodeCreationChange() const
+{
+    auto creationChange = Qt3DCore::QNodeCreatedChangePtr<PhysicsBodyInfoData>::create(this);
+    auto &data = creationChange->data;
+    data.mask=m_mask;
+    data.group=m_group;
+    data.kinematic=m_kinematic;
+    data.mass=m_mass;
+    data.fallInertia=m_fallInertia;
+    data.restitution=m_restitution;
+    data.friction=m_friction;
+    data.rollingFriction=m_rollingFriction;
+    data.inputTransformID=m_inputTransform!=Q_NULLPTR ? m_inputTransform->id() : Qt3DCore::QNodeId();
+    return creationChange;
+}
+
 bool PhysicsBodyInfo::collisionTest(Qt3DCore::QNodeId id){
     return m_collisionsCache.contains(id);
 }
@@ -122,8 +138,8 @@ bool PhysicsBodyInfo::collisionTest(Qt3DCore::QNodeId id){
 
 void PhysicsBodyInfo::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &change)
 {
-    Qt3DCore::QScenePropertyChangePtr e = qSharedPointerCast< Qt3DCore::QScenePropertyChange>(change);
-    if (e->type() == Qt3DCore::NodeUpdated) {
+    Qt3DCore::QPropertyUpdatedChangePtr e = qSharedPointerCast< Qt3DCore::QPropertyUpdatedChange>(change);
+    if (e->type() == Qt3DCore::PropertyUpdated) {
         /*if (e->propertyName() == QByteArrayLiteral("attachPhysicsTransfrom")) {
             bool val = e->value().toBool();
             if(val){
