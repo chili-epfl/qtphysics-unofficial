@@ -17,25 +17,29 @@ PhysicsBodyInfo::PhysicsBodyInfo(Qt3DCore::QNode* parent):
     m_outputTransform=new Qt3DCore::QTransform(this);
     setShareable(false);
 }
-void PhysicsBodyInfo::copy(const Qt3DCore::QNode *ref){
-    Qt3DCore::QComponent::copy(ref);
-    const PhysicsBodyInfo * body_info = static_cast<const PhysicsBodyInfo *>(ref);
 
-    m_fallInertia=body_info->m_fallInertia;
-    m_restitution=body_info->m_restitution;
-    m_friction=body_info->m_restitution;
-    m_rollingFriction=body_info->m_rollingFriction;
-    m_mass=body_info->m_mass;
-    m_mask=body_info->m_mask;
-    m_group=body_info->m_group;
-    m_kinematic=body_info->m_kinematic;
+Qt3DCore::QNodeCreatedChangeBasePtr PhysicsBodyInfo::createNodeCreationChange() const
+{
+    auto creationChange = Qt3DCore::QNodeCreatedChangePtr<PhysicsBodyInfoData>::create(this);
+    PhysicsBodyInfoData &data = creationChange->data;
 
-    m_inputTransform=body_info->m_inputTransform;
-    m_outputTransform=body_info->m_outputTransform;
+    data.m_fallInertia = m_fallInertia;
+    data.m_restitution = m_restitution;
+    data.m_friction = m_restitution;
+    data.m_rollingFriction = m_rollingFriction;
+    data.m_mass = m_mass;
+    data.m_mask = m_mask;
+    data.m_group = m_group;
+    data.m_kinematic = m_kinematic;
+
+    data.m_inputTransformId = qIdForNode(m_inputTransform);
+    data.m_outputTransformId = qIdForNode(m_outputTransform);
+
+    return creationChange;
 }
 
-PhysicsBodyInfo::~PhysicsBodyInfo(){
-    Qt3DCore::QNode::cleanup();
+PhysicsBodyInfo::~PhysicsBodyInfo()
+{
 }
 
 void PhysicsBodyInfo::setMass(qreal mass){
@@ -122,8 +126,9 @@ bool PhysicsBodyInfo::collisionTest(Qt3DCore::QNodeId id){
 
 void PhysicsBodyInfo::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &change)
 {
-    Qt3DCore::QScenePropertyChangePtr e = qSharedPointerCast< Qt3DCore::QScenePropertyChange>(change);
-    if (e->type() == Qt3DCore::NodeUpdated) {
+   Qt3DCore::QPropertyUpdatedChangePtr e = qSharedPointerCast< Qt3DCore::QPropertyUpdatedChange>(change);
+
+    if (e->type() == Qt3DCore::PropertyUpdated) {
         /*if (e->propertyName() == QByteArrayLiteral("attachPhysicsTransfrom")) {
             bool val = e->value().toBool();
             if(val){

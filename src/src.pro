@@ -2,7 +2,7 @@ TARGET = QtPhysicsUnofficial
 TEMPLATE = lib
 PROJECT_NAME=QtPhysicsUnofficial
 
-QT+= 3dcore 3dquick 3drender
+QT+= 3dcore 3dquick 3drender 3dcore-private 3drender-private
 
 DESTDIR+= ./lib
 

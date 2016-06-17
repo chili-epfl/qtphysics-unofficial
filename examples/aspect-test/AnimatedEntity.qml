@@ -3,6 +3,7 @@ import Qt3D.Render 2.0
 import QtPhysics.unofficial 1.0
 import QtQuick 2.0 as QQ2
 import Qt3D.Input 2.0
+import Qt3D.Extras 2.0
 
 
 
@@ -21,35 +22,20 @@ Entity {
         viewCenter: Qt.vector3d( 0.0, 0.0, 0.0 )
     }
 
-    Configuration  {
-        controlledCamera: camera
-    }
-
-    MouseController {
-        id: mouseController
-    }
     components: [
-        FrameGraph {
-            activeFrameGraph: Viewport {
-                id: viewport
-                rect: Qt.rect(0, 0.0, 1.0, 1.0) // From Top Left
-                clearColor: Qt.rgba(0, 0.5, 1, 1)
-
-                CameraSelector {
-                    id : cameraSelector
-                    camera: camera
-
-                    ClearBuffer {
-                        buffers : ClearBuffer.ColorDepthBuffer
-                    }
-                }
+        RenderSettings {
+            activeFrameGraph: ForwardRenderer {
+                camera: camera
+                clearColor: "transparent"
             }
         },
+        InputSettings { },
         PhysicsWorldInfo{
           gravity: Qt.vector3d(0,-10,0)
           debug:true
         }
     ]
+
 
     SphereMesh {
         id: torusMesh
@@ -70,6 +56,10 @@ Entity {
 //        Translate{
 //            id:torusTranslate
 //        }
+    }
+
+    PhongMaterial {
+        id: mat
     }
 
     PhysicsBodyInfo{
@@ -98,7 +88,7 @@ Entity {
 //                    }
 
 
-            components: [ torusMesh, torusBodyinfo, torusBodyinfo.outputTransform ]
+            components: [ torusMesh, torusBodyinfo, torusBodyinfo.outputTransform, mat]
         }
 
 //    Transform {
@@ -202,7 +192,7 @@ Entity {
             inputTransform: transformFloor
             //shapeDetails:{"Type":"StaticPlane","PlaneConstant":0,"PlaneNormal": Qt.vector3d(0, 1, 0) }
         }
-        components: [planeMesh,transformFloor,floorBodyInfo]
+        components: [planeMesh,transformFloor,floorBodyInfo, mat]
     }
 
 

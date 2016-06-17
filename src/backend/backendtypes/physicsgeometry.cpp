@@ -2,6 +2,8 @@
 
 
 #include <backend/physicsmanager.h>
+#include <Qt3DCore/QNodeCreatedChange>
+#include <Qt3DRender/private/qgeometry_p.h>
 
 namespace Physics {
 
@@ -11,60 +13,57 @@ PhysicsGeometry::PhysicsGeometry():
     m_enabled(false),
     m_attributes()
 {
-    m_verticesPerPatch=0;
     m_manager=Q_NULLPTR;
 }
 
 void PhysicsGeometry::setManager(PhysicsManager *manager){
-        m_manager=manager;
+    m_manager=manager;
 }
 
 
 PhysicsGeometry::~PhysicsGeometry(){
-    m_manager->m_resources.remove(peerUuid());
+    m_manager->m_resources.remove(peerId());
 }
 
-void PhysicsGeometry::updateFromPeer(Qt3DCore::QNode *peer){
-    Qt3DRender::QGeometry *geometry = static_cast<Qt3DRender::QGeometry *>(peer);
-       if (geometry != Q_NULLPTR) {
-           m_enabled=geometry->isEnabled();
-           m_attributes.reserve(geometry->attributes().size());
-           Q_FOREACH (Qt3DRender::QAbstractAttribute *attribute, geometry->attributes())
-               m_attributes.push_back(attribute->id());
-           m_verticesPerPatch = geometry->verticesPerPatch();
-   }
+void PhysicsGeometry::initializeFromPeer(const Qt3DCore::QNodeCreatedChangeBasePtr &change)
+{
+    const auto typedChange = qSharedPointerCast<Qt3DCore::QNodeCreatedChange<Qt3DRender::QGeometryData>>(change);
+    const auto &data = typedChange->data;
+    m_attributes = data.attributeIds;
 }
-
 
 void PhysicsGeometry::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &e){
-    Qt3DCore::QScenePropertyChangePtr propertyChange = qSharedPointerCast<Qt3DCore::QScenePropertyChange>(e);
-    QByteArray propertyName = propertyChange->propertyName();
     switch (e->type()) {
-    case Qt3DCore::NodeAdded: {
-        if (propertyName == QByteArrayLiteral("attribute")) {
-            m_attributes.push_back(propertyChange->value().value<Qt3DCore::QNodeId>());
+    case Qt3DCore::PropertyValueAdded: {
+        const auto change = qSharedPointerCast<Qt3DCore::QPropertyNodeAddedChange>(e);
+
+        if (change->propertyName() == QByteArrayLiteral("attribute")) {
+            m_attributes.push_back(change->addedNodeId());
         }
         break;
     }
-    case Qt3DCore::NodeRemoved: {
-        if (propertyName == QByteArrayLiteral("attribute")) {
-            m_attributes.removeOne(propertyChange->value().value<Qt3DCore::QNodeId>());
+    case Qt3DCore::PropertyValueRemoved: {
+        const auto change = qSharedPointerCast<Qt3DCore::QPropertyNodeRemovedChange>(e);
+
+        if (change->propertyName() == QByteArrayLiteral("attribute")) {
+            m_attributes.removeOne(change->removedNodeId());
         }
         break;
     }
-    case Qt3DCore::NodeUpdated:
-        if (propertyName == QByteArrayLiteral("enabled")){
-            m_enabled = propertyChange->value().value<bool>();
+    case Qt3DCore::PropertyUpdated: {
+
+        const auto change = qSharedPointerCast<Qt3DCore::QPropertyUpdatedChange>(e);
+
+        if (change->propertyName() == QByteArrayLiteral("enabled")){
+            m_enabled = change->value().value<bool>();
         }
-        else if (propertyName == QByteArrayLiteral("verticesPerPatch")) {
-            m_verticesPerPatch = propertyChange->value().value<int>();
-            break;
-        }
+        break;
+    }
+
     default:
         break;
     }
 }
-
 
 PhysicsGeometryFunctor::PhysicsGeometryFunctor(PhysicsManager* manager)
 {
@@ -72,23 +71,21 @@ PhysicsGeometryFunctor::PhysicsGeometryFunctor(PhysicsManager* manager)
 }
 
 
-Qt3DCore::QBackendNode *PhysicsGeometryFunctor::create(Qt3DCore::QNode *frontend, const Qt3DCore::QBackendNodeFactory *factory)
+Qt3DCore::QBackendNode *PhysicsGeometryFunctor::create(const Qt3DCore::QNodeCreatedChangeBasePtr &change)
 const {
     PhysicsGeometry* geometry=new PhysicsGeometry();
-    m_manager->m_resources.insert(frontend->id(),geometry);
-    geometry->setFactory(factory);
+    m_manager->m_resources.insert(change->subjectId(),geometry);
     geometry->setManager(m_manager);
-    geometry->setPeer(frontend);
     return geometry;
 }
-Qt3DCore::QBackendNode *PhysicsGeometryFunctor::get(const Qt3DCore::QNodeId &id) const
+Qt3DCore::QBackendNode *PhysicsGeometryFunctor::get(Qt3DCore::QNodeId id) const
 {
     if(m_manager->m_resources.contains(id))
         return m_manager->m_resources.operator [](id);
     else
         return Q_NULLPTR;
 }
-void PhysicsGeometryFunctor::destroy(const Qt3DCore::QNodeId &id) const
+void PhysicsGeometryFunctor::destroy(Qt3DCore::QNodeId id) const
 {
     if(m_manager->m_resources.contains(id))
         delete m_manager->m_resources.operator [](id);

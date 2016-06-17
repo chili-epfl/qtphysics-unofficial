@@ -23,16 +23,7 @@ void PhysicsWorldInfoBackendNode::setManager(PhysicsManager *manager){
 
 
 PhysicsWorldInfoBackendNode::~PhysicsWorldInfoBackendNode(){
-    m_manager->m_resources.remove(peerUuid());
-}
-
-void PhysicsWorldInfoBackendNode::updateFromPeer(Qt3DCore::QNode *peer){
-    PhysicsWorldInfo *world_info = static_cast<PhysicsWorldInfo*>(peer);
-    m_objectName = peer->objectName();
-    setEnabled(world_info->isEnabled());
-    setGravity(world_info->gravity());
-    setScaleFactor(world_info->scaleFactor());
-    m_debug=world_info->debug();
+    m_manager->m_resources.remove(peerId());
 }
 
 void PhysicsWorldInfoBackendNode::setGravity(QVector3D gravity){
@@ -53,8 +44,8 @@ void PhysicsWorldInfoBackendNode::setScaleFactor(qreal val)
 
 void PhysicsWorldInfoBackendNode::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &e){
     switch (e->type()) {
-        case Qt3DCore::NodeUpdated: {
-            Qt3DCore::QScenePropertyChangePtr propertyChange = qSharedPointerCast<Qt3DCore::QScenePropertyChange>(e);
+        case Qt3DCore::PropertyUpdated: {
+        const Qt3DCore::QPropertyUpdatedChangePtr &propertyChange = qSharedPointerCast<Qt3DCore::QPropertyUpdatedChange>(e);
             if (propertyChange->propertyName() == QByteArrayLiteral("gravity"))
                 setGravity(propertyChange->value().value<QVector3D>());
             else if (propertyChange->propertyName() == QByteArrayLiteral("enabled"))
@@ -70,8 +61,16 @@ void PhysicsWorldInfoBackendNode::sceneChangeEvent(const Qt3DCore::QSceneChangeP
     }
 }
 
+void PhysicsWorldInfoBackendNode::initializeFromPeer(const Qt3DCore::QNodeCreatedChangeBasePtr &change)
+{
+    const auto typedChange = qSharedPointerCast<Qt3DCore::QNodeCreatedChange<PhysicsWorldInfoData>>(change);
+    const PhysicsWorldInfoData &data = typedChange->data;
+    m_gravity = data.m_gravity;
+    m_scaleFactor = data.m_scaleFactor;
+}
+
 void PhysicsWorldInfoBackendNode::notifyFrontEnd(QString operation, QVariantList args){
-    Qt3DCore::QBackendScenePropertyChangePtr e(new Qt3DCore::QBackendScenePropertyChange(Qt3DCore::NodeUpdated, peerUuid()));
+    Qt3DCore::QPropertyUpdatedChangePtr e(new Qt3DCore::QPropertyUpdatedChange(peerId()));
     /*if(operation=="attachPhysicsTransfrom"){
         e->setPropertyName("attachPhysicsTransfrom");
         e->setValue(true);
@@ -84,7 +83,6 @@ void PhysicsWorldInfoBackendNode::notifyFrontEnd(QString operation, QVariantList
     else{
         return;
     }
-    e->setTargetNode(peerUuid());
     notifyObservers(e);
 }
 
@@ -103,23 +101,21 @@ PhysicsWorldInfoBackendNodeFunctor::PhysicsWorldInfoBackendNodeFunctor(PhysicsMa
 }
 
 
-Qt3DCore::QBackendNode *PhysicsWorldInfoBackendNodeFunctor::create(Qt3DCore::QNode *frontend, const Qt3DCore::QBackendNodeFactory *factory)
+Qt3DCore::QBackendNode *PhysicsWorldInfoBackendNodeFunctor::create(const Qt3DCore::QNodeCreatedChangeBasePtr &change)
 const {
     PhysicsWorldInfoBackendNode* world_info=new PhysicsWorldInfoBackendNode();
-    m_manager->m_resources.insert(frontend->id(),world_info);
-    world_info->setFactory(factory);
+    m_manager->m_resources.insert(change->subjectId(),world_info);
     world_info->setManager(m_manager);
-    world_info->setPeer(frontend);
     return world_info;
 }
-Qt3DCore::QBackendNode *PhysicsWorldInfoBackendNodeFunctor::get(const Qt3DCore::QNodeId &id) const
+Qt3DCore::QBackendNode *PhysicsWorldInfoBackendNodeFunctor::get(Qt3DCore::QNodeId id) const
 {
     if(m_manager->m_resources.contains(id))
         return m_manager->m_resources.operator [](id);
     else
         return Q_NULLPTR;
 }
-void PhysicsWorldInfoBackendNodeFunctor::destroy(const Qt3DCore::QNodeId &id) const
+void PhysicsWorldInfoBackendNodeFunctor::destroy(Qt3DCore::QNodeId id) const
 {
     if(m_manager->m_resources.contains(id))
         delete m_manager->m_resources.operator [](id);
