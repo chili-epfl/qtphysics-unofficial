@@ -7,11 +7,26 @@
 #include <QQmlListProperty>
 namespace Physics {
 
+struct PhysicsBodyInfoData
+{
+    int m_mask;
+    int m_group;
+    bool m_kinematic;
+
+    qreal m_mass;
+    QVector3D m_fallInertia;
+    qreal m_restitution;
+    qreal m_friction;
+    qreal m_rollingFriction;
+
+    Qt3DCore::QNodeId m_inputTransformId;
+    Qt3DCore::QNodeId m_outputTransformId;
+};
+
 class QTPHYSICSUNOFFICIAL_EXPORT PhysicsBodyInfo:
         public Qt3DCore::QComponent
 {
     Q_OBJECT
-    Q_PROPERTY(bool shareable READ shareable)
     Q_PROPERTY(int mask READ mask WRITE setMask NOTIFY maskChanged)
     Q_PROPERTY(int group READ group WRITE setGroup NOTIFY groupChanged)
     Q_PROPERTY(bool kinematic READ kinematic WRITE setKinematic NOTIFY kinematicChanged)
@@ -79,9 +94,7 @@ signals:
     void hasCollidedChanged(bool val);
     void collisionsListChanged();
 protected:
-    void copy(const Qt3DCore::QNode *ref) Q_DECL_OVERRIDE;
-
-    QT3D_CLONEABLE(PhysicsBodyInfo)
+    Qt3DCore::QNodeCreatedChangeBasePtr createNodeCreationChange() const Q_DECL_OVERRIDE;
 
     int m_mask;
     int m_group;

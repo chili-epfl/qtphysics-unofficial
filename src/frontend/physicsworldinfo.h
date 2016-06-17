@@ -7,6 +7,12 @@
 
 namespace Physics {
 
+struct PhysicsWorldInfoData
+{
+    QVector3D m_gravity;
+    qreal m_scaleFactor;
+};
+
 
 class QTPHYSICSUNOFFICIAL_EXPORT PhysicsWorldInfo:
         public Qt3DCore::QComponent
@@ -19,7 +25,6 @@ public:
     explicit PhysicsWorldInfo(QNode* parent=0);
     ~PhysicsWorldInfo();
     void sceneChangeEvent(const Qt3DCore::QSceneChangePtr &change) Q_DECL_OVERRIDE;
-    void copy(const QNode *ref) Q_DECL_OVERRIDE;
 
     QVector3D gravity() const {return m_gravity;}
     void setGravity(QVector3D gravity);
@@ -35,10 +40,12 @@ signals:
     void debugChanged(bool debug);
     void scaleFactorChanged();
 private:
+
+    Qt3DCore::QNodeCreatedChangeBasePtr createNodeCreationChange() const Q_DECL_OVERRIDE;
+
     QVector3D m_gravity;
     bool m_debug;
     qreal m_scaleFactor;
-    QT3D_CLONEABLE(PhysicsWorldInfo)
 
 };
 

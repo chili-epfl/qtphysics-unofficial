@@ -1,6 +1,7 @@
 #include <backend/backendtypes/physicsbuffer.h>
 
 #include <backend/physicsmanager.h>
+#include <Qt3DRender/private/qbuffer_p.h>
 
 namespace Physics {
 
@@ -21,24 +22,12 @@ void PhysicsBuffer::setManager(PhysicsManager *manager){
 
 
 PhysicsBuffer::~PhysicsBuffer(){
-    m_manager->m_resources.remove(peerUuid());
-}
-
-void PhysicsBuffer::updateFromPeer(Qt3DCore::QNode *peer){
-    Qt3DRender::QBuffer *buffer = static_cast<Qt3DRender::QBuffer *>(peer);
-    if (buffer != Q_NULLPTR) {
-        m_type = buffer->type();
-        m_usage = buffer->usage();
-        m_data = buffer->data();
-        m_functor = buffer->bufferFunctor();
-        m_dirty = true;
-        m_enabled=buffer->isEnabled();
-    }
+    m_manager->m_resources.remove(peerId());
 }
 
 void PhysicsBuffer::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &e){
-    if (e->type() == Qt3DCore::NodeUpdated) {
-        Qt3DCore::QScenePropertyChangePtr propertyChange = qSharedPointerCast<Qt3DCore::QScenePropertyChange>(e);
+    if (e->type() == Qt3DCore::PropertyUpdated) {
+        Qt3DCore::QPropertyUpdatedChangePtr propertyChange = qSharedPointerCast<Qt3DCore::QPropertyUpdatedChange>(e);
         QByteArray propertyName = propertyChange->propertyName();
         if (propertyName == QByteArrayLiteral("enabled")){
             m_enabled = propertyChange->value().value<bool>();
@@ -54,12 +43,23 @@ void PhysicsBuffer::sceneChangeEvent(const Qt3DCore::QSceneChangePtr &e){
             m_usage = static_cast<Qt3DRender::QBuffer::UsageType>(propertyChange->value().value<int>());
             m_dirty = true;
         } else if (propertyName == QByteArrayLiteral("bufferFunctor")) {
-            Qt3DRender::QBufferFunctorPtr newFunctor = propertyChange->value().value<Qt3DRender::QBufferFunctorPtr>();
+            Qt3DRender::QBufferDataGeneratorPtr newFunctor = propertyChange->value().value<Qt3DRender::QBufferDataGeneratorPtr>();
             m_dirty |= !(newFunctor && m_functor && *newFunctor == *m_functor);
             m_functor = newFunctor;
         }
     }
 
+}
+
+void PhysicsBuffer::initializeFromPeer(const Qt3DCore::QNodeCreatedChangeBasePtr &change)
+{
+    const auto typedChange = qSharedPointerCast<Qt3DCore::QNodeCreatedChange<Qt3DRender::QBufferData>>(change);
+    const auto &data = typedChange->data;
+    m_data = data.data;
+    m_type = data.type;
+    m_usage = data.usage;
+    m_dirty = true;
+    m_functor = data.functor;
 }
 
 
@@ -69,23 +69,21 @@ PhysicsBufferFunctor::PhysicsBufferFunctor(PhysicsManager* manager)
 }
 
 
-Qt3DCore::QBackendNode *PhysicsBufferFunctor::create(Qt3DCore::QNode *frontend, const Qt3DCore::QBackendNodeFactory *factory)
+Qt3DCore::QBackendNode *PhysicsBufferFunctor::create(const Qt3DCore::QNodeCreatedChangeBasePtr &change)
 const {
     PhysicsBuffer* attribute=new PhysicsBuffer();
-    m_manager->m_resources.insert(frontend->id(),attribute);
-    attribute->setFactory(factory);
+    m_manager->m_resources.insert(change->subjectId(),attribute);
     attribute->setManager(m_manager);
-    attribute->setPeer(frontend);
     return attribute;
 }
-Qt3DCore::QBackendNode *PhysicsBufferFunctor::get(const Qt3DCore::QNodeId &id) const
+Qt3DCore::QBackendNode *PhysicsBufferFunctor::get(Qt3DCore::QNodeId id) const
 {
     if(m_manager->m_resources.contains(id))
         return m_manager->m_resources.operator [](id);
     else
         return Q_NULLPTR;
 }
-void PhysicsBufferFunctor::destroy(const Qt3DCore::QNodeId &id) const
+void PhysicsBufferFunctor::destroy(Qt3DCore::QNodeId id) const
 {
     if(m_manager->m_resources.contains(id))
         delete m_manager->m_resources.operator [](id);
