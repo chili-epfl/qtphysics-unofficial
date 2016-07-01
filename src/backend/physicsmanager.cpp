@@ -28,16 +28,23 @@ PhysicsManager::~PhysicsManager()
 
 
 void PhysicsManager::loadPhysicsFactories(){
+#ifdef ANDROID
+    QString pluginsPath="../lib";
+#else
     QString pluginsPath = QLibraryInfo::location(QLibraryInfo::PluginsPath) + PHYSICS_FACTORIES_PATH;
+#endif
     QDir physicsFactoryPluginDir(pluginsPath);
     //TODO: handle more than 1
     Q_FOREACH (QString plugin, physicsFactoryPluginDir.entryList(QDir::Files)) {
+           qDebug()<<plugin;
            QPluginLoader loader(physicsFactoryPluginDir.absoluteFilePath(plugin));
            loader.load();
-           m_physics_factory = qobject_cast<PhysicsFactoryInterface *>(loader.instance());
-           if (m_physics_factory == Q_NULLPTR)
-               qWarning() << "Failed to load physics factory plugin ";
+           PhysicsFactoryInterface* factory_interface = qobject_cast<PhysicsFactoryInterface *>(loader.instance());
+           if (factory_interface != Q_NULLPTR)
+               m_physics_factory=factory_interface;
    }
+   if(m_physics_factory==Q_NULLPTR)
+       qWarning("No PhysicsFactoryInterface found");
 }
 /*Simply convert the collisions from the world to the format of the Physics manager.*/
 QVector<Collision> PhysicsManager::getCollisions(){
