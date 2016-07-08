@@ -87,12 +87,14 @@ void AbstractRigidBody::setMassProps(){
 
 void AbstractRigidBody::setMask(int mask){
     if(mask >0 && m_mask!=mask){
+        m_mask=mask;
         m_changeFlags|=MaskChanged;
     }
 }
 
 void AbstractRigidBody::setGroup(int group){
     if(group >0 && m_group!=group){
+        m_group=group;
         m_changeFlags|=GroupChanged;
     }
 }
