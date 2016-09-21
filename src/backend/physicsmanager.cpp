@@ -36,7 +36,6 @@ void PhysicsManager::loadPhysicsFactories(){
     QDir physicsFactoryPluginDir(pluginsPath);
     //TODO: handle more than 1
     Q_FOREACH (QString plugin, physicsFactoryPluginDir.entryList(QDir::Files)) {
-           qDebug()<<plugin;
            QPluginLoader loader(physicsFactoryPluginDir.absoluteFilePath(plugin));
            loader.load();
            PhysicsFactoryInterface* factory_interface = qobject_cast<PhysicsFactoryInterface *>(loader.instance());
