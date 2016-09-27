@@ -1,5 +1,6 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-    aspect-test 
+    aspect-test \
+    simple-shapes-c++
 		
