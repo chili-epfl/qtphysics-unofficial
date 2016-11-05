@@ -104,14 +104,9 @@ void PhysicsAspect::onRootEntityChanged(QEntity *rootEntity)
 ////    visitor.traverse(rootObject, this, &PhysicsAspect::visitNode, &PhysicsAspect::visitNode);
 //    m_manager->setRootEntityId(rootObject->id());
 //}
-#if (QT_VERSION == QT_VERSION_CHECK(5, 6, 0))
 void PhysicsAspect::onInitialize(const QVariantMap &data) {
     Q_UNUSED(data);
 }
-#elif (QT_VERSION == QT_VERSION_CHECK(5, 7, 0))
-void PhysicsAspect::onInitialize() {
-}
-#endif
 void PhysicsAspect::onCleanup() {
     delete m_manager;
 }

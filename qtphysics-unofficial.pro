@@ -2,7 +2,7 @@ load(configure)
 qtCompileTest(bullet)
 
 TEMPLATE = subdirs
-CONFIG += ordered
+CONFIG += ordered c++11
 CONFIG -= android_install
 
 qtHaveModule(3dcore){
@@ -18,7 +18,7 @@ if(config_bullet){
 else{
      message("Bullet not found")
 }
-     SUBDIRS += examples
+#     SUBDIRS += examples
 }else{
     message("Physics needs Qt3d 2.0")
 }
