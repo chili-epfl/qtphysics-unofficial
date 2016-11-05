@@ -86,9 +86,14 @@ Example: In BulletSoftBody/CMakeList.txt
 Then in bullet directory:
 * mkdir build-android and cd build-android 
 * ccmake .. -DANDROID_NDK=[NDK dir] -DCMAKE_TOOLCHAIN_FILE=[android.toolchain.cmake] -DANDROID_TOOLCHAIN_NAME=[TOOLChain name] -DANDROID_NDK_LAYOUT=RELEASE -DANDROID_ABI=[Your ABI]
+example:
+ccmake .. -DCMAKE_TOOLCHAIN_FILE=/home/chili/android-ndk-r13b/build/cmake/android.toolchain.cmake -DANDROID_PLATFORM=android-19  -DANDROID_ARM_MODE=arm -DANDROID_ABI=armeabi-v7a\ with\ NEON
+
 * Disable everything except BUILD_SHARED_LIBS ,INSTALL_LIBS and NO_VERSION=true. Check also your install directory.
 * make and make install 
 
 Do not forget to add your include dirs and libs enviroment if they are not in the default position.
+
+
 
 
