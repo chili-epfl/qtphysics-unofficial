@@ -2,7 +2,7 @@ TEMPLATE = app
 
 QT += 3dcore 3drender 3dinput 3dquick qml quick
 CONFIG += c++11
-CONFIG -= android_install
+#CONFIG -= android_install
 
 SOURCES += main.cpp
 #    physicssetter.cpp
@@ -17,7 +17,7 @@ include(deployment.pri)
 
 
 android{
-    LIBS += -L/home/chili/android-ndk-r10d/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/user/lib
+    LIBS += -L/home/chili/bullet3-2.83.5/build_android/install/lib/
 }
 
 !android{
@@ -31,3 +31,12 @@ LIBS += -lLinearMath -lBulletDynamics -lBulletCollision
 
 LIBS += -lQtPhysicsUnofficial
 LIBS += -L../../src/lib
+
+contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
+    ANDROID_EXTRA_LIBS = \
+        /home/chili/QTProjects/qtphysics-unofficial/examples/aspect-test/../../../../bullet3-2.83.5/build_android/install/lib/libLinearMath.so \
+        /home/chili/QTProjects/qtphysics-unofficial/examples/aspect-test/../../../../bullet3-2.83.5/build_android/install/lib/libBulletDynamics.so \
+        /home/chili/QTProjects/qtphysics-unofficial/examples/aspect-test/../../../../bullet3-2.83.5/build_android/install/lib/libBulletCollision.so \
+        /home/chili/QTProjects/qtphysics-unofficial/examples/aspect-test/../../../../bullet3-2.83.5/build_android/install/lib/libBulletSoftBody.so \
+        $$PWD/../../../../Qt/5.6/android_armv7/plugins/physicsfactories/libbullet.so
+}
