@@ -18,7 +18,7 @@ if(config_bullet){
 else{
      message("Bullet not found")
 }
-     SUBDIRS += examples
+     #SUBDIRS += examples
 }else{
     message("Physics needs Qt3d 2.0")
 }
