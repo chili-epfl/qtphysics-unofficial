@@ -84,8 +84,8 @@ void PhysicsAttribute::initializeFromPeer(const Qt3DCore::QNodeCreatedChangeBase
     m_bufferId = data.bufferId;
     m_objectName = data.name;
     //m_nameId = StringToInt::lookupId(m_name);
-    m_dataType = data.dataType;
-    m_dataSize = data.dataSize;
+    m_dataType = data.vertexBaseType;
+    m_dataSize = data.vertexSize;
     m_count = data.count;
     m_byteStride = data.byteStride;
     m_byteOffset = data.byteOffset;
