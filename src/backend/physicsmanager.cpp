@@ -32,12 +32,36 @@ void PhysicsManager::loadPhysicsFactories(){
     QDir physicsFactoryPluginDir(pluginsPath);
     //TODO: handle more than 1
     Q_FOREACH (QString plugin, physicsFactoryPluginDir.entryList(QDir::Files)) {
-           QPluginLoader loader(physicsFactoryPluginDir.absoluteFilePath(plugin));
-           loader.load();
-           m_physics_factory = qobject_cast<PhysicsFactoryInterface *>(loader.instance());
-           if (m_physics_factory == Q_NULLPTR)
-               qWarning() << "Failed to load physics factory plugin ";
-   }
+        qDebug()<<"Loading:"<<plugin;
+        QPluginLoader loader(physicsFactoryPluginDir.absoluteFilePath(plugin));
+        loader.load();
+        m_physics_factory = qobject_cast<PhysicsFactoryInterface *>(loader.instance());
+        if (m_physics_factory == Q_NULLPTR)
+            qWarning() << "Failed to load physics factory plugin ";
+        else{
+            qDebug()<< "Loaded: " << plugin;
+            return;
+        }
+    }
+    QStringList libraryPaths=QCoreApplication::libraryPaths();
+    Q_FOREACH(QString libraryPath, libraryPaths){
+        physicsFactoryPluginDir.setPath(libraryPath);
+        Q_FOREACH (QString plugin, physicsFactoryPluginDir.entryList(QDir::Files)) {
+            qDebug()<<"Loading:"<<plugin;
+            QPluginLoader loader(physicsFactoryPluginDir.absoluteFilePath(plugin));
+            loader.load();
+            m_physics_factory = qobject_cast<PhysicsFactoryInterface *>(loader.instance());
+            if (m_physics_factory == Q_NULLPTR)
+                qWarning() << "Failed to load physics factory plugin ";
+            else{
+                qDebug()<< "Loaded: " << plugin;
+                return;
+            }
+        }
+    }
+    if(m_physics_factory==NULL)
+        qWarning() << "Failed to load physics factory plugin ";
+
 }
 /*Simply convert the collisions from the world to the format of the Physics manager.*/
 QVector<Collision> PhysicsManager::getCollisions(){
