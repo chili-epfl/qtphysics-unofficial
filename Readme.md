@@ -7,6 +7,8 @@ Based on the Qt3D 2.x, the module offers:
 * An aspect that implements the physic simulation;
 * A Qt plugin that works as wrapper around Bullet Physics;
 
+Video at <https://www.youtube.com/watch?v=KyyvVLGzN8U>
+
 ## QML Components ##
 
 Two Qml componets are provided:
